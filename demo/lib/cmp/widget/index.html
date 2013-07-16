@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>widget</title>
+    <meta charset="utf-8"/>
+    <link href="../../../../public/theme/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="./style.css" rel="stylesheet" type="text/css" media="all"/>
+    <script src="../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../public/js/config.js"></script>
+    <script>seajs.use('./app');</script>
+</head>
+<body>
+</body>
+    <div>
+        <p>一个弹窗</p>
+        <input type="button" value="居中显示【窗口1】" id="btn11"/>
+        <input type="button" value="设置【窗口1】位置到 (100,100)" id="btn12"/>
+        <input type="button" value="隐藏" id="btn13"/>
+        <input type="button" value="显示" id="btn14"/>
+    </div>
+
+    <div>
+        <p>一个继承来的弹窗</p>
+        <input type="button" value="居中显示【窗口2】，调用父窗口" id="btn21"/>
+        <input type="button" value="默认的底部哦" id="btn22"/>
+        <input type="button" value="好惨，我没有底部" id="btn23"/>
+    </div>
+
+    <div>
+        <p>直接渲染写在页面上的组件</p>
+        <div class="widget-tab">
+            <ul class="nav">
+                <li>男人</li>
+                <li>女人</li>
+                <li>春哥</li>
+            </ul>
+            <div class="content">
+                <div><p>为X生，为X死，为X辛苦一辈子。</p><p>吃X亏，上X当，最后死在X身上</p></div>
+                <div>我是水做的，开水</div>
+                <div>相信我得永生</div>
+            </div>
+        </div>
+    </div>
+    <div class="widget-tab">
+        <ul class="nav">
+            <li>物理</li>
+            <li>化学</li>
+            <li>生物</li>
+            <li>语文</li>
+            <li>数学</li>
+            <li>英语</li>
+        </ul>
+        <div class="content">
+            <div>牛顿被苹果砸死了</div>
+            <div>元素姨妈表</div>
+            <div>当初是在数亿竞争中脱颖而出</div>
+            <div>锄禾、当午</div>
+            <div>1+1</div>
+            <div>hello, baby</div>
+        </div>
+    </div>
+</html>

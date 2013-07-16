@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>action</title>
+    <meta charset="utf-8"/>
+    <script src="../../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../../public/js/config.js"></script>
+    <script>seajs.use('./app');</script>
+</head>
+<body>
+    <div id="box1">
+        <input type="button" value="alert" data-action="alert"/>
+    </div>
+    <div id="box2" data-action="p">
+        <input type="button" value="允许冒泡到父节点，父节点不再往上冒泡" data-action="alert"/>
+    </div>
+    <div id="box3">
+        <input type="button" value="可冒泡" data-action="alert"/>
+    </div>
+    <div id="box4" data-action="alert">
+        <input type="button" value="click 1"/>
+        <input type="button" value="click 2"/>
+        <input type="button" value="click 3"/>
+    </div>
+    <div id="box5">
+        <input type="button" value="aim 不点击我会触发" data-action="aim"/>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../public/js/config.js"></script>
+</head>
+<body>
+<input type="button" value="我是框架内的按钮，点击可以关闭窗口" id="btn"/>
+<script>
+
+    document.getElementById('btn').onclick = function() {
+        window.frameElement.trigger('close');
+    }
+</script>
+</body>
+</html>

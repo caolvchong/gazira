@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body class="auto-height">
+    我高度会自动变化
+    <script>
+        var rand = function(min, max) {
+            return Math.floor(Math.random() * (max - min) + min);
+        };
+        document.body.style.height = rand(200, 600) + 'px';
+        setInterval(function() {
+            document.body.style.height = rand(200, 600) + 'px';
+        }, 3000);
+    </script>
+</body>
+</html>

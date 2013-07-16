@@ -1,0 +1,1 @@
+define(function(){return {render:function(map) {var p=[],v =[];for(var i in map) {p.push(i);v.push(map[i]);}return (new Function(p, "var _s=[];_s.push(' <input type=\"button\" value=\"',text,'\" class=\"',className,'\" data-action=\"',action,'\"/>'); return _s;")).apply(null, v).join("");}};});

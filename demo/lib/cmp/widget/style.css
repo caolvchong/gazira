@@ -1,0 +1,69 @@
+.widget-dialog {
+  width: 300px;
+  height: 150px;
+  border: 1px solid #ddd;
+  position: absolute;
+}
+.widget-dialog .widget-dialog-header, .widget-dialog .widget-dialog-title {
+  height: 36px;
+  line-height: 36px;
+}
+.widget-dialog .widget-dialog-header {
+  background: #356635;
+  color:#fff;
+}
+.widget-dialog .widget-dialog-header.hover{
+  background: #528CE0;
+  color:#fff;
+}
+.widget-dialog .widget-dialog-close {
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+}
+.widget-dialog .widget-dialog-footer {
+  position: absolute;
+  bottom: 0;
+  padding: 2px;
+}
+.widget-dialog .widget-dialog-button {
+  margin-left: 2px;
+}
+
+
+
+.widget-tab {
+  float: left;
+  margin: 20px;
+}
+.widget-tab .nav {
+  margin-left: 20px;
+}
+.widget-tab .nav li {
+  float: left;
+  padding: 0 3px;
+  margin-left: 2px;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  height: 24px;
+  min-width: 35px;
+  line-height: 24px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+.widget-tab .nav li.active {
+  background: #356635;
+  color: #fff;
+}
+.widget-tab .content {
+  border: 1px solid #ddd;
+  padding: 5px;
+  background: #fff;
+  min-height: 200px;
+  min-width: 300px;
+  margin-top: 25px;
+}
+.widget-tab .content div {
+  display: none;
+}

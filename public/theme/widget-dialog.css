@@ -1,0 +1,83 @@
+/* dialog组件 */
+.widget-dialog {
+  text-align:left;
+  display: none;
+  position: fixed;
+}
+.widget-dialog .hide {
+  display: none;
+}
+table.border, table.dialog { border:0; margin:0; border-collapse:collapse; width:auto; }
+.widget-dialog .nw, .widget-dialog .n, .widget-dialog .ne, .widget-dialog .w, .widget-dialog .c, .widget-dialog .e, .widget-dialog .sw, .widget-dialog .s, .widget-dialog .se, .widget-dialog .header, .widget-dialog .tdIcon, .widget-dialog .main, .widget-dialog .footer { padding:0; }
+.widget-dialog .header, .widget-dialog .buttons button { font: 14px/1.11 'Microsoft Yahei', Tahoma, Arial, Helvetica, STHeiti; _font-family:Tahoma,Arial,Helvetica,STHeiti; -o-font-family: Tahoma, Arial; }
+.widget-dialog .title { overflow:hidden; text-overflow: ellipsis; }
+.widget-dialog .state_noTitle .title { display:none; }
+.widget-dialog .close { display:block; position:absolute; text-decoration:none; outline:none; _cursor:pointer; }
+.widget-dialog .close:hover { text-decoration:none; }
+.widget-dialog .main { text-align:center; min-width:9em; min-width:0 \9/*IE8 BUG*/; }
+.widget-dialog .content { display:inline-block; *zoom:1; padding: 20px; *display:inline; text-align:left; border:none 0; background:#fff}
+.widget-dialog .content.state_full { display:block; width:100%; margin:0; padding:0!important; height:100%; }
+.widget-dialog .loading { height:100%; text-align:left; text-indent:-999em; overflow:hidden; background:url(./images/common/loading.gif) no-repeat center center; }
+
+.widget-dialog .icon { float: left; vertical-align: middle;  width:48px; height:48px; margin:10px 0 10px 10px; background-position: center center; background-repeat:no-repeat; }
+.widget-dialog .icon-success {background: url(images/dialog/icons/success.png);}
+.widget-dialog .icon-error {background: url(images/dialog/icons/error.png);}
+.widget-dialog .icon-warning {background: url(images/dialog/icons/warning.png);}
+.widget-dialog .icon-question {background: url(images/dialog/icons/question.png);}
+.widget-dialog .icon-html {padding: 15px 10px 5px 70px;}
+
+.widget-dialog .prompt-content {padding: 20px 10px}
+.widget-dialog .prompt-val {margin: 5px auto}
+.prompt-val input {border: 1px solid #aaa; height: 24px; width: 100%}
+
+.buttons { padding:8px; text-align:right; white-space:nowrap; }
+.buttons button { margin-left:15px; padding: 10px 27px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; *padding:10px 27px; *height:40px; letter-spacing:2px; font-family: Tahoma, Arial/9!important; width:auto; overflow:visible; *width:1; color: #585858; border: solid 1px #e5e5e5; border-radius: 5px; background: #fbfbfb;}
+.buttons button::-moz-focus-inner{ border:0; padding:0; margin:0; }
+.buttons button:hover { color:#000; border-color:#e5e5e5; }
+.buttons button:active { border-color:#e5e5e5; color: #000; }
+.buttons button[disabled] { cursor:default; color:#666; background:#DDD; border: solid 1px #999; filter:alpha(opacity=50); opacity:.5; box-shadow:none; }
+button.state_highlight { color: #FFF; border: solid 1px #2597c7; background: #279ecf;}
+button.state_highlight:hover { color:#FFF; border-color: #2597c7; }
+/* common end */
+
+.widget-dialog .inner { background:#fff; }
+.widget-dialog .titleBar { width:100%; height:0; position:relative; bottom:35px; _bottom:0; _margin-top:-30px; }
+.widget-dialog .title { height:29px; font-size: 14px; font-weight: 700; line-height:29px; padding:0 25px 0 0; _padding:0; text-indent:20px; color:#222;}
+.widget-dialog .nw, .widget-dialog .ne, .widget-dialog .sw, .widget-dialog .widget-dialog .se, .widget-dialog .n, .widget-dialog .s, .widget-dialog .close { background-image:url(images/dialog/bg.png); background-repeat:no-repeat; }
+.widget-dialog .nw { width:5px; height:47px; background-position: 0 0; _png:images/dialog/ie6/nw.png; }
+.widget-dialog .ne { width:5px; height:47px; background-position: -5px 0; _png:images/dialog/ie6/ne.png; }
+.widget-dialog .sw { width:5px; height:5px; background-position: 0 -47px; _png:images/dialog/ie6/sw.png; }
+.widget-dialog .se { width:5px; height:5px; background-position: -5px -47px; _png:images/dialog/ie6/se.png; }
+.widget-dialog .close { top:4px; right:4px; _z-index:1; width:20px; height:20px; _font-size:0; _line-height:0; text-indent:-9999em; background-position:0 -106px; _png:images/dialog/ie6/close.png; }
+.widget-dialog .close:hover { background-position:0 -132px; }
+.widget-dialog .n, .widget-dialog .s { background-repeat:repeat-x; }
+.widget-dialog .n { background-position: 0 -53px; _png:images/dialog/ie6/n.png; }
+.widget-dialog .s { background-position: 0 -100px; _png:images/dialog/ie6/s.png; }
+.widget-dialog .w, .widget-dialog .e { background-image:url(images/dialog/bg_css3_2.png); background-repeat:repeat-y; }
+.widget-dialog .w { background-position:left top; _png:images/dialog/ie6/w.png; }
+.widget-dialog .e { background-position: right bottom; _png:images/dialog/ie6/e.png; }
+.widget-dialog icon, .widget-dialog .main { padding-top:3px; }
+@media screen and (min-width:0) {
+  .widget-dialog { border-radius:8px; box-shadow:0 5px 15px rgba(2, 37, 69, .4); -moz-transition:-moz-box-shadow linear .2s; -webkit-transition: -webkit-box-shadow linear .2s; transition: -webkit-box-shadow linear .2s; }
+  .state_drag .widget-dialog { box-shadow:none; }
+  .state_lock .widget-dialog { box-shadow:0 3px 26px rgba(0, 0, 0, .9); }
+  .widget-dialog:active { box-shadow:0 0 5px rgba(2, 37, 69, .1)!important; }
+  .state_drag .widget-dialog { box-shadow:none!important; }
+  .widget-dialog .nw, .widget-dialog .ne, .widget-dialog .sw, .widget-dialog .se, .widget-dialog .n, .widget-dialog .s, .widget-dialog .close { background-image:url(images/dialog/bg_css3.png); }
+  .widget-dialog .nw { width:5px; height:47px; }
+  .widget-dialog .ne { width:5px; height:47px; background-position: -5px 0; _png:images/dialog/ie6/ne.png; }
+.widget-dialog .sw { width:5px; height:5px;background-position: 0 -47px; }
+.widget-dialog .se { width:5px; height:5px; background-position: -5px -47px; }
+.widget-dialog .close { background-position:0 -106px; }
+.widget-dialog .close:hover { background-position:0 -106px; }
+.widget-dialog .n { background-position: 0 -53px; }
+.widget-dialog .s { background-position: 0 -100px; }
+.widget-dialog .w, .widget-dialog .e { background-image:url(images/dialog/bg_css3_2.png); }
+  }
+.state_noTitle .nw, .state_noTitle .ne, .state_noTitle .sw, .state_noTitle .se { width:3px; height:3px; }
+.state_noTitle .inner { border:1px solid #666; background:#FFF; }
+.state_noTitle .widget-dialog { box-shadow:none; }
+.state_noTitle .nw, .state_noTitle .n, .state_noTitle .ne, .state_noTitle .w, .state_noTitle .e, .state_noTitle .sw, .state_noTitle .s, .state_noTitle .se { background:rgba(0, 0, 0, .05); background:#000\9!important; filter:alpha(opacity=5)!important; }
+.state_noTitle .titleBar { bottom:0; _bottom:0; _margin-top:0; }
+.state_noTitle .close { top:0; right:0; width:18px; height:18px; line-height:18px; text-align:center; text-indent:0; font-family: Helvetica, STHeiti; _font-family: '\u9ed1\u4f53', 'Book Antiqua', Palatino; font-size:18px; text-decoration:none; color:#214FA3; background:none; filter:!important; }
+.state_noTitle .close:hover, .state_noTitle .close:active { text-decoration:none; color:#900; }

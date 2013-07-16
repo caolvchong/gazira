@@ -1,0 +1,39 @@
+body {
+  height: 2000px;
+}
+
+.row {
+  padding: 20px;
+}
+
+.widget-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #040404;
+  background: #fff;
+}
+.widget-dialog .header {
+  height: 24px;
+  line-height: 24px;
+  background: #3c510c;
+  color: #fff;
+}
+.widget-dialog .title {
+  font-weight: bold;
+}
+.widget-dialog .dialog-close {
+  position: absolute;
+  top: -3px;
+  right: 5px;
+  text-decoration: none;
+  font-size: 30px;
+  color: #f89406;
+}
+.widget-dialog .dialog-close:hover {
+  color: #C6E746;
+}
+.widget-dialog .footer {
+  position: absolute;
+  bottom: 0;
+}
