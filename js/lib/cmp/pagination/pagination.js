@@ -18,11 +18,12 @@ define(function(require, exports, module) {
     var Pagination = Widget.extend({
         attrs: {
             url: '', // 获取数据的URL
-            type: 'ajax',
-            data: null, // 提供data数组，则使用静态数据(静态分页)
+            type: 'ajax', // 默认方式ajax分页，
+            data: null, // 静态分页时候的数据数组，或ajax分页的附加数据
             before: null, // ajax请求前的回调
             success: null, // 点击分页后的回调,ajax则为成功之后
             error: null, // ajax请求失败后的回调
+            methdo: 'get', // ajax请求方法
             pageName: 'page', // 传递给后端的页数参数名
             sizeName: 'pagesize', // 传递给后端的每页数量参数名
             totalName: 'data.total', // 后端返回总条数的参数名
@@ -76,6 +77,7 @@ define(function(require, exports, module) {
         },
         /**
          * 视图，自定义显示的话需要重写此方法
+         * flag
          */
         view: function(flag) {
             var url = this.get('url');
@@ -121,7 +123,7 @@ define(function(require, exports, module) {
             this.element.html(pn[0] + html.join('') + pn[1]);
             this.reflow();
             if(flag !== false && this.get('type') === 'ajax') {
-                this._ajax();
+                this.ajax();
             } else {
                 this.get('success') && this.get('success').call(this, current);
             }
@@ -136,14 +138,13 @@ define(function(require, exports, module) {
             this.$('[data-page=' + current + ']').addClass('active');
             return this;
         },
-        _ajax: function() {
+        ajax: function() {
             var that = this;
             var sa = ajax.single(this.cid);
             var data = {};
             var list = ['before', 'error', 'complete'];
             var obj = {
                 url: this.get('url'),
-                data: data,
                 success: function(data) {
                     var totalName = that.get('totalName').split('.');
                     var total = data;
@@ -160,7 +161,7 @@ define(function(require, exports, module) {
                         if(current > totalPage) {
                             that.set('current', totalPage);
                         } else {
-                            that.view(false);
+                            that.view(false); // 避免递归请求
                         }
                     }
                     that.get('success') && that.get('success').call(that, that.get('current'));
@@ -168,6 +169,8 @@ define(function(require, exports, module) {
             };
             data[this.get('pageName')] = this.get('current');
             data[this.get('sizeName')] = this.get('size');
+            obj.data = $.extend(data, this.get('data'));
+            obj.type = this.get('method');
 
             for(var i = 0, len = list.length; i < len; i++) {
                 var key = list[i];

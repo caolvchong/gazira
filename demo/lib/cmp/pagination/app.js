@@ -59,7 +59,7 @@ define(function(require, exports, module) {
 
                 this.element.html(html);
                 this.reflow();
-                this._ajax();
+                this.ajax();
                 return this;
             }
         });
@@ -76,6 +76,26 @@ define(function(require, exports, module) {
             }
         }).render();
 
+        //----------------------------------------
+        var p5 = new Pagination({
+            parentNode: '#box5',
+            url: './data.php',
+            data: {
+                name: 'tom',
+                age: 22
+            },
+            method: 'post',
+            size: 10,
+            before: function() {
+                $('#content5').html('正在请求数据');
+            },
+            success: function(page) {
+                $('#content5').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+            }
+        }).render();
+        $('#btn51').click(function() {
+            p5.set('current', 6);
+        });
 
     });
 });
