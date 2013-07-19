@@ -134,6 +134,7 @@ define(function(require, exports, module) {
                     params.complete(xhr, status);
                 }
             };
+            params.before && params.before();
             return $.ajax(obj);
         },
         /**
