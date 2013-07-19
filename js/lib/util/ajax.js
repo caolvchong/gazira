@@ -55,7 +55,7 @@ define(function(require, exports, module) {
     });
 
     if(!!window.ActiveXObject) { // IE清除ajax缓存
-        $.ajaxSetup({cache:false});
+        $.ajaxSetup({cache: false});
     }
 
     var r = {
@@ -111,31 +111,32 @@ define(function(require, exports, module) {
          */
         base: function(params) {
             var obj = $.extend({}, params || {});
-            obj.dataType = 'json';
-            obj.type = params.type || 'GET';
-            obj.success = function(data) {
-                if(rule(data, obj, 'success')) { // 成功
-                    if(params.success) {
-                        params.success(data);
+            if(!obj.before || (obj.before && obj.before() !== false)) {
+                obj.dataType = 'json';
+                obj.type = params.type || 'GET';
+                obj.success = function(data) {
+                    if(rule(data, obj, 'success')) { // 成功
+                        if(params.success) {
+                            params.success(data);
+                        }
+                    } else if(rule(data, obj, 'permission')) { // 无权限
+                        $.isFunction(params.permission) ? params.permission(data) : config.noPermissionAction();
+                    } else { // 服务端判定失败
+                        $.isFunction(params.error) ? params.error(data) : config.errorAction(data);
                     }
-                } else if(rule(data, obj, 'permission')) { // 无权限
-                    $.isFunction(params.permission) ? params.permission(data) : config.noPermissionAction();
-                } else { // 服务端判定失败
-                    $.isFunction(params.error) ? params.error(data) : config.errorAction(data);
-                }
-            };
-            obj.error = function(xhr, status) {
-                if(status !== 'abort') { // 主动放弃，这种一般是程序控制，不应该抛出error
-                    $.isFunction(params.error) ? params.error(xhr, status) : config.errorAction(xhr, status);
-                }
-            };
-            obj.complete = function(xhr, status) {
-                if($.isFunction(params.complete)) {
-                    params.complete(xhr, status);
-                }
-            };
-            params.before && params.before();
-            return $.ajax(obj);
+                };
+                obj.error = function(xhr, status) {
+                    if(status !== 'abort') { // 主动放弃，这种一般是程序控制，不应该抛出error
+                        $.isFunction(params.error) ? params.error(xhr, status) : config.errorAction(xhr, status);
+                    }
+                };
+                obj.complete = function(xhr, status) {
+                    if($.isFunction(params.complete)) {
+                        params.complete(xhr, status);
+                    }
+                };
+                return $.ajax(obj);
+            }
         },
         /**
          * AJAX单例模式：
@@ -211,7 +212,7 @@ define(function(require, exports, module) {
          * @param {Integer} priority 有多少个优先级(最高优先级为1，往后优先级越低)
          * @return {Object} 返回对创建的连接池的操作方法：增加连接，放弃连接
          */
-        pool:function(name, max, priority) {
+        pool: function(name, max, priority) {
             if(!pool[name]) { // 连接池未建立
                 var n = 0; // 当前连接数量
                 pool[name] = {}; // 存放连接
@@ -262,7 +263,7 @@ define(function(require, exports, module) {
                      * @param {Integer} p 优先级
                      * @return {Undefined}
                      */
-                    add:function(params, p) {
+                    add: function(params, p) {
                         if(p && list[p]) {
                             list[p].push(params);
                         } else { // 不在定义优先级范围内或不提供优先级，当作优先级最低
@@ -273,7 +274,7 @@ define(function(require, exports, module) {
                     /**
                      * 放弃连接池中所有AJAX请求，并清空该连接池
                      */
-                    abort:function() {
+                    abort: function() {
                         if(list) {
                             for(var i = 1; i <= priority; i++) {
                                 list[i].length = 0;
