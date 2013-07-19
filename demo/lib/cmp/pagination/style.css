@@ -1,0 +1,42 @@
+body {
+  height: 2000px;
+}
+
+.row {
+  padding: 20px;
+}
+.super {
+  font-size: 32px;
+}
+
+
+.widget-pagination {
+
+}
+.widget-pagination a {
+  border: 1px solid #ddd;
+  padding: 2px 5px;
+  margin: 2px 5px;
+  text-decoration: none;
+}
+.widget-pagination a:hover {
+  background: #387038;
+  color: #fff;
+}
+.widget-pagination .active, .widget-pagination .active:hover {
+  border: 0;
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+  cursor: default;
+}
+.widget-pagination .disabled {
+  color: #ddd;
+  cursor: default;
+  border: 0;
+  outline: none;
+}
+.widget-pagination .disabled:hover {
+  background: #fff;
+  color: #ddd;
+}

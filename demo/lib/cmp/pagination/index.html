@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>pagination</title>
+    <meta charset="utf-8"/>
+    <link href="../../../../public/theme/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="./style.css" rel="stylesheet" type="text/css" media="all"/>
+    <script src="../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../public/js/config.js"></script>
+    <script>seajs.use('./app');</script>
+</head>
+<body>
+</body>
+<div class="row">
+    <div class="span12">
+        <p>静态分页，默认模板</p>
+        <div>
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">总数</label>
+                    <div class="controls">
+                        <select id="total_count1">
+                            <option value="0">0</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="35" selected="selected">35</option>
+                            <option value="100">100</option>
+                            <option value="555">555</option>
+                        </select>
+                        每页10条
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="button" class="btn btn-primary" id="btn11">设置</button>
+                        <button type="button" class="btn" id="btn12">载入第6页</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="content1">内容</div>
+        <div id="box1"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <p>ajax分页，默认模板</p>
+        <div>
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">每页10条</label>
+                    <div class="controls">
+                        <button type="button" class="btn" id="btn21">载入第6页</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="content2">内容</div>
+        <div id="box2"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <p>传统跳转分页，默认模板</p>
+        <div id="box3"></div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="span12">
+        <p>ajax分页，自定义模板</p>
+        <div>
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">每页10条</label>
+                </div>
+            </form>
+        </div>
+        <div id="content4">内容</div>
+        <div id="box4"></div>
+    </div>
+</div>
+
+</html>
