@@ -4,6 +4,7 @@ body {
 
 .row {
   padding: 20px;
+  border-bottom: 1px dashed;
 }
 .super {
   font-size: 32px;
