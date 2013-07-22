@@ -174,7 +174,6 @@ define(function(require, exports, module) {
                     }
                     var completeFn = params.complete;
                     params.complete = function(xhr, status) {
-                        single[name] = {}; // 完成后清理
                         if($.isFunction(completeFn)) {
                             completeFn(xhr, status);
                         }
@@ -189,7 +188,7 @@ define(function(require, exports, module) {
                  * 放弃单例AJAX请求
                  */
                 abort: function() {
-                    if(single[name] && single[name].xhr) {
+                    if(single[name] && single[name].xhr && single[name].xhr.readyState !== 4) {
                         single[name].xhr.abort();
                         single[name].xhr = null;
                     }
