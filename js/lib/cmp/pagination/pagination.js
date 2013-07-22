@@ -9,8 +9,8 @@ define(function(require, exports, module) {
     var ajax = require('../../util/ajax');
 
     var helper = {
-        tpl: function(url, page) {
-            var html = '<a href="' + (url + page) + '" data-page="' + page + '" data-action="page">' + page + '</a>';
+        tpl: function(url, page, flag) {
+            var html = '<a href="' + (flag === true ? '#' : (url + page)) + '" data-page="' + page + '" data-action="page">' + page + '</a>';
             return html;
         }
     };
@@ -23,7 +23,7 @@ define(function(require, exports, module) {
             before: null, // ajax请求前的回调
             success: null, // 点击分页后的回调,ajax则为成功之后
             error: null, // ajax请求失败后的回调
-            methdo: 'get', // ajax请求方法
+            method: 'get', // ajax请求方法
             pageName: 'page', // 传递给后端的页数参数名
             sizeName: 'pagesize', // 传递给后端的每页数量参数名
             totalName: 'data.total', // 后端返回总条数的参数名
@@ -80,6 +80,7 @@ define(function(require, exports, module) {
          * flag
          */
         view: function(flag) {
+            var isPost = this.get('method').toLowerCase() === 'post';
             var url = this.get('url');
             var x = this.get('x') || 2; // 当前页码附近显示页数
             var y = this.get('y') || 1; // 省略号附近显示页数
@@ -90,12 +91,15 @@ define(function(require, exports, module) {
             var html = [];
             var pn = ['', ''];
             var split = '<span>...</span>';
-            url += url.indexOf('?') === -1 ? '?' : '&';
-            if(url.indexOf(sizeName + '=') == -1) {
-                url += sizeName + '=' + this.get('size') + '&';
-            }
-            if(url.indexOf(pageName + '=') == -1) {
-                url += pageName + '=';
+            if(!isPost) {
+                url += url.indexOf('?') === -1 ? '?' : '&';
+                url += $.param(this.get('data') || {});
+                if(url.indexOf(sizeName + '=') == -1) {
+                    url += sizeName + '=' + this.get('size') + '&';
+                }
+                if(url.indexOf(pageName + '=') == -1) {
+                    url += pageName + '=';
+                }
             }
             if(this.get('showPN') !== false) {
                 pn[0] = '<a href="' + (url + Math.max(1, current - 1)) + '" data-action="prev">上一页</a>';
@@ -103,21 +107,21 @@ define(function(require, exports, module) {
             }
             if(totalPage <= 5) {
                 for(var i = 1; i <= totalPage; i++) {
-                    html.push(helper.tpl(url, i));
+                    html.push(helper.tpl(url, i, isPost));
                 }
             } else {
                 if(current <= 3) {
                     for(var i = 1; i <= 4; i++) {
-                        html.push(helper.tpl(url, i));
+                        html.push(helper.tpl(url, i, isPost));
                     }
-                    html.push(split, helper.tpl(url, totalPage));
+                    html.push(split, helper.tpl(url, totalPage, isPost));
                 } else if(current >= totalPage - 2) {
-                    html.push(helper.tpl(url, 1), split);
+                    html.push(helper.tpl(url, 1, isPost), split);
                     for(var i = totalPage - 2; i <= totalPage; i++) {
-                        html.push(helper.tpl(url, i));
+                        html.push(helper.tpl(url, i, isPost));
                     }
                 } else {
-                    html.push(helper.tpl(url, 1), split, helper.tpl(url, current - 1), helper.tpl(url, current), helper.tpl(url, current + 1), split, helper.tpl(url, totalPage));
+                    html.push(helper.tpl(url, 1, isPost), split, helper.tpl(url, current - 1, isPost), helper.tpl(url, current, isPost), helper.tpl(url, current + 1, isPost), split, helper.tpl(url, totalPage, isPost));
                 }
             }
             this.element.html(pn[0] + html.join('') + pn[1]);
