@@ -2,60 +2,60 @@
     $type = $_GET['type'];
     $id = $_GET['id'];
     $province = Array(
-        Array("value" => "100", "text" => "北京"),
-        Array("value" => "101", "text" => "广东"),
-        Array("value" => "102", "text" => "福建")
+        Array("id" => "100", "name" => "北京"),
+        Array("id" => "101", "name" => "广东"),
+        Array("id" => "102", "name" => "福建")
     );
 
     $city = Array(
         "100" => Array(
-                    Array("value" => "1001", "text" => "北京")
+                    Array("id" => "1001", "name" => "北京")
         ),
         "101" => Array(
-                    Array("value" => "1010", "text" => "广州"),
-                    Array("value" => "1011", "text" => "深圳")
+                    Array("id" => "1010", "name" => "广州"),
+                    Array("id" => "1011", "name" => "深圳")
         ),
         "102" => Array(
-                    Array("value" => "1020", "text" => "福州"),
-                    Array("value" => "1021", "text" => "厦门"),
-                    Array("value" => "1022", "text" => "泉州")
+                    Array("id" => "1020", "name" => "福州"),
+                    Array("id" => "1021", "name" => "厦门"),
+                    Array("id" => "1022", "name" => "泉州")
         )
     );
 
     $county = Array(
         "1001" => Array(
-                    Array("value" => "10010", "text" => "东城区"),
-                    Array("value" => "10011", "text" => "西城区"),
-                    Array("value" => "10012", "text" => "崇文区"),
-                    Array("value" => "10013", "text" => "宣武区")
+                    Array("id" => "10010", "name" => "东城区"),
+                    Array("id" => "10011", "name" => "西城区"),
+                    Array("id" => "10012", "name" => "崇文区"),
+                    Array("id" => "10013", "name" => "宣武区")
         ),
 
         "1010" => Array(
-                    Array("value" => "10100", "text" => "天河区"),
-                    Array("value" => "10101", "text" => "越秀区")
+                    Array("id" => "10100", "name" => "天河区"),
+                    Array("id" => "10101", "name" => "越秀区")
         ),
 
         "1011" => Array(
-                    Array("value" => "10110", "text" => "福田区"),
-                    Array("value" => "10111", "text" => "罗湖区"),
-                    Array("value" => "10112", "text" => "南山区")
+                    Array("id" => "10110", "name" => "福田区"),
+                    Array("id" => "10111", "name" => "罗湖区"),
+                    Array("id" => "10112", "name" => "南山区")
         ),
 
         "1020" => Array(
-                    Array("value" => "10200", "text" => "鼓楼区"),
-                    Array("value" => "10201", "text" => "台江区"),
-                    Array("value" => "10202", "text" => "闽侯县")
+                    Array("id" => "10200", "name" => "鼓楼区"),
+                    Array("id" => "10201", "name" => "台江区"),
+                    Array("id" => "10202", "name" => "闽侯县")
         ),
 
         "1021" => Array(
-                    Array("value" => "10210", "text" => "思明区"),
-                    Array("value" => "10211", "text" => "翔安区"),
-                    Array("value" => "10212", "text" => "海沧区")
+                    Array("id" => "10210", "name" => "思明区"),
+                    Array("id" => "10211", "name" => "翔安区"),
+                    Array("id" => "10212", "name" => "海沧区")
         ),
 
         "1022" => Array(
-                    Array("value" => "10220", "text" => "梅列区"),
-                    Array("value" => "10221", "text" => "三元区")
+                    Array("id" => "10220", "name" => "梅列区"),
+                    Array("id" => "10221", "name" => "三元区")
         )
     );
 

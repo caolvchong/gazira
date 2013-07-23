@@ -10,14 +10,18 @@ define(function(require, exports, module) {
 
     var undefined;
     var helper = {
-        loading: function(item) {
-            return '<option value="' + (item.value || 0) + '">' + (item.placeholder || 'loading...') + '</option>';
+        loading: function(item, key) {
+            return '<option value="' + (item[key] || 0) + '">' + (item.placeholder || 'loading...') + '</option>';
         }
     };
     var Cascade = Widget.extend({
         attrs: {
             data: [],
-            template: '<div class="widget-cascade"></div>'
+            template: '<div class="widget-cascade"></div>',
+            model: {
+                val: 'value',
+                text: 'text'
+            }
         },
         setup: function() {
             Cascade.superclass.setup.call(this);
@@ -29,7 +33,7 @@ define(function(require, exports, module) {
             var html = [];
             for(var i = 0, len = list.length; i < len; i++) {
                 var item = list[i];
-                html[i] = '<select' + (item.name ? ' name="' + item.name + '"' : '') + '>' + helper.loading(item) + '</select>';
+                html[i] = '<select' + (item.name ? ' name="' + item.name + '"' : '') + '>' + helper.loading(item, this.get('model').val) + '</select>';
             }
             return html;
         },
@@ -121,8 +125,8 @@ define(function(require, exports, module) {
                         option.value = item;
                         option.text = item;
                     } else {
-                        option.value = item.value;
-                        option.text = item.text === undefined ? item.value : item.text;
+                        option.value = item[this.get('model').val];
+                        option.text = item[this.get('model').text] === undefined ? item[this.get('model').val] : item[this.get('model').text];
                         if(item.selected) {
                             option.selected = true;
                         }
@@ -144,7 +148,7 @@ define(function(require, exports, module) {
                 if(i < len) {
                     $(v).change(function() {
                         that.$('select:gt(' + i + ')').each(function(j, v) {
-                            $(v).html(helper.loading(that.get('data')[i]));
+                            $(v).html(helper.loading(that.get('data')[i]), that.get('model').val);
                         });
                         that._getData(i + 1);
                         return true;

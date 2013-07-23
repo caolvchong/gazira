@@ -39,14 +39,22 @@ define(function(require, exports, module) {
         new Cascade({
             parentNode: '#box3',
             data: xdata,
-            field: 'id'
+            field: 'id',
+            model: {
+                val: 'id',
+                text: 'name'
+            }
         }).render();
 
         //----------------------------------------
         new P({
             parentNode: '#box4',
             data: xdata,
-            field: 'id'
+            field: 'id',
+            model: {
+                val: 'id',
+                text: 'name'
+            }
         }).render();
     });
 });
