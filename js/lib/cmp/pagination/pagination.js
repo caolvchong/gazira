@@ -38,6 +38,10 @@ define(function(require, exports, module) {
             total: 0, // 数据总数
             template: '<div class="widget-pagination"></div>'
         },
+        setup: function() {
+            Pagination.superclass.setup.call(this);
+            this._init = true;
+        },
         events: {
             'click [data-action=prev]': function(e) { // 上一页事件
                 if(this.get('type') !== 'link') {
@@ -165,15 +169,17 @@ define(function(require, exports, module) {
                         if(current > totalPage) {
                             that.set('current', totalPage);
                         } else {
-                            that.view(false); // 避免递归请求
+                            that.view(false); // 只刷新分页视图，false避免递归请求
                         }
                     }
                     that.get('success') && that.get('success').call(that, that.get('current'));
                 }
             };
+            var params = this.get('data');
+            params = $.isFunction(params) ? params.call(this) : params;
             data[this.get('pageName')] = this.get('current');
             data[this.get('sizeName')] = this.get('size');
-            obj.data = $.extend(data, this.get('data'));
+            obj.data = $.extend(data, params);
             obj.type = this.get('method');
 
             for(var i = 0, len = list.length; i < len; i++) {
@@ -182,14 +188,16 @@ define(function(require, exports, module) {
                     obj[key] = that.get(key).call(that);
                 }
             }
-
             return sa.send(obj);
         },
         _onRenderCurrent: function(val, prev) {
             this.view();
         },
         _onRenderTotal: function(val, prev) {
-            this.view();
+            if(this._init !== true) {
+                delete this._init;
+                this.view();
+            }
         }
     });
 

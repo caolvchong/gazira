@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         });
 
         //----------------------------------------
-        var p3 = new Pagination({
+        new Pagination({
             parentNode: '#box3',
             type: 'link',
             url: '.',
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
             }
         });
 
-        var p4 = new P({
+        new P({
             parentNode: '#box4',
             url: './data.php',
             size: 10,
@@ -77,14 +77,13 @@ define(function(require, exports, module) {
         }).render();
 
         //----------------------------------------
-        var p5 = new Pagination({
+        new Pagination({
             parentNode: '#box5',
             url: './data.php',
             data: {
                 name: 'tom',
                 age: 22
             },
-            method: 'post',
             size: 10,
             before: function() {
                 $('#content5').html('正在请求数据');
@@ -93,9 +92,32 @@ define(function(require, exports, module) {
                 $('#content5').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
             }
         }).render();
-        $('#btn51').click(function() {
-            p5.set('current', 6);
-        });
 
+        //----------------------------------------
+        var p6 = new Pagination({
+            parentNode: '#box6',
+            url: './data.php',
+            data: function() {
+                return {
+                    url: 'pagination.php',
+                    method: 'get',
+                    params: {
+                        position: this.get('current'),
+                        size: this.get('size')
+                    }
+                };
+            },
+            method: 'post',
+            size: 10,
+            before: function() {
+                $('#content6').html('正在请求数据');
+            },
+            success: function(page) {
+                $('#content6').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+            }
+        }).render();
+        $('#btn61').click(function() {
+            p6.set('current', 6);
+        });
     });
 });
