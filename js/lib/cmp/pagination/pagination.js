@@ -179,7 +179,7 @@ define(function(require, exports, module) {
             params = $.isFunction(params) ? params.call(this) : params;
             data[this.get('pageName')] = this.get('current');
             data[this.get('sizeName')] = this.get('size');
-            obj.data = $.extend(data, params);
+            obj.data = typeof params === 'object' ? $.extend(data, params) : params;
             obj.type = this.get('method');
 
             for(var i = 0, len = list.length; i < len; i++) {
