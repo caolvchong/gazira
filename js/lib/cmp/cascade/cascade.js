@@ -26,7 +26,7 @@ define(function(require, exports, module) {
         setup: function() {
             Cascade.superclass.setup.call(this);
             this.view();
-            this.cascadeEvent();
+            this._cascadeEvent();
         },
         _view: function() {
             var list = this.get('data');
@@ -66,16 +66,27 @@ define(function(require, exports, module) {
                     var actions = this._xhr;
                     var obj = $.extend({
                         url: data
-                    }, item.ajax);
+                    }, item.ajax || this.get('ajax'));
+                    var extData = item.extData || this.get('extData');
                     obj.data = obj.data || {};
                     obj.data[item.field || this.get('field')] = this.$('select').eq(index - 1).val();
+                    if($.isFunction(extData)) {
+                        var result = extData.call(this, this.$('select').eq(index - 1), obj.data, index);
+                        obj.data = typeof result === 'object' ? $.extend(obj.data, result) : result;
+                    }
                     if(!obj.success) {
                         obj.success = function(data) {
-                            var result = data[item.resultField || 'data'];
+                            var resultField = item.resultField || that.get('resultField');
+                            var result = $.isFunction(resultField) ? resultField.call(that, data, index) : data[resultField || 'data'];
                             that._buildItem(result, index);
                             if(result && result.length > 0) {
                                 that._getData(index + 1);
                             }
+                        };
+                    } else {
+                        var temp = obj.success;
+                        obj.success = function(data) {
+                            temp.call(that, data);
                         };
                     }
                     actions.abort();
@@ -140,7 +151,7 @@ define(function(require, exports, module) {
             }
             return this;
         },
-        cascadeEvent: function() {
+        _cascadeEvent: function() {
             var that = this;
             var selectList = this.$('select');
             var len = selectList.length - 1;
@@ -156,6 +167,20 @@ define(function(require, exports, module) {
                 }
             });
             return this;
+        },
+        /**
+         * 获取某个select
+         * @param which number则按顺序，从0开始；string为按name获取
+         * @returns {*}
+         */
+        getItem: function(which) {
+            var select;
+            if(typeof which === 'number') {
+                select = this.$('select').eq(which);
+            } else {
+                select = this.$('select[name=' + which + ']').eq(0);
+            }
+            return select;
         }
     });
 

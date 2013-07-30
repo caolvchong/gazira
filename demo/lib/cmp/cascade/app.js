@@ -10,12 +10,15 @@ define(function(require, exports, module) {
     var data = require('./data');
 
     $(function() {
+        // 静态数据
         new Cascade({
             parentNode: '#box1',
             data: data
         }).render();
 
         //----------------------------------------
+
+        // 自定义模板
         var P = Cascade.extend({
             view: function() {
                 var arr = this._view(); // select列表
@@ -31,6 +34,8 @@ define(function(require, exports, module) {
         }).render();
 
         //----------------------------------------
+
+        // ajax，自定义字段
         var xdata = [
             {name: 'province', data: './data.php?type=province'},
             {name: 'city', data: './data.php?type=city'},
@@ -47,10 +52,34 @@ define(function(require, exports, module) {
         }).render();
 
         //----------------------------------------
+
+        // ajax，自定义模板，字段
         new P({
             parentNode: '#box4',
             data: xdata,
             field: 'id',
+            model: {
+                val: 'id',
+                text: 'name'
+            }
+        }).render();
+
+        //----------------------------------------
+
+        // ajax，自定义模板，字段
+        new Cascade({
+            parentNode: '#box5',
+            data: xdata,
+            extData: function(select, data, index) {
+                return {
+                    ext: '前一个select的值' + select.val()
+                };
+            },
+            field: 'id',
+            resultField: function(data, index) {
+                data.data[data.data.length - 1].selected = true;
+                return data.data;
+            },
             model: {
                 val: 'id',
                 text: 'name'
