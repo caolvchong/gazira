@@ -13,8 +13,9 @@ define(function(require, exports, module) {
             type: 'static',
             total: +$('#total_count1').val(),
             size: 10,
-            success: function(page) {
+            success: function(page, data) {
                 $('#content1').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+                console.log('1', data);
             }
         }).render();
 
@@ -33,8 +34,9 @@ define(function(require, exports, module) {
             before: function() {
                 $('#content2').html('正在请求数据');
             },
-            success: function(page) {
+            success: function(page, data) {
                 $('#content2').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+                console.log('2', data);
             }
         }).render();
         $('#btn21').click(function() {
@@ -71,8 +73,9 @@ define(function(require, exports, module) {
             before: function() {
                 $('#content4').html('正在请求数据');
             },
-            success: function(page) {
+            success: function(page, data) {
                 $('#content4').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+                console.log('4', data);
             }
         }).render();
 
@@ -88,13 +91,14 @@ define(function(require, exports, module) {
             before: function() {
                 $('#content5').html('正在请求数据');
             },
-            success: function(page) {
+            success: function(page, data) {
                 $('#content5').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+                console.log('5', data);
             }
         }).render();
 
         //----------------------------------------
-        var p6 = new Pagination({
+        new Pagination({
             parentNode: '#box6',
             url: './data.php',
             data: function() {
@@ -112,12 +116,10 @@ define(function(require, exports, module) {
             before: function() {
                 $('#content6').html('正在请求数据');
             },
-            success: function(page) {
+            success: function(page, data) {
                 $('#content6').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+                console.log('6', data);
             }
         }).render();
-        $('#btn61').click(function() {
-            p6.set('current', 6);
-        });
     });
 });

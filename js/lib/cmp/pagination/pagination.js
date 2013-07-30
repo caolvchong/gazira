@@ -88,7 +88,8 @@ define(function(require, exports, module) {
             var url = this.get('url');
             var x = this.get('x') || 2; // 当前页码附近显示页数
             var y = this.get('y') || 1; // 省略号附近显示页数
-            var totalPage = Math.ceil(this.get('total') / this.get('size')); // 总页数
+            var size = this.get('size');
+            var totalPage = Math.ceil(this.get('total') / size); // 总页数
             var current = this.get('current'); // 当前页
             var sizeName = this.get('sizeName');
             var pageName = this.get('pageName');
@@ -99,7 +100,7 @@ define(function(require, exports, module) {
                 url += url.indexOf('?') === -1 ? '?' : '&';
                 url += $.param(this.get('data') || {});
                 if(url.indexOf(sizeName + '=') == -1) {
-                    url += sizeName + '=' + this.get('size') + '&';
+                    url += sizeName + '=' + size + '&';
                 }
                 if(url.indexOf(pageName + '=') == -1) {
                     url += pageName + '=';
@@ -133,7 +134,7 @@ define(function(require, exports, module) {
             if(flag !== false && this.get('type') === 'ajax') {
                 this.ajax();
             } else {
-                this.get('success') && this.get('success').call(this, current);
+                this.get('success') && this.get('success').call(this, current, $.isArray(this.get('data')) ? this.get('data').splice((current - 1) * size, Math.min(this.get('data').length, current * size)) : []);
             }
             return this;
         },
@@ -172,7 +173,7 @@ define(function(require, exports, module) {
                             that.view(false); // 只刷新分页视图，false避免递归请求
                         }
                     }
-                    that.get('success') && that.get('success').call(that, that.get('current'));
+                    that.get('success') && that.get('success').call(that, that.get('current'), data);
                 }
             };
             var params = this.get('data');
