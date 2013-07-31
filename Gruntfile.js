@@ -54,15 +54,16 @@ module.exports = function(grunt) {
                 forin: false, // 允许for in中不强制hasOwnProperty检测
                 bitwise: false, // 允许位运算
                 es5: true, // 允许使用ES5特性
+                expr: true, // 允许表达式用做函数调用或者语句使用
                 evil: false // 不允许使用eval和new Function
             },
-            useDefault: ['Gruntfile.js', 'js/**/*.js'],
+            useDefault: ['Gruntfile.js', 'js/**/*.js', '!**/tpl/*.js', '!js/lib/util/dom/position.js'],
             useEval: { // 允许使用eval或者new Function
                 options: {
                     evil: true
                 },
                 files: {
-                    src: []
+                    src: ['js/lib/util/dom/position.js']
                 }
             },
             testUnit: {
@@ -156,6 +157,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
+    // 默认任务：代码检查，单元测试，转化，合并，压缩，清理
     grunt.registerTask('default', ['jshint', 'qunit', 'transport', 'concat', 'uglify', 'clean']);
+    // jquery任务：压缩jquery
     grunt.registerTask('jquery', ['uglify:jquery']);
 }
