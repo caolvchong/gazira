@@ -96,13 +96,14 @@ define(function(require, exports, module) {
             var html = [];
             var pn = ['', ''];
             var split = '<span>...</span>';
+            var i;
             if(!isPost) {
                 url += url.indexOf('?') === -1 ? '?' : '&';
                 url += $.param(this.get('data') || {});
-                if(url.indexOf(sizeName + '=') == -1) {
+                if(url.indexOf(sizeName + '=') === -1) {
                     url += sizeName + '=' + size + '&';
                 }
-                if(url.indexOf(pageName + '=') == -1) {
+                if(url.indexOf(pageName + '=') === -1) {
                     url += pageName + '=';
                 }
             }
@@ -111,18 +112,18 @@ define(function(require, exports, module) {
                 pn[1] = '<a href="' + (url + Math.min(totalPage, current + 1)) + '" data-action="next">下一页</a>';
             }
             if(totalPage <= 5) {
-                for(var i = 1; i <= totalPage; i++) {
+                for(i = 1; i <= totalPage; i++) {
                     html.push(helper.tpl(url, i, isPost));
                 }
             } else {
                 if(current <= 3) {
-                    for(var i = 1; i <= 4; i++) {
+                    for(i = 1; i <= 4; i++) {
                         html.push(helper.tpl(url, i, isPost));
                     }
                     html.push(split, helper.tpl(url, totalPage, isPost));
                 } else if(current >= totalPage - 2) {
                     html.push(helper.tpl(url, 1, isPost), split);
-                    for(var i = totalPage - 2; i <= totalPage; i++) {
+                    for(i = totalPage - 2; i <= totalPage; i++) {
                         html.push(helper.tpl(url, i, isPost));
                     }
                 } else {
@@ -160,10 +161,12 @@ define(function(require, exports, module) {
                     var prev = +that.get('total');
                     var size = that.get('size');
                     var current = that.get('current');
-                    for(var i = 0, len = totalName.length; i < len; i++) {
-                        total = total[totalName[i]];
+                    if(total) {
+                        for(var i = 0, len = totalName.length; i < len; i++) {
+                            total = total[totalName[i]];
+                        }
                     }
-                    total = +total;
+                    total = +total || 0;
                     if(prev !== total) {
                         var totalPage = Math.ceil(total / size);
                         that.set('total', total, {silent: true});
