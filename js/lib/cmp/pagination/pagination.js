@@ -108,8 +108,8 @@ define(function(require, exports, module) {
                 }
             }
             if(this.get('showPN') !== false) {
-                pn[0] = '<a href="' + (url + Math.max(1, current - 1)) + '" data-action="prev">上一页</a>';
-                pn[1] = '<a href="' + (url + Math.min(totalPage, current + 1)) + '" data-action="next">下一页</a>';
+                pn[0] = '<a href="' + (isPost ? '#' : (url + Math.max(1, current - 1))) + '" data-action="prev">上一页</a>';
+                pn[1] = '<a href="' + (isPost ? '#' : (url + Math.min(totalPage, current + 1))) + '" data-action="next">下一页</a>';
             }
             if(totalPage <= 5) {
                 for(i = 1; i <= totalPage; i++) {
@@ -132,8 +132,10 @@ define(function(require, exports, module) {
             }
             this.element.html(pn[0] + html.join('') + pn[1]);
             this.reflow();
-            if(flag !== false && this.get('type') === 'ajax') {
-                this.ajax();
+            if(this.get('type') === 'ajax') {
+                if(flag !== false) {
+                    this.ajax();
+                }
             } else {
                 this.get('success') && this.get('success').call(this, current, $.isArray(this.get('data')) ? this.get('data').splice((current - 1) * size, Math.min(this.get('data').length, current * size)) : []);
             }
@@ -199,8 +201,9 @@ define(function(require, exports, module) {
         },
         _onRenderTotal: function(val, prev) {
             if(this._init !== true) {
-                delete this._init;
                 this.view();
+            } else {
+                delete this._init;
             }
         }
     });
