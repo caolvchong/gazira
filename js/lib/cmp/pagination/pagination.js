@@ -161,8 +161,8 @@ define(function(require, exports, module) {
                     var prev = +that.get('total');
                     var size = that.get('size');
                     var current = that.get('current');
-                    if(total) {
-                        for(var i = 0, len = totalName.length; i < len; i++) {
+                    for(var i = 0, len = totalName.length; i < len; i++) {
+                        if(total) {
                             total = total[totalName[i]];
                         }
                     }
