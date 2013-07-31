@@ -31,18 +31,18 @@ define(function(require, exports, module) {
          * @param type 事件类型，默认是click，基本也都是处理click事件
          * @return {object} jQuery对象，父节点
          */
-        listen:function(actions, node, type) {
+        listen: function(actions, node, type) {
             actions = actions || {};
             node = node ? $(node) : $(document);
             type = type || 'click';
-            
+
             var index = $.inArray(node[0], cache.dom);
             if(index !== -1) {
-                if(cache.eventType[index] != type) {
+                if(cache.eventType[index] !== type) {
                     index = -1;
                 }
             }
-            
+
             if(index === -1) {
                 cache.dom.push(node[0]);
                 cache.eventType.push(type);
@@ -73,7 +73,7 @@ define(function(require, exports, module) {
                     for(var i = 0, len = cache.action.length; i < len; i++) {
                         var temp = cache.action[i];
                         for(var key in temp) {
-                            if(key != actionKey && temp[key] && temp[key].not && $.isFunction(temp[key].not)) {
+                            if(key !== actionKey && temp[key] && temp[key].not && $.isFunction(temp[key].not)) {
                                 temp[key].not.call(temp[key].scope || target, e, xnode, actionKey);
                             }
                         }

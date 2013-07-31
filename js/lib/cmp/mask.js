@@ -22,7 +22,7 @@ define(function(require, exports, module) {
             width: isIE6 ? doc.outerWidth(true) : '100%',
             height: isIE6 ? doc.outerHeight(true) : '100%',
             className: 'dialog-mask',
-            opacity: .2,
+            opacity: 0.2,
             backgroundColor: '#000',
             style: {
                 position: isIE6 ? 'absolute' : 'fixed',

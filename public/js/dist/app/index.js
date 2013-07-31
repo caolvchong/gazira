@@ -1,0 +1,1 @@
+define("dist/app/index",["$"],function(n){var i=n("$");i(function(){})});

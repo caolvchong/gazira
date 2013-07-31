@@ -60,7 +60,7 @@ define(function(require, exports, module) {
          * @return {Boolean} true 是闰年 false 不是闰年
          */
         isLeap: function(year) {
-            return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+            return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
         },
         /**
          * 检测是否是一个符合格式的日期字符串
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
          */
         check: function(val, pattern) {
             var date = r.stringToDate(val, pattern);
-            return date != 0;
+            return date !== 0;
         },
         /**
          * 比较两个日期的前后顺序
@@ -111,51 +111,64 @@ define(function(require, exports, module) {
             val = val + '';
             // 日期格式
             pattern = pattern || 'yyyy-MM-dd';
-            var i_val = 0, i_pattern = 0, c = '', token = '', token2 = '', x, y, year = 1970, month = 1, date = 1, hh = 0, mm = 0, ss = 0, ampm = '';
-            while(i_pattern < pattern.length) {
+            var iVal = 0;
+            var iPattern = 0;
+            var c = '';
+            var token = '';
+            var x;
+            var y;
+            var year = 1970;
+            var month = 1;
+            var date = 1;
+            var hh = 0;
+            var mm = 0;
+            var ss = 0;
+            var ampm = '';
+            var i;
+            while(iPattern < pattern.length) {
                 // 挨个取字符,直到取到不一样的,形成token
-                c = pattern.charAt(i_pattern);
+                c = pattern.charAt(iPattern);
                 token = '';
-                while((pattern.charAt(i_pattern) == c) && (i_pattern < pattern.length)) {
-                    token += pattern.charAt(i_pattern++);
+                while((pattern.charAt(iPattern) === c) && (iPattern < pattern.length)) {
+                    token += pattern.charAt(iPattern++);
                 }
-                if(token == 'yyyy' || token == 'yy' || token == 'y') { // 年
-                    if(token == 'yyyy') {
+                if(token === 'yyyy' || token === 'yy' || token === 'y') { // 年
+                    if(token === 'yyyy') {
                         x = 4;
                         y = 4;
                     }
-                    if(token == 'yy') {
+                    if(token === 'yy') {
                         x = 2;
                         y = 2;
                     }
-                    if(token == 'y') {
+                    if(token === 'y') {
                         x = 2;
                         y = 4;
                     }
                     // 取得val中的年
-                    year = getLeftNum(val, i_val, x, y);
-                    if(year == null) {
+                    year = getLeftNum(val, iVal, x, y);
+                    if(year === null) {
                         return 0;
                     }
-                    i_val += year.length;
-                    if(year.length == 2) {
+                    iVal += year.length;
+                    if(year.length === 2) {
                         if(year > 70) {
                             year = 1900 + (year - 0);
                         } else {
                             year = 2000 + (year - 0);
                         }
                     }
-                } else if(token == 'MMM' || token == 'NNN') { // 英文月
+                } else if(token === 'MMM' || token === 'NNN') { // 英文月
                     month = 0;
-                    for(var i = 0; i < MONTH_NAMES.length; i++) {
-                        var month_name = MONTH_NAMES[i];
-                        if(val.substring(i_val, i_val + month_name.length).toLowerCase() == month_name.toLowerCase()) {
-                            if(token == 'MMM' || (token == 'NNN' && i > 11)) {
+                    for(i = 0; i < MONTH_NAMES.length; i++) {
+                        var monthName = MONTH_NAMES[i];
+                        if(val.substring(iVal, iVal + monthName.length).toLowerCase() === monthName.toLowerCase()) {
+                            if(token === 'MMM' || (token === 'NNN' && i > 11)) {
                                 month = i + 1;
                                 if(month > 12) {
                                     month -= 12;
                                 }
-                                i_val += month_name.length;
+                                iVal += monthName.length;
                                 break;
                             }
                         }
@@ -163,86 +176,86 @@ define(function(require, exports, module) {
                     if((month < 1) || (month > 12)) {
                         return 0;
                     }
-                } else if(token == 'EE' || token == 'E') { // 星期
-                    for(var i = 0; i < DAY_NAMES.length; i++) {
-                        var day_name = DAY_NAMES[i];
-                        if(val.substring(i_val, i_val + day_name.length).toLowerCase() == day_name.toLowerCase()) {
-                            i_val += day_name.length;
+                } else if(token === 'EE' || token === 'E') { // 星期
+                    for(i = 0; i < DAY_NAMES.length; i++) {
+                        var dayName = DAY_NAMES[i];
+                        if(val.substring(iVal, iVal + dayName.length).toLowerCase() === dayName.toLowerCase()) {
+                            iVal += dayName.length;
                             break;
                         }
                     }
-                } else if(token == 'MM' || token == 'M') { // 数字月
-                    month = getLeftNum(val, i_val, token.length, 2);
-                    if(month == null || (month < 1) || (month > 12)) {
+                } else if(token === 'MM' || token === 'M') { // 数字月
+                    month = getLeftNum(val, iVal, token.length, 2);
+                    if(month === null || (month < 1) || (month > 12)) {
                         return 0;
                     }
-                    i_val += month.length;
-                } else if(token == 'dd' || token == 'd') { // 号数
-                    date = getLeftNum(val, i_val, token.length, 2);
-                    if(date == null || (date < 1) || (date > 31)) {
+                    iVal += month.length;
+                } else if(token === 'dd' || token === 'd') { // 号数
+                    date = getLeftNum(val, iVal, token.length, 2);
+                    if(date === null || (date < 1) || (date > 31)) {
                         return 0;
                     }
-                    i_val += date.length;
-                } else if(token == 'hh' || token == 'h') { // 小时(12小时制)
-                    hh = getLeftNum(val, i_val, token.length, 2);
-                    if(hh == null || (hh < 1) || (hh > 12)) {
+                    iVal += date.length;
+                } else if(token === 'hh' || token === 'h') { // 小时(12小时制)
+                    hh = getLeftNum(val, iVal, token.length, 2);
+                    if(hh === null || (hh < 1) || (hh > 12)) {
                         return 0;
                     }
-                    i_val += hh.length;
-                } else if(token == 'HH' || token == 'H') { // 小时(24小时制)
-                    hh = getLeftNum(val, i_val, token.length, 2);
-                    if(hh == null || (hh < 0) || (hh > 23)) {
+                    iVal += hh.length;
+                } else if(token === 'HH' || token === 'H') { // 小时(24小时制)
+                    hh = getLeftNum(val, iVal, token.length, 2);
+                    if(hh === null || (hh < 0) || (hh > 23)) {
                         return 0;
                     }
-                    i_val += hh.length;
-                } else if(token == 'KK' || token == 'K') { // 小时(12小时制,12 = 0)
-                    hh = getLeftNum(val, i_val, token.length, 2);
-                    if(hh == null || (hh < 0) || (hh > 11)) {
+                    iVal += hh.length;
+                } else if(token === 'KK' || token === 'K') { // 小时(12小时制,12 = 0)
+                    hh = getLeftNum(val, iVal, token.length, 2);
+                    if(hh === null || (hh < 0) || (hh > 11)) {
                         return 0;
                     }
-                    i_val += hh.length;
-                } else if(token == 'kk' || token == 'k') { // 小时(24小时制,24 = 0)
-                    hh = getLeftNum(val, i_val, token.length, 2);
-                    if(hh == null || (hh < 1) || (hh > 24)) {
+                    iVal += hh.length;
+                } else if(token === 'kk' || token === 'k') { // 小时(24小时制,24 = 0)
+                    hh = getLeftNum(val, iVal, token.length, 2);
+                    if(hh === null || (hh < 1) || (hh > 24)) {
                         return 0;
                     }
-                    i_val += hh.length;
+                    iVal += hh.length;
                     hh--;
-                } else if(token == 'mm' || token == 'm') { // 分钟
-                    mm = getLeftNum(val, i_val, token.length, 2);
-                    if(mm == null || (mm < 0) || (mm > 59)) {
+                } else if(token === 'mm' || token === 'm') { // 分钟
+                    mm = getLeftNum(val, iVal, token.length, 2);
+                    if(mm === null || (mm < 0) || (mm > 59)) {
                         return 0;
                     }
-                    i_val += mm.length;
-                } else if(token == 'ss' || token == 's') { // 秒
-                    ss = getLeftNum(val, i_val, token.length, 2);
-                    if(ss == null || (ss < 0) || (ss > 59)) {
+                    iVal += mm.length;
+                } else if(token === 'ss' || token === 's') { // 秒
+                    ss = getLeftNum(val, iVal, token.length, 2);
+                    if(ss === null || (ss < 0) || (ss > 59)) {
                         return 0;
                     }
-                    i_val += ss.length;
-                } else if(token == 'a') { // 早上/下午
-                    if(val.substring(i_val, i_val + 2).toLowerCase() == 'am') {
+                    iVal += ss.length;
+                } else if(token === 'a') { // 早上/下午
+                    if(val.substring(iVal, iVal + 2).toLowerCase() === 'am') {
                         ampm = 'AM';
-                    } else if(val.substring(i_val, i_val + 2).toLowerCase() == 'pm') {
+                    } else if(val.substring(iVal, iVal + 2).toLowerCase() === 'pm') {
                         ampm = 'PM';
                     } else {
                         return 0;
                     }
-                    i_val += 2;
+                    iVal += 2;
                 } else {
-                    if(val.substring(i_val, i_val + token.length) != token) {
+                    if(val.substring(iVal, iVal + token.length) !== token) {
                         return 0;
                     } else {
-                        i_val += token.length;
+                        iVal += token.length;
                     }
                 }
             }
             // 已经匹配完,而后面还有字符串,说明输入格式有问题
-            if(i_val != val.length) {
+            if(iVal !== val.length) {
                 return 0;
             }
             // 验证月份天数的合法性
-            if(month == 2) { // 2月
+            if(month === 2) { // 2月
                 if(r.isLeap(year)) { // 闰年
                     if(date > 29) {
                         return 0;
@@ -253,15 +266,15 @@ define(function(require, exports, module) {
                     }
                 }
             }
-            if((month == 4) || (month == 6) || (month == 9) || (month == 11)) { // 4,6,9,11 是30天
+            if((month === 4) || (month === 6) || (month === 9) || (month === 11)) { // 4,6,9,11 是30天
                 if(date > 30) {
                     return 0;
                 }
             }
             // 维护hh 24小时的格式
-            if(hh < 12 && ampm == 'PM') {
+            if(hh < 12 && ampm === 'PM') {
                 hh = hh - 0 + 12;
-            } else if(hh > 11 && ampm == 'AM') {
+            } else if(hh > 11 && ampm === 'AM') {
                 hh -= 12;
             }
             return new Date(year, month - 1, date, hh, mm, ss);
@@ -274,7 +287,19 @@ define(function(require, exports, module) {
          */
         format: function(date, pattern) {
             pattern = pattern || 'yyyy-MM-dd';
-            var result = '', i_pattern = 0, c = '', token = '', y = date.getYear() + '', M = date.getMonth() + 1, d = date.getDate(), E = date.getDay(), H = date.getHours(), m = date.getMinutes(), s = date.getSeconds(), yyyy, yy, MMM, MM, dd, hh, h, mm, ss, ampm, HH, H, KK, K, kk, k, value = {};
+            var result = '';
+            var iPattern = 0;
+            var c = '';
+            var token = '';
+            var y = date.getYear() + '';
+            var M = date.getMonth() + 1;
+            var d = date.getDate();
+            var E = date.getDay();
+            var H = date.getHours();
+            var m = date.getMinutes();
+            var s = date.getSeconds();
+            var yyyy, yy, MMM, MM, dd, hh, h, mm, ss, HH, KK, K, kk, k;
+            var value = {};
             if(y.length < 4) {
                 y = '' + (y - 0 + 1900);
             }
@@ -291,7 +316,7 @@ define(function(require, exports, module) {
             value['EE'] = DAY_NAMES[E];
             value['H'] = H;
             value['HH'] = leftZero(H);
-            if(H == 0) {
+            if(H === 0) {
                 value['h'] = 12;
             } else if(H > 12) {
                 value['h'] = H - 12;
@@ -316,13 +341,13 @@ define(function(require, exports, module) {
             value['mm'] = leftZero(m);
             value['s'] = s;
             value['ss'] = leftZero(s);
-            while(i_pattern < pattern.length) {
-                c = pattern.charAt(i_pattern);
+            while(iPattern < pattern.length) {
+                c = pattern.charAt(iPattern);
                 token = '';
-                while((pattern.charAt(i_pattern) == c) && (i_pattern < pattern.length)) {
-                    token += pattern.charAt(i_pattern++);
+                while((pattern.charAt(iPattern) === c) && (iPattern < pattern.length)) {
+                    token += pattern.charAt(iPattern++);
                 }
-                if(value[token] != null) { // 获取对应token的值
+                if(value[token] !== null) { // 获取对应token的值
                     result = result + value[token];
                 } else { // 将其他字符串跟上,比如分隔符
                     result = result + token;
@@ -339,18 +364,20 @@ define(function(require, exports, module) {
          */
         distance: function(date, n, unit) {
             var t = 0;
-            if(unit == 'y') { //年
-                var strArr = r.format(date, 'yyyy-MM-dd HH:mm:ss').split('-');
-                var year = strArr[0] - 0 + n;
+            var strArr;
+            var year;
+            if(unit === 'y') { //年
+                strArr = r.format(date, 'yyyy-MM-dd HH:mm:ss').split('-');
+                year = strArr[0] - 0 + n;
                 return r.stringToDate(year + '-' + strArr[1] + '-' + strArr[2], 'yyyy-MM-dd HH:mm:ss');
-            } else if(unit == 'q' || unit == 'M') { // 季度/月
-                if(unit == 'q') {
+            } else if(unit === 'q' || unit === 'M') { // 季度/月
+                if(unit === 'q') {
                     n *= 3;
                 }
                 var tm = n % 12;
                 var ty = (n - tm) / 12;
-                var strArr = r.format(date, 'yyyy-MM-dd HH:mm:ss').split('-');
-                var year = strArr[0] - 0 + ty;
+                strArr = r.format(date, 'yyyy-MM-dd HH:mm:ss').split('-');
+                year = strArr[0] - 0 + ty;
                 var month = strArr[1] - 0 + tm;
                 var tt = strArr[2].split(' ');
                 var day = tt[0];
@@ -361,25 +388,25 @@ define(function(require, exports, module) {
                     month -= 12;
                     year += 1;
                 }
-                if(month == 2) {
+                if(month === 2) {
                     if(r.isLeap(year)) {
                         day = day > 29 ? 29 : day;
                     } else {
                         day = day > 28 ? 28 : day;
                     }
-                } else if(month == 4 || month == 6 || month == 9 || month == 11) {
+                } else if(month === 4 || month === 6 || month === 9 || month === 11) {
                     day = day > 30 ? 30 : day;
                 } else {
                     day = day > 31 ? 31 : day;
                 }
                 return r.stringToDate(year + '-' + leftZero(month) + '-' + day + ' ' + tt[1], 'yyyy-MM-dd HH:mm:ss');
-            } else if(unit == 'h') { // 时
+            } else if(unit === 'h') { // 时
                 t = 3600 * 1000 * n;
-            } else if(unit == 'm') { // 分钟
+            } else if(unit === 'm') { // 分钟
                 t = 60 * 1000 * n;
-            } else if(unit == 's') { // 秒
+            } else if(unit === 's') { // 秒
                 t = 1000 * n;
-            } else if(unit == 'w') { // 周
+            } else if(unit === 'w') { // 周
                 t = 7 * 24 * 3600 * 1000 * n;
             } else { // 天
                 t = 24 * 3600 * 1000 * n;

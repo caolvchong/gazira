@@ -84,7 +84,7 @@ define(function(require, exports, module) {
             loadProgress: function(percent, duration) {
                 this.loadedPercent = percent;
                 this.duration = duration;
-                if(duration != 0) {
+                if(duration !== 0) {
                     this._event.trigger('progress', [duration * percent, duration, this]); // 触发载入进度事件
                 }
                 if(percent >= 1) {
@@ -98,7 +98,7 @@ define(function(require, exports, module) {
              */
             updatePlayhead: function(percent) {
                 this._event.trigger('timeupdate', [percent * this.duration, this.duration, this]);
-                if(this.prevPercent != percent) {
+                if(this.prevPercent !== percent) {
                     this.prevPercent = percent;
                 } else {
                     this.percentCount++;
@@ -174,7 +174,7 @@ define(function(require, exports, module) {
                 this.element.init(this.src);
             }
         }
-        helper.useFlash ? (this.status != 1 && this.element.pplay()) : this.element.play();
+        helper.useFlash ? (this.status !== 1 && this.element.pplay()) : this.element.play();
         this.status = 1;
         this._event.trigger('play', [this]); // 触发播放事件，和timeupdate区别是播放中一直触发timeupdate，play仅调用播放时触发一次
     };
@@ -182,7 +182,7 @@ define(function(require, exports, module) {
      * 暂停
      */
     audio.prototype.pause = function() {
-        if(this.status == 1) {
+        if(this.status === 1) {
             this.status = 2;
             helper.useFlash ? this.element.ppause() : this.element.pause();
             this._event.trigger('pause', [this]); // 触发暂停事件
@@ -192,21 +192,21 @@ define(function(require, exports, module) {
      * 切换播放/暂停
      */
     audio.prototype.toggle = function() {
-        this.status == 1 ? this.pause() : this.play();
+        this.status === 1 ? this.pause() : this.play();
     };
     audio.prototype.bind = function() {
         var len = arguments.length;
-        if(len == 1) {
+        if(len === 1) {
             this._event.bind(arguments[0]);
-        } else if(len == 2) {
+        } else if(len === 2) {
             this._event.bind(arguments[0], arguments[1]);
         }
     };
     audio.prototype.unbind = function() {
         var len = arguments.length;
-        if(len == 1) {
+        if(len === 1) {
             this._event.unbind(arguments[0]);
-        } else if(len == 2) {
+        } else if(len === 2) {
             this._event.unbind(arguments[0], arguments[1]);
         }
     };

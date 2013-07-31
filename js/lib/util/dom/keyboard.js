@@ -85,7 +85,7 @@ define(function(require, exports, module) {
             '222':'"',
             '220':'|',
             '188':'<',
-            '192':'>',
+            '190':'>',
             '191':'?'
         },
         normal:{ // 正常按键
@@ -161,16 +161,16 @@ define(function(require, exports, module) {
                 var temp = [0, 0, 0]; // 表示Ctrl，Alt，Shift
                 for(var i = 0, iLen = keyArr.length; i < iLen; i++) {
                     var s = keyArr[i].toLowerCase();
-                    if(s == 'ctrl') {
+                    if(s === 'ctrl') {
                         temp[0] = 1;
-                    } else if(s == 'alt') {
+                    } else if(s === 'alt') {
                         temp[1] = 1;
-                    } else if(s == 'shift' && flag) {
+                    } else if(s === 'shift' && flag) {
                         temp[2] = 1;
                     } else {
                         if(!(/^[a-z]$/gi.test(s))) { // 非字母
                             for(var k in KEY.shift) {
-                                if(KEY.shift[k] == s) {
+                                if(KEY.shift[k] === s) {
                                     temp[2] = 1;
                                     flag = false;
                                     break;
@@ -247,7 +247,7 @@ define(function(require, exports, module) {
          */
         ctrlEnter:function(node, callback) {
             return node.keydown(function(e) {
-                if((e.ctrlKey || e.originalEvent.metaKey) && e.keyCode == r.ENTER) {
+                if((e.ctrlKey || e.originalEvent.metaKey) && e.keyCode === r.ENTER) {
                     callback.call(node, e);
                     e.stopPropagation();
                 }
@@ -306,7 +306,7 @@ define(function(require, exports, module) {
         var key;
         var temp = [0, 0, 0];
         var tag = e.target.tagName.toUpperCase();
-        if(tag != 'INPUT' && tag != 'BUTTON' && tag != 'TEXTAREA' && tag != 'SELECT' && tag != 'OPTION') {
+        if(tag !== 'INPUT' && tag !== 'BUTTON' && tag !== 'TEXTAREA' && tag !== 'SELECT' && tag !== 'OPTION') {
             if(!keydownCache[e.keyCode]) {
                 if(e.ctrlKey) {
                     temp[0] = 1;

@@ -92,9 +92,9 @@ define(function(require, exports, module) {
         hide: function() {
             if(this._type === 'iframe' && this.iframe) { // 把 iframe 状态复原
                 this.iframe.attr({
-                    src: 'javascript:\'\';'
+                    src: 'about:blank'
                 });
-                this.iframe.remove(); // IE6 下，将 src 置为 javascript:''; 会出现 404 页面
+                this.iframe.remove(); // IE6 下，将 src 置为 javascript:''; 会出现 404 页面（已经修改为about:blank）
                 this.iframe = null;
                 this._errCount = 0;
             }
@@ -220,7 +220,7 @@ define(function(require, exports, module) {
 
             this.contentElement.empty();
             this.iframe = $('<iframe>', {
-                src: 'javascript:\'\';',
+                src: 'about:blank',
                 scrolling: 'no',
                 frameborder: 'no',
                 allowTransparency: 'true',

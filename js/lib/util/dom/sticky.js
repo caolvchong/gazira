@@ -11,7 +11,67 @@ define(function(require, exports, module) {
     var isIE = ua.indexOf('msie') !== -1;
     var isIE6 = ua.indexOf('msie 6') !== -1;
 
-    var isPositionStickySupported = checkPositionStickySupported(), isPositionFixedSupported = checkPositionFixedSupported();
+    function sticky(elem, marginTop, callback) {
+        return (new Sticky({
+            element: elem,
+            marginTop: marginTop || 0,
+            callback: callback
+        })).render();
+    }
+
+    // Helper
+    // ---
+    function checkPositionFixedSupported() {
+        return !isIE6;
+    }
+
+    function checkPositionStickySupported() {
+        if(isIE) {
+            return false;
+        }
+
+        var container = doc[0].body;
+
+        if(doc[0].createElement && container && container.appendChild && container.removeChild) {
+            var isSupported, el = doc[0].createElement('div'), getStyle = function(st) {
+                if(window.getComputedStyle) {
+                    return window.getComputedStyle(el).getPropertyValue(st);
+                } else {
+                    return el.currentStyle.getAttribute(st);
+                }
+            };
+
+            container.appendChild(el);
+
+            for(var i = 0; i < stickyPrefix.length; i++) {
+                el.style.cssText = 'position:' + stickyPrefix[i] + 'sticky;visibility:hidden;';
+                if(isSupported = getStyle('position').indexOf('sticky') !== -1) {
+                    break;
+                }
+            }
+
+            el.parentNode.removeChild(el);
+            return isSupported;
+        }
+    }
+
+    var isPositionStickySupported = checkPositionStickySupported();
+    var isPositionFixedSupported = checkPositionFixedSupported();
+
+    // sticky.stick(elem, marginTop, callback)
+    sticky.stick = sticky;
+
+    // sticky.fix(elem)
+    sticky.fix = function(elem) {
+        return (new Sticky({
+            element: elem,
+            marginTop: Number.MAX_VALUE // 无穷大的 marginTop 即表示元素永远 fixed
+        })).render();
+    };
+
+    // 便于写测试用例
+    sticky.isPositionStickySupported = isPositionStickySupported;
+    sticky.isPositionFixedSupported = isPositionFixedSupported;
 
     // Sticky
     // 实现侧边栏跟随滚动的效果
@@ -27,6 +87,7 @@ define(function(require, exports, module) {
 
     Sticky.prototype.render = function() {
         var self = this;
+        var callFix;
 
         // 一个元素只允许绑定一次
         if(!this.elem.length || this.elem.data('bind-sticked')) {
@@ -38,7 +99,7 @@ define(function(require, exports, module) {
 
         // 表示需要 fixed，不能用 position:sticky 来实现
         if(this.marginTop === Number.MAX_VALUE) {
-            var callFix = true;    // 表示调用了 sticky.fix
+            callFix = true;    // 表示调用了 sticky.fix
             this.marginTop = this._originTop;
         }
 
@@ -196,60 +257,4 @@ define(function(require, exports, module) {
     // ---
 
     module.exports = sticky;
-
-    function sticky(elem, marginTop, callback) {
-        return (new Sticky({
-            element: elem,
-            marginTop: marginTop || 0,
-            callback: callback
-        })).render();
-    }
-
-    // sticky.stick(elem, marginTop, callback)
-    sticky.stick = sticky;
-
-    // sticky.fix(elem)
-    sticky.fix = function(elem) {
-        return (new Sticky({
-            element: elem,
-            marginTop: Number.MAX_VALUE // 无穷大的 marginTop 即表示元素永远 fixed
-        })).render();
-    };
-
-    // 便于写测试用例
-    sticky.isPositionStickySupported = isPositionStickySupported;
-    sticky.isPositionFixedSupported = isPositionFixedSupported;
-
-    // Helper
-    // ---
-    function checkPositionFixedSupported() {
-        return !isIE6;
-    }
-
-    function checkPositionStickySupported() {
-        if(isIE) return false;
-
-        var container = doc[0].body;
-
-        if(doc[0].createElement && container && container.appendChild && container.removeChild) {
-            var isSupported, el = doc[0].createElement('div'), getStyle = function(st) {
-                    if(window.getComputedStyle) {
-                        return window.getComputedStyle(el).getPropertyValue(st);
-                    } else {
-                        return el.currentStyle.getAttribute(st);
-                    }
-                };
-
-            container.appendChild(el);
-
-            for(var i = 0; i < stickyPrefix.length; i++) {
-                el.style.cssText = 'position:' + stickyPrefix[i] + 'sticky;visibility:hidden;';
-                if(isSupported = getStyle('position').indexOf('sticky') !== -1) break;
-            }
-
-            el.parentNode.removeChild(el);
-            return isSupported;
-        }
-    }
-
 });

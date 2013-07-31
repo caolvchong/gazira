@@ -28,7 +28,7 @@
         map: map,
         alias: {
             $: 'jquery/jquery.js',
-            'seajs-debug': 'seajs/plugin-debug'
+            'seajs-debug': 'seajs/seajs-debug'
         }
     });
 })();

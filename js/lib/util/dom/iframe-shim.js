@@ -58,7 +58,7 @@ define(function(require, exports, module) {
         module.exports = Shim;
     } else {
         // 除了 IE6 都返回空函数
-        function Noop() {}
+        var Noop = function() {};
 
         Noop.prototype.sync = function() {return this};
         Noop.prototype.destroy = Noop;
@@ -85,7 +85,7 @@ define(function(require, exports, module) {
         }
 
         return $('<iframe>', {
-            src: 'javascript:\'\'', // 不加的话，https 下会弹警告
+            src: 'about:blank', // 不加的话，https 下会弹警告
             frameborder: 0,
             css: css
         }).insertBefore(target);

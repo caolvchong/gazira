@@ -49,7 +49,7 @@ define(function(require, exports, module) {
     };
 
     $(document).keydown(function(e) { // 防止ESC键导致终端AJAX请求,这种情况下AJAX的状态值是error
-        if(e.keyCode == 27) {
+        if(e.keyCode === 27) {
             return false;
         }
     });
@@ -216,8 +216,8 @@ define(function(require, exports, module) {
                 var n = 0; // 当前连接数量
                 pool[name] = {}; // 存放连接
                 var list = pool[name];
-                max = Math.max(1, parseInt(max) || 1);
-                priority = Math.max(1, parseInt(priority) || 1);
+                max = Math.max(1, parseInt(max, 10) || 1);
+                priority = Math.max(1, parseInt(priority, 10) || 1);
                 for(var i = 1; i <= priority; i++) {
                     list[i] = [];
                 }
@@ -237,7 +237,7 @@ define(function(require, exports, module) {
                                     obj.complete = (function(xhrId) {
                                         return function(xhr, status) {
                                             n--;
-                                            if(status != 'success') {
+                                            if(status !== 'success') {
                                                 xhr && xhr.abort();
                                             }
                                             if($.isFunction(completeFn)) {

@@ -73,9 +73,9 @@ define(function(require, exports, module) {
     }
 
     // 提供原型对象，判断是处于速度上的考虑
-    var createProto = Object.__proto__ ? function(proto) {
+    var createProto = Object['__proto__'] ? function(proto) {
         return {
-            __proto__: proto
+            '__proto__': proto
         };
     } : function(proto) {
         Ctor.prototype = proto;

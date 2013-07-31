@@ -69,10 +69,10 @@ define(function(require, exports, module) {
             key = encode(key);
             var start = cookieString.indexOf(key + '=');
             var result = '';
-            if(start != -1) {
+            if(start !== -1) {
                 start += key.length + 1;
                 var end = cookieString.indexOf(';', start);
-                if(end == -1) {
+                if(end === -1) {
                     result = decode(cookieString.substring(start));
                 } else {
                     result = decode(cookieString.substring(start, end));

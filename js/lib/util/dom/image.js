@@ -1,17 +1,17 @@
 define(function(require, exports, module) {
     var $ = require('$');
-    var undefined;
+    var undef;
 
     var helper = {
         getCssPrefix: (function() {
             var prefix = false; // 前缀类型,false表示不支持
             return function() {
                 var node = document.createElement('div');
-                if(node.style.MozTransform !== undefined) {
+                if(node.style.MozTransform !== undef) {
                     prefix = 'Moz';
-                } else if(node.style.webkitTransform !== undefined) {
+                } else if(node.style.webkitTransform !== undef) {
                     prefix = 'webkit';
-                } else if(node.style.OTransform !== undefined) {
+                } else if(node.style.OTransform !== undef) {
                     prefix = 'O';
                 } else {
                     prefix = '';
@@ -185,7 +185,7 @@ define(function(require, exports, module) {
             var image = params.node[0] || params.node;
             var dir = params.dir;
             var prefix = helper.getCssPrefix();
-            if(lang.isUndefined(image.degree)) {
+            if($.isUndefined(image.degree)) {
                 image.degree = 0;
                 if(prefix !== false && params.animate !== false) {
                     if(prefix) {

@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     var Widget = require('../widget');
     var ajax = require('../../util/ajax');
 
-    var undefined;
+    var undef;
     var helper = {
         loading: function(item, key) {
             return '<option value="' + (item[key] || 0) + '">' + (item.placeholder || 'loading...') + '</option>';
@@ -137,7 +137,7 @@ define(function(require, exports, module) {
                         option.text = item;
                     } else {
                         option.value = item[this.get('model').val];
-                        option.text = item[this.get('model').text] === undefined ? item[this.get('model').val] : item[this.get('model').text];
+                        option.text = item[this.get('model').text] === undef ? item[this.get('model').val] : item[this.get('model').text];
                         if(item.selected) {
                             option.selected = true;
                         }

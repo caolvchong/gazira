@@ -5,7 +5,7 @@ define(function(require, exports, module) {
          */
         useFlash: (function() {
             var a = document.createElement('audio');
-            return !(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, '')) || navigator.userAgent.indexOf('Chromium') != -1;
+            return !(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, '')) || navigator.userAgent.indexOf('Chromium') !== -1;
         })(),
         /**
          * 格式化好load方法的参数，需要绑定this
@@ -14,7 +14,7 @@ define(function(require, exports, module) {
          */
         loadParams: function(params) {
             var p = {};
-            if(typeof params == 'string') {
+            if(typeof params === 'string') {
                 p.src = params;
                 p.preload = true;
                 p.autoplay = true;
@@ -63,11 +63,11 @@ define(function(require, exports, module) {
                     _this.timer.progress = setInterval(function() { // 进度条加载
                         var durationLoaded = _this.element.buffered.end(_this.element.buffered.length - 1); // 载入时长
                         percent = durationLoaded / _this.element.duration;
-                        if(percent != prePercent) {
+                        if(percent !== prePercent) {
                             prePercent = percent;
                         } else {
                             count++;
-                            if(count == 5) { // 缓存检测
+                            if(count === 5) { // 缓存检测
                                 durationLoaded = _this.element.duration;
                                 _this._event.trigger('loaded', [_this]); // 触发载入完成事件
                                 clearInterval(_this.timer.progress);

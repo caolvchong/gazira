@@ -26,14 +26,14 @@ define(function(require, exports, module) {
         cut: function(string, n, params) {
             params = params || {};
             var fullSharp = (params === true || params.fullSharp === true);
-            var right = params && params.dir == 'right';
+            var right = params && params.dir === 'right';
             if(fullSharp) { // 全角算两个字符
                 var bLen = this.blength(string), nowLen = 0, suitLen = 0;
                 if(bLen <= n) { // 全角长度还不如n,则返回全部,减少计算量
                     return string;
                 }
                 var t = n / 2, temp;
-                t = t != parseInt(t) ? parseInt(t) - 1 : t;
+                t = t !== parseInt(t, 10) ? parseInt(t, 10) - 1 : t;
                 temp = right ? string.slice(string.length - t) : string.slice(0, t);
                 suitLen = this.blength(temp);
                 nowLen = temp.length;

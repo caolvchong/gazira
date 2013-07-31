@@ -102,7 +102,7 @@ define(function(require, exports, module) {
             var that = this;
 
             bindEvent('click', this.get('trigger'), function(e) {
-                if(this.tagName.toLowerCase() === "a") {
+                if(this.tagName.toLowerCase() === 'a') {
                     e.preventDefault();
                 }
 
@@ -128,7 +128,7 @@ define(function(require, exports, module) {
                     return;
                 }
                 that.get('trigger').each(function(i, item) {
-                    if(trigger == item) {
+                    if(trigger === item) {
                         item._active = true;
                         // 标识当前点击的元素
                         that.activeTrigger = $(item);
@@ -156,7 +156,7 @@ define(function(require, exports, module) {
             }, this.get('delegateNode'), this);
 
             // 为了当input blur时能够选择和操作弹出层上的内容
-            this.delegateEvents("mousedown", function(e) {
+            this.delegateEvents('mousedown', function(e) {
                 this._downOnElement = true;
             });
         },
@@ -168,6 +168,16 @@ define(function(require, exports, module) {
 
             var showTimer, hideTimer;
             var that = this;
+            function leaveHandler(e) {
+                clearTimeout(showTimer);
+                showTimer = null;
+
+                if(that.get('visible')) {
+                    hideTimer = setTimeout(function() {
+                        that.hide();
+                    }, delay);
+                }
+            }
 
             // 当 delay 为负数时
             // popup 变成 tooltip 的效果
@@ -190,21 +200,10 @@ define(function(require, exports, module) {
             bindEvent('mouseleave', trigger, leaveHandler, delegateNode, this);
 
             // 鼠标在悬浮层上时不消失
-            this.delegateEvents("mouseenter", function() {
+            this.delegateEvents('mouseenter', function() {
                 clearTimeout(hideTimer);
             });
-            this.delegateEvents("mouseleave", leaveHandler);
-
-            function leaveHandler(e) {
-                clearTimeout(showTimer);
-                showTimer = null;
-
-                if(that.get('visible')) {
-                    hideTimer = setTimeout(function() {
-                        that.hide();
-                    }, delay);
-                }
-            }
+            this.delegateEvents('mouseleave', leaveHandler);
         },
 
         _bindTooltip: function() {
@@ -247,7 +246,7 @@ define(function(require, exports, module) {
     function bindEvent(type, element, fn, delegateNode, context) {
         var hasDelegateNode = delegateNode && delegateNode[0];
 
-        context.delegateEvents(hasDelegateNode ? delegateNode : element, hasDelegateNode ? type + " " + element.selector : type, function(e) {
+        context.delegateEvents(hasDelegateNode ? delegateNode : element, hasDelegateNode ? type + ' ' + element.selector : type, function(e) {
             fn.call(e.currentTarget, e);
         });
     }
