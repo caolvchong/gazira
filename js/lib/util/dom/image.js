@@ -185,7 +185,7 @@ define(function(require, exports, module) {
             var image = params.node[0] || params.node;
             var dir = params.dir;
             var prefix = helper.getCssPrefix();
-            if($.isUndefined(image.degree)) {
+            if(image.degree === undef) {
                 image.degree = 0;
                 if(prefix !== false && params.animate !== false) {
                     if(prefix) {

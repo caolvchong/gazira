@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     var $ = require('$');
 
+    var undef;
     var optionalParam = /\((.*?)\)/g;
     var namedParam = /(\(\?)?:\w+/g; // :通配符
     var splatParam = /\*\w+/g; // *号通配符
@@ -83,7 +84,7 @@ define(function(require, exports, module) {
     };
 
     var iframe;
-    var supportHash = ('onhashchange' in window) && ($.isUndefined(document.documentMode) || document.documentMode === 8);
+    var supportHash = ('onhashchange' in window) && (document.documentMode === undef || document.documentMode === 8);
     var lastHash = helper.getHash();
     var cache = {};
 
