@@ -176,7 +176,7 @@ define(function(require, exports, module) {
                     if(selector) { // delegate
                         $(element).on(eventType, selector, callback);
                     } else {
-                        $(element).on(eventType, callback)
+                        $(element).on(eventType, callback);
                     }
                 })(events[key], this);
             }
