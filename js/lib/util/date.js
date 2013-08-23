@@ -287,6 +287,7 @@ define(function(require, exports, module) {
          */
         format: function(date, pattern) {
             pattern = pattern || 'yyyy-MM-dd';
+            var undef;
             var result = '';
             var iPattern = 0;
             var c = '';
@@ -347,7 +348,7 @@ define(function(require, exports, module) {
                 while((pattern.charAt(iPattern) === c) && (iPattern < pattern.length)) {
                     token += pattern.charAt(iPattern++);
                 }
-                if(value[token] !== null) { // 获取对应token的值
+                if(value[token] !== null && value[token] !== undef) { // 获取对应token的值
                     result = result + value[token];
                 } else { // 将其他字符串跟上,比如分隔符
                     result = result + token;
