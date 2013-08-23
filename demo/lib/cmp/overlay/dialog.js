@@ -12,8 +12,13 @@ define(function(require, exports, module) {
         attrs: {
             template: '<div class="widget-dialog"><a href="#" class="close" data-action="close">X</a></div>',
             align: {
-                selfXY: ['50%', '50%'],
-                baseXY: ['50%', '50%']
+                getter: function(val) {
+                    console.log(123);
+                    return {
+                        selfXY: ['50%', '50%'],
+                        baseXY: ['50%', '50%']
+                    };
+                }
             }
         },
         events: {
@@ -24,6 +29,14 @@ define(function(require, exports, module) {
         },
         setup: function() {
             Dialog.superclass.setup.call(this);
+
+            var that = this;
+            $(this.get('trigger')).click(function() {
+                that.show();
+            });
+            // 需要调用这句话来实现功能
+            this._blurHide(this.get('trigger'));
+
         },
         show: function() {
             if(!this.rendered) {
@@ -31,10 +44,6 @@ define(function(require, exports, module) {
                 Sticky.fix(this.element);
             }
             Dialog.superclass.show.call(this);
-            return this;
-        },
-        hide: function() {
-            Dialog.superclass.hide.call(this);
             return this;
         }
     });

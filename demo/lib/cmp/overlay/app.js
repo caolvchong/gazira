@@ -51,9 +51,8 @@ define(function(require, exports, module) {
 
 
 
-        var d1 = new Dialog();
-        $('#btn21').click(function() {
-            d1.show();
+        var d1 = new Dialog({
+            trigger: '#btn21'
         });
     });
 });
