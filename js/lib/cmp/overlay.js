@@ -163,7 +163,7 @@ define(function(require, exports, module) {
 
     // 绑定 blur 隐藏事件
     Overlay.blurOverlays = [];
-    $(document).on('click', function(e) {
+    $(document).on('mousedown', function(e) {
         hideBlurOverlays(e);
     });
 
