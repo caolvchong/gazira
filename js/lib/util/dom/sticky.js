@@ -247,7 +247,7 @@ define(function(require, exports, module) {
         this._placeholder && this._placeholder.remove();
     };
 
-    Sticky.prototype.destory = function() {
+    Sticky.prototype.destroy = function() {
         this._restore();
         this.elem.data('bind-sticked', false);
         $(window).off('scroll.' + this._stickyId);
