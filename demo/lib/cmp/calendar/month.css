@@ -1,0 +1,38 @@
+.widget-calendar-month {
+  font: 16px/20px 'Xin Gothic', 'PT Sans', 'Hiragino Sans GB', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #dadada;
+  box-shadow: 1px 1px 9px #ccc;
+  text-align: center;
+  border-spacing: 0;
+  width: 238px;
+}
+.widget-calendar-month tr {
+  background-color: #f9f9f9;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  color: #333;
+}
+.widget-calendar-month .widget-calendar-month-column td {
+  text-align: center;
+  width: 76px;
+  border: none;
+  padding: 6px 0;
+}
+.widget-calendar-month .widget-calendar-month-column td:hover {
+  cursor: pointer;
+  color: #333;
+  background: #dadada;
+}
+.widget-calendar-month .widget-calendar-month-column td.month-curr {
+  color: #fff;
+  background: #d64;
+}
+.widget-calendar-month .widget-calendar-month-column td.month-disabled {
+  background: #eee;
+  color: #bbb;
+  cursor: not-allowed;
+}

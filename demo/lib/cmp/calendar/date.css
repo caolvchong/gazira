@@ -1,0 +1,50 @@
+.widget-calendar-date {
+  font: 16px/20px 'Xin Gothic', 'PT Sans', 'Hiragino Sans GB', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #dadada;
+  box-shadow: 1px 1px 9px #ccc;
+  text-align: center;
+  border-spacing: 0;
+  width: 238px;
+}
+.widget-calendar-date tr {
+  background-color: #f9f9f9;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  color: #333;
+}
+.widget-calendar-date td, .widget-calendar-date th {
+  font-weight: normal;
+  text-align: center;
+  border: none;
+  width: 34px;
+  padding: 4px 0;
+}
+.widget-calendar-date .widget-calendar-day-column {
+  border-bottom: 1px solid #dadada;
+}
+.widget-calendar-date .widget-calendar-day-5,
+.widget-calendar-date .widget-calendar-day-6 {
+  color: #d64;
+}
+.widget-calendar-date .widget-calendar-date-column .prev-month,
+.widget-calendar-date .widget-calendar-date-column .next-month {
+  color: #ccc;
+}
+.widget-calendar-date .widget-calendar-date-column td:hover {
+  cursor: pointer;
+  color: #333;
+  background: #dadada;
+}
+.widget-calendar-date .widget-calendar-date-column td.curr-day {
+  color: #fff;
+  background: #d64;
+}
+.widget-calendar-date .widget-calendar-date-column td.day-disabled {
+  background: #eee;
+  color: #bbb;
+  cursor: not-allowed;
+}

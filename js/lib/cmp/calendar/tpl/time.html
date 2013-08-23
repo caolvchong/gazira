@@ -1,0 +1,21 @@
+{{if(display.hour)}}
+<div class="cal-hour">
+    <input type="text" value="{{hour}}" data-input="hour"/>
+    <span data-action="nextHour"> + </span>
+    <span data-action="prevHour"> - </span>
+</div>
+{{endif}}
+{{if(display.minute)}}
+<div class="cal-minute">
+    <input type="text" value="{{minute}}" data-input="minute"/>
+    <span data-action="nextMinute"> + </span>
+    <span data-action="prevMinute"> - </span>
+</div>
+{{endif}}
+{{if(display.second)}}
+<div class="cal-second">
+    <input type="text" value="{{second}}" data-input="second"/>
+    <span data-action="nextSecond"> + </span>
+    <span data-action="prevSecond"> - </span>
+</div>
+{{endif}}
