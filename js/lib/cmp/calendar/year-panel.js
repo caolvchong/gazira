@@ -6,17 +6,19 @@
 define(function(require, exports, module) {
     var $ = require('$');
     var Widget = require('../widget');
+    var helper = {
+        getDate: function(year) {
+            return new Date(+year, 0, 1);
+        }
+    };
 
-    var Year = Widget.extend({
+    var YearPanel = Widget.extend({
         attrs: {
-            year: new Date().getFullYear(),
-            min: 1900,
-            max: 2099,
+            date: new Date(),
             n: 10, // 每页显示的年数个数
             m: 3, // 每行默认显示的个数
             disabled: function(year) { // function, 返回false的则不可点击
-                year = year.getFullYear ? year.getFullYear() : year;
-                return year < this.get('min') || year > this.get('max');
+                return false;
             },
             prevPlaceholder: '. . .',
             nextPlaceholder: '. . .'
@@ -24,49 +26,48 @@ define(function(require, exports, module) {
         events: {
             'click [data-role=set-year]': function(e) {
                 var node = $(e.target);
-                var prev = this.get('year');
-                var year = +node.attr('data-val');
-                this.set('year', year);
-                this.trigger('select', year, prev, node);
+                var prev = this.get('date');
+                var now = helper.getDate(node.attr('data-val'));
+                this.set('date', now);
+                this.trigger('select', now, prev, node);
             },
             'click .year-disabled': function(e) {
                 var node = $(e.target);
-                var year = this.get('year');
-                var val = +node.attr('data-val');
+                var year = this.get('date');
+                var val = helper.getDate(node.attr('data-val'));
                 this.trigger('selectDisabled', val, year, node);
             },
             'click [data-role=get-prev-page]': function(e) {
-                var prev = this.get('year');
-                var year = prev - this.get('n');
-                this.set('year', year);
+                var prev = this.get('date');
+                var now =  helper.getDate(prev.getFullYear() - this.get('n'));
+                this.set('date', now);
                 this.show();
-                this.trigger('select', year, prev);
+                this.trigger('select', now, prev);
             },
             'click [data-role=get-next-page]': function(e) {
-                var prev = this.get('year');
-                var year = prev + this.get('n');
-                this.set('year', year);
+                var prev = this.get('date');
+                var now = helper.getDate(prev.getFullYear() + this.get('n'));
+                this.set('date', now);
                 this.show();
-                this.trigger('select', year, prev);
+                this.trigger('select', now, prev);
             }
         },
         prev: function() {
-            var prev = this.get('year');
-            var year = prev - 1;
-            this.set('year', year);
-            this.trigger('select', year, prev);
+            var prev = this.get('date');
+            var now = helper.getDate(prev.getFullYear() - 1);
+            this.set('date', now);
+            this.trigger('select', now, prev);
             return this;
         },
         next: function() {
-            var prev = this.get('year');
-            var year = prev + 1;
-            this.set('year', year);
-            this.trigger('select', year, prev);
+            var prev = this.get('date');
+            var now = helper.getDate(prev.getFullYear() + 1);
+            this.set('date', now);
+            this.trigger('select', now, prev);
             return this;
         },
         show: function() {
-            try {
-            var year = this.get('year');
+            var year = this.get('date').getFullYear();
             var n = this.get('n');
             var m = this.get('m');
             var row = Math.ceil((n + 2) / m);
@@ -76,7 +77,7 @@ define(function(require, exports, module) {
                 list[i] = {
                     role: 'set-year',
                     value: start + i,
-                    disabled: this.get('disabled').call(this, start + i)
+                    disabled: this.get('disabled').call(this, helper.getDate(start + i))
                 };
             }
             list.unshift({
@@ -109,16 +110,13 @@ define(function(require, exports, module) {
                 temp.push('</tr>');
                 arr[i] = temp.join('');
             }
-            arr.unshift('<table class="widget-calendar-year" data-role="year-column">');
+            arr.unshift('<table class="widget-calendar-year" data-role="year-panel">');
             arr.push('</table>');
 
             this.element.html(arr.join('')).show();
-            } catch (e) {
-                console.log(e);
-            }
             return this;
         }
     });
 
-    module.exports = Year;
+    module.exports = YearPanel;
 });

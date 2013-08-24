@@ -1,0 +1,7 @@
+.widget-calendar-time {
+    display: inline;
+}
+
+.widget-calendar-time input {
+  width: 20px;
+}

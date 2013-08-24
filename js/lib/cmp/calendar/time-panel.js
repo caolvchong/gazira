@@ -32,7 +32,7 @@ define(function(require, exports, module) {
         }
     };
 
-    var Time = Widget.extend({
+    var TimePanel = Widget.extend({
         attrs: {
             hour: new Date().getHours(),
             minute: new Date().getMinutes(),
@@ -66,6 +66,9 @@ define(function(require, exports, module) {
             })).show();
             return this;
         },
+        output: function() {
+            return helper.patchZero(this.get('hour')) + ':' + helper.patchZero(this.get('minute')) + ':' + helper.patchZero(this.get('second'));
+        },
         _change: function(hour, minute, second) {
             var flag = false;
             var h = this.get('hour');
@@ -91,5 +94,5 @@ define(function(require, exports, module) {
         }
     });
 
-    module.exports = Time;
+    module.exports = TimePanel;
 });

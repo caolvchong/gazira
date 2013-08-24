@@ -8,13 +8,35 @@
     <link href="./year.css" type="text/css" rel="stylesheet" media="all"/>
     <link href="./month.css" type="text/css" rel="stylesheet" media="all"/>
     <link href="./date.css" type="text/css" rel="stylesheet" media="all"/>
+    <link href="./time.css" type="text/css" rel="stylesheet" media="all"/>
     <link href="./calendar.css" type="text/css" rel="stylesheet" media="all"/>
     <script src="../../../../public/js/seajs/sea.js"></script>
     <script src="../../../../public/js/config.js"></script>
     <script>seajs.use('./app');</script>
 </head>
 <body>
-<input id="cal1" type="text" class="cal-input"/>
-</body>
+<div class="sample">
+    <p>简单日历</p>
+    <input id="cal1" type="text" class="cal-input"/>
+</div>
 
+
+<div class="sample">
+    <p>禁用日期</p>
+    <input id="cal2" type="text" class="cal-input"/>
+</div>
+
+
+<div class="sample">
+    <p>不是input触发的</p>
+    <a href="#" id="cal3">弄处一个日历</a>
+    <em id="output1">日期显示在这里</em>
+</div>
+
+<div class="sample">
+    <p>直接显示</p>
+    <div id="show1"></div>
+</div>
+
+</body>
 </html>

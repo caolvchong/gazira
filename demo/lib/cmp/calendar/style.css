@@ -1,3 +1,12 @@
+.sample {
+    padding: 20px;
+    border-bottom: 1px solid #005580;
+}
+
 .cal-input {
-  margin: 100px auto 20px 100px;
+  margin: 20px;
+}
+
+#show1 {
+    height: 200px;
 }

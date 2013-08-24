@@ -23,27 +23,24 @@
   width: 34px;
   padding: 4px 0;
 }
-.widget-calendar-date .widget-calendar-day-column {
-  border-bottom: 1px solid #dadada;
-}
-.widget-calendar-date .widget-calendar-day-5,
-.widget-calendar-date .widget-calendar-day-6 {
+.widget-calendar-date .widget-calendar-date-5,
+.widget-calendar-date .widget-calendar-date-6 {
   color: #d64;
 }
-.widget-calendar-date .widget-calendar-date-column .prev-month,
-.widget-calendar-date .widget-calendar-date-column .next-month {
+.widget-calendar-date .widget-calendar-date-panel .prev-month,
+.widget-calendar-date .widget-calendar-date-panel .next-month {
   color: #ccc;
 }
-.widget-calendar-date .widget-calendar-date-column td:hover {
+.widget-calendar-date .widget-calendar-date-panel td:hover {
   cursor: pointer;
   color: #333;
   background: #dadada;
 }
-.widget-calendar-date .widget-calendar-date-column td.curr-day {
+.widget-calendar-date .widget-calendar-date-panel td.curr-date {
   color: #fff;
   background: #d64;
 }
-.widget-calendar-date .widget-calendar-date-column td.day-disabled {
+.widget-calendar-date .widget-calendar-date-panel td.date-disabled {
   background: #eee;
   color: #bbb;
   cursor: not-allowed;

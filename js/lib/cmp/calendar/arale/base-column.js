@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     var $ = require('$');
-    var date = require('../../util/date');
+    var date = require('../../../util/date');
     var Widget = require('widget');
 
     var BaseColumn = Widget.extend({

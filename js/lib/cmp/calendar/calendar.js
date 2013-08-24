@@ -5,32 +5,77 @@
  */
 define(function(require, exports, module) {
     var $ = require('$');
-    var date = require('../../util/date');
+    var DateUtil = require('../../util/date');
     var Overlay = require('../overlay');
-    var Day = require('./day');
-    var Month = require('./month');
-    var Year = require('./year');
-    var Time = require('./time');
-    var Bar = require('./bar');
-    var tpl = require('./tpl/calendar');
+    var DatePanel = require('./date-panel');
+    var MonthPanel = require('./month-panel');
+    var YearPanel = require('./year-panel');
+    var TimePanel = require('./time-panel');
+    var tpl = {
+        calendar: require('./tpl/calendar'),
+        bar: require('./tpl/bar')
+    };
 
     var defaultFormat = 'yyyy-MM-dd';
+    var defalutBar = {
+        display: {
+            clear: true,
+            ok: true
+        },
+        text: {
+            clear: '清除',
+            ok: '确定'
+        }
+    };
 
     var helper = {
-        setDate: function(d, params) {
+        /**
+         * 获取一个日期
+         * @param params
+         * @returns {*}
+         */
+        setDate: function(params) {
             var fn = function(a, b, undef) {
                 return a === undef ? b : a;
             };
+            var d = this.get('date');
+            var result;
             if(params.date) {
-                return date.stringToDate(params.date);
+                var str = params.date;
+                var format = defaultFormat;
+                if(this.times) {
+                    str += ' ' + this.times.output();
+                    format += ' ' + 'HH:mm:ss';
+                }
+                result = DateUtil.stringToDate(str, format);
+            } else {
+                if(this.times) {
+                    result = new Date(fn(params.year, d.getFullYear()), fn(params.month, d.getMonth()), d.getDate(), fn(params.hour, this.times.get('hour')), fn(params.minute, this.times.get('minute')), fn(params.second, this.times.get('second')));
+                } else {
+                    result = new Date(fn(params.year, d.getFullYear()), fn(params.month, d.getMonth()), d.getDate());
+                }
             }
-            return new Date(fn(params.year, d.getFullYear()), fn(params.month, d.getMonth()), d.getDate());
+            this.set('date', result);
+            return result;
+        },
+        output: function() {
+            var output = $(this.get('output'));
+            var value = output.val() || output.text();
+            if(value) {
+                return DateUtil.stringToDate(value, this.get('format')) || new Date();
+            }
+            return new Date();
         }
     };
 
     var Calendar = Overlay.extend({
         attrs: {
-            date: new Date(),
+            date: {
+                value: '',
+                getter: function(val) {
+                    return val || helper.output.call(this);
+                }
+            },
             trigger: null,
             triggerType: 'click',
             output: {
@@ -42,9 +87,9 @@ define(function(require, exports, module) {
             },
             mode: 'dates',
             hideOnSelect: true,
-            time: true, // 是否显示时间，true显示时分，细粒度控制则传入一个对象{hour: true, minute: true, second: false},
+            time: false, // 是否显示时间，true显示时分，细粒度控制则传入一个对象{hour: true, minute: true, second: false},
             format: defaultFormat, // 输出格式
-            template: tpl.render(),
+            template: tpl.calendar.render(),
             align: {
                 getter: function(val) {
                     var trigger = $(this.get('trigger'));
@@ -62,8 +107,21 @@ define(function(require, exports, module) {
                 }
             },
             // 底部按钮栏，默认不显示。当time设置后会自动开启。bar开启后，hideOnSelect会自动转为false
-            // bar具体配置 {clear: true, today: false, ok: true} 表示：清除，今天，确定按钮的显示与否
-            bar: false
+            bar: {
+                display: false, // {clear: true, ok: true} 表示：清除,确定按钮的显示与否
+                text: defalutBar.text
+            },
+            disabled: { // date, month, year
+                date: function(date) {
+                    return false;
+                },
+                month: function(date) {
+                    return false;
+                },
+                year: function(date) {
+                    return false;
+                }
+            }
         },
         events: {
             'click [data-role=current-month]': function(e) {
@@ -87,6 +145,14 @@ define(function(require, exports, module) {
             'click [data-role=next-month]': function(e) {
                 this.months.next();
                 this.renderContainer(this.get('mode'));
+            },
+            'click [data-role="btn-clear"]': function(e) {
+                this.output('');
+                this.hide();
+            },
+            'click [data-role="btn-ok"]': function(e) {
+                this.output();
+                this.hide();
             }
         },
         setup: function() {
@@ -94,11 +160,16 @@ define(function(require, exports, module) {
             var self = this;
             var container = this.element.find('[data-role=container]');
             var d = this.get('date');
+            var bar = this.get('bar');
 
             (function(time) { // 存在时间显示的情况下设置默认格式
                 if(time) {
                     if(this.get('format') === defaultFormat) {
                         if(time === true) {
+                            this.set('time', {
+                                hour: true,
+                                minute: true
+                            });
                             this.set('format', defaultFormat + ' ' + 'HH:mm');
                         } else {
                             var arr = [];
@@ -111,80 +182,110 @@ define(function(require, exports, module) {
                             this.set('format', defaultFormat + ' ' + arr.join(':'));
                         }
                     }
+                    bar.display = true;
                 }
             }).call(this, this.get('time'));
+
+            if(bar === true) {
+                this.set('bar', defalutBar);
+                bar = this.get('bar');
+            }
+            if(bar.display === true) {
+                bar.display = defalutBar.display;
+            }
+            if(bar.display) {
+                this.set('hideOnSelect', false);
+                container.after(tpl.bar.render({
+                    bar: bar
+                }));
+            }
 
             this._setPosition();
             this.enable();
 
-            this.dates = new Day({
-                day: d,
+            var disabled = this.get('disabled');
+
+            this.dates = new DatePanel({
+                date: d,
+                disabled: function(date) {
+                    return disabled.date.call(self, date) || disabled.month.call(self, date) || disabled.year.call(self, date);
+                },
                 parentNode: container
             }).render();
-            this.months = new Month({
-                month: d.getMonth(),
+            this.months = new MonthPanel({
+                date: d,
+                disabled: function(date) {
+                    return disabled.month.call(self, date) || disabled.year.call(self, date);
+                },
                 parentNode: container
             }).render();
-            this.years = new Year({
-                year: d.getFullYear(),
+            this.years = new YearPanel({
+                date: d,
+                disabled: function(date) {
+                    return disabled.year.call(self, date);
+                },
                 parentNode: container
             }).render();
 
             if(this.get('time')) {
-                this.times = new Time({
+                this.times = new TimePanel({
                     parentNode: container,
                     display: this.get('time')
                 }).render();
-                this.bars = new Bar({
-                    calendar: this,
-                    parentNode: container,
-                    display: this.get('bar') || {},
-                    text: this.get('barText')
-                }).render();
+                this.times.on('change', function(hour, minute, second) {
+                    helper.setDate.call(self, {
+                        hour: hour,
+                        minute: minute,
+                        second: second
+                    });
+                });
             }
 
-            this.dates.on('select', function(val, prev, node) {
-                var d = helper.setDate(self.get('date'), {
-                    date: val
+            this.dates.on('select', function(now, prev, node) {
+                var d = helper.setDate.call(self, {
+                    date: now
                 });
-                self.set('date', d);
                 self.renderPannel();
                 if(node) {
                     self.renderContainer('dates');
-                    self.output();
+                    if(self.get('hideOnSelect')) {
+                        self.output();
+                    }
                     self.trigger('selectDate', d);
                 }
                 return false;
             });
-            this.months.on('select', function(val, prev, node) {
-                var d = helper.setDate(self.get('date'), {
-                    month: val
+            this.months.on('select', function(now, prev, node) {
+                var d = helper.setDate.call(self, {
+                    year: now.getFullYear(),
+                    month: now.getMonth()
                 });
-                self.set('date', d);
                 self.renderPannel();
                 if(node && node.attr('data-role') === 'set-month') {
                     self.renderContainer('dates');
                     self.trigger('selectMonth', d);
                 }
             });
-            this.years.on('select', function(val, prev, node) {
-                var d = helper.setDate(self.get('date'), {
-                    year: val
+            this.years.on('select', function(now, prev, node) {
+                var d = helper.setDate.call(self, {
+                    year: now.getFullYear()
                 });
-                self.set('date', d);
                 self.renderPannel();
                 if(node && node.attr('data-role') === 'set-year') {
                     self.renderContainer('dates');
                     self.trigger('selectYear', d);
                 }
             });
-            this.renderPannel();
-            this.renderContainer('dates');
         },
         show: function() {
             if(!this.rendered) {
                 this.render();
             }
+            var value = helper.output.call(this);
+            this.set('date', value);
+            this.renderPannel();
+            this.renderContainer('dates');
+
             Calendar.superclass.show.call(this);
             this.trigger('show');
             return this;
@@ -201,21 +302,24 @@ define(function(require, exports, module) {
             yearPannel.text(year);
         },
         renderContainer: function(mode) {
+            var bar = this.$('[data-role=bar]');
             var d = this.get('date');
             this.set('mode', mode);
 
             this.dates.element.hide();
             this.months.element.hide();
             this.years.element.hide();
-            this.times.element.hide();
-            this.dates.set('day', d);
-            this.months.set('month', d.getMonth());
-            this.years.set('year', d.getFullYear());
+            this.times && this.times.element.hide();
+            bar.hide();
+
+            this.dates.set('date', d);
+            this.months.set('date', d);
+            this.years.set('date', d);
 
             if(mode === 'dates') {
                 this.dates.show();
-                this.times.show();
-                this.bars.show();
+                this.times && this.times.show();
+                bar.show();
             } else if(mode === 'months') {
                 this.months.show();
             } else if(mode === 'years') {
@@ -229,8 +333,9 @@ define(function(require, exports, module) {
             if(trigger && trigger[0]) {
                 var self = this;
                 var event = this.get('triggerType') + '.calendar';
-                trigger.on(event, function() {
+                trigger.on(event, function(e) {
                     self.show();
+                    e.preventDefault();
                 });
                 this._blurHide(this.get('trigger'));
             }
@@ -251,7 +356,7 @@ define(function(require, exports, module) {
             }
             var tagName = output[0].tagName.toLowerCase();
             val = (val === null || val === undef) ? this.get('date') : val;
-            output[(tagName === 'input' || tagName === 'textarea') ? 'val' : 'text'](val.getDate ? date.format(val, this.get('format')) : val);
+            output[(tagName === 'input' || tagName === 'textarea') ? 'val' : 'text'](val.getDate ? DateUtil.format(val, this.get('format')) : val);
             if(this.get('hideOnSelect')) {
                 this.hide();
             }
