@@ -62,9 +62,8 @@ define(function(require, exports, module) {
             var output = $(this.get('output'));
             var value = output.val() || output.text();
             if(value) {
-                return DateUtil.stringToDate(value, this.get('format')) || new Date();
+                return DateUtil.stringToDate(value, this.get('format'));
             }
-            return new Date();
         }
     };
 
@@ -73,7 +72,15 @@ define(function(require, exports, module) {
             date: {
                 value: '',
                 getter: function(val) {
-                    return val || helper.output.call(this);
+                    return val || helper.output.call(this) || new Date();
+                },
+                setter: function(val) {
+                    if(!val) {
+                        val = new Date();
+                    } else if(typeof val === 'string') {
+                        val = DateUtil.stringToDate(val, this.get('format'));
+                    }
+                    return val;
                 }
             },
             trigger: null,
@@ -121,14 +128,16 @@ define(function(require, exports, module) {
                 year: function(date) {
                     return false;
                 }
-            }
+            },
+            i18n: {},
+            view: 'date' // year: 年选择器；month: 年月选择器；date: 正常的日期选择器
         },
         events: {
             'click [data-role=current-month]': function(e) {
-                this.renderContainer(this.get('mode') === 'months' ? 'dates' : 'months');
+                this.renderContainer(this.get('mode') === 'months' && this.get('view') === 'date' ? 'dates' : 'months');
             },
             'click [data-role=current-year]': function(e) {
-                this.renderContainer(this.get('mode') === 'years' ? 'dates' : 'years');
+                this.renderContainer(this.get('mode') === 'years' && this.get('view') === 'date' ? 'dates' : 'years');
             },
             'click [data-role=prev-year]': function(e) {
                 this.years.prev();
@@ -161,6 +170,8 @@ define(function(require, exports, module) {
             var container = this.element.find('[data-role=container]');
             var d = this.get('date');
             var bar = this.get('bar');
+            var view = this.get('view');
+            var mode = view + 's';
 
             (function(time) { // 存在时间显示的情况下设置默认格式
                 if(time) {
@@ -186,27 +197,43 @@ define(function(require, exports, module) {
                 }
             }).call(this, this.get('time'));
 
-            if(bar === true) {
-                this.set('bar', defalutBar);
-                bar = this.get('bar');
-            }
-            if(bar.display === true) {
-                bar.display = defalutBar.display;
-            }
-            if(bar.display) {
-                this.set('hideOnSelect', false);
-                container.after(tpl.bar.render({
-                    bar: bar
-                }));
-            }
+            (function(bar) { // 底部按钮栏控制，开启底部按钮，则选择日期后隐藏日历功能关闭
+                if(bar === true) {
+                    this.set('bar', defalutBar);
+                    bar = this.get('bar');
+                }
+                if(bar.display === true) {
+                    bar.display = defalutBar.display;
+                }
+                if(bar.display) {
+                    this.set('hideOnSelect', false);
+                    container.after(tpl.bar.render({
+                        bar: bar
+                    }));
+                }
+            }).call(this, bar);
+
+            (function(view) { // 根据模式自动调整输出格式
+                if(this.get('format') === defaultFormat) {
+                    if(view === 'month') {
+                        this.set('format', 'yyyy-MM');
+                    } else if(view === 'year') {
+                        this.set('format', 'yyyy');
+                    }
+                }
+            }).call(this, view);
 
             this._setPosition();
             this.enable();
 
             var disabled = this.get('disabled');
 
+            this.set('mode', mode);
+
             this.dates = new DatePanel({
                 date: d,
+                week: this.get('i18n').week,
+                weekStart: this.get('weekStart'),
                 disabled: function(date) {
                     return disabled.date.call(self, date) || disabled.month.call(self, date) || disabled.year.call(self, date);
                 },
@@ -214,6 +241,7 @@ define(function(require, exports, module) {
             }).render();
             this.months = new MonthPanel({
                 date: d,
+                months: this.get('i18n').months,
                 disabled: function(date) {
                     return disabled.month.call(self, date) || disabled.year.call(self, date);
                 },
@@ -221,6 +249,8 @@ define(function(require, exports, module) {
             }).render();
             this.years = new YearPanel({
                 date: d,
+                prevPlaceholder: this.get('i18n').prevPlaceholder,
+                nextPlaceholder: this.get('i18n').nextPlaceholder,
                 disabled: function(date) {
                     return disabled.year.call(self, date);
                 },
@@ -247,11 +277,8 @@ define(function(require, exports, module) {
                 });
                 self.renderPannel();
                 if(node) {
-                    self.renderContainer('dates');
-                    if(self.get('hideOnSelect')) {
-                        self.output();
-                    }
-                    self.trigger('selectDate', d);
+                    self.renderContainer(mode);
+                    self.get('hideOnSelect') && view === 'date' ? self.output() : self.trigger('selectDate', d);
                 }
                 return false;
             });
@@ -262,8 +289,8 @@ define(function(require, exports, module) {
                 });
                 self.renderPannel();
                 if(node && node.attr('data-role') === 'set-month') {
-                    self.renderContainer('dates');
-                    self.trigger('selectMonth', d);
+                    self.renderContainer(mode);
+                    self.get('hideOnSelect') && view === 'month' ? self.output() : self.trigger('selectMonth', d);
                 }
             });
             this.years.on('select', function(now, prev, node) {
@@ -272,8 +299,8 @@ define(function(require, exports, module) {
                 });
                 self.renderPannel();
                 if(node && node.attr('data-role') === 'set-year') {
-                    self.renderContainer('dates');
-                    self.trigger('selectYear', d);
+                    self.renderContainer(mode);
+                    self.get('hideOnSelect') && view === 'year' ? self.output() : self.trigger('selectYear', d);
                 }
             });
         },
@@ -281,10 +308,10 @@ define(function(require, exports, module) {
             if(!this.rendered) {
                 this.render();
             }
-            var value = helper.output.call(this);
+            var value = helper.output.call(this) || this.get('date');
             this.set('date', value);
             this.renderPannel();
-            this.renderContainer('dates');
+            this.renderContainer(this.get('mode'));
 
             Calendar.superclass.show.call(this);
             this.trigger('show');
@@ -298,7 +325,7 @@ define(function(require, exports, module) {
             var month = date.getMonth();
             var year = date.getFullYear();
 
-            monthPannel.text(this.months.get('list')[month]);
+            monthPannel.text(this.months.get('months')[month]);
             yearPannel.text(year);
         },
         renderContainer: function(mode) {
@@ -351,15 +378,21 @@ define(function(require, exports, module) {
 
         output: function(val, undef) {
             var output = this.get('output');
+            var view = this.get('view');
             if(!output.length) {
                 return;
             }
             var tagName = output[0].tagName.toLowerCase();
             val = (val === null || val === undef) ? this.get('date') : val;
-            output[(tagName === 'input' || tagName === 'textarea') ? 'val' : 'text'](val.getDate ? DateUtil.format(val, this.get('format')) : val);
+
+            var result = val.getDate ? DateUtil.format(val, this.get('format')) : val;
+            output[(tagName === 'input' || tagName === 'textarea') ? 'val' : 'text'](result);
             if(this.get('hideOnSelect')) {
                 this.hide();
             }
+            this.trigger('select' + view.replace(/[a-z]/, function(s) {
+                return s.toUpperCase();
+            }), typeof val === 'string' ? DateUtil.stringToDate(val) || '' : val);
         }
     });
 

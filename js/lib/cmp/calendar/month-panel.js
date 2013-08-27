@@ -18,7 +18,7 @@ define(function(require, exports, module) {
     var MonthPanel = Widget.extend({
         attrs: {
             date: new Date(),
-            list: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
             disabled: function(month) { // function, 返回false的则不可点击
                 return false;
             }
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
             var date = this.get('date');
             var year = date.getFullYear();
             var month = date.getMonth();
-            var list = this.get('list');
+            var list = this.get('months');
             var arr = [];
             var flag = 0;
             for(var i = 0; i < 4; i++) {
