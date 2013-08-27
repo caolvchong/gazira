@@ -1,6 +1,7 @@
 .sample {
     padding: 20px;
     border-bottom: 1px solid #005580;
+    min-height: 300px;
 }
 
 .cal-input {
