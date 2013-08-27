@@ -73,11 +73,13 @@ define(function(require, exports, module) {
          */
         match: function(hash, cache) {
             var fetch = helper.fetch(hash, cache);
-            if(fetch.action) {
-                fetch.action.apply(null, fetch.params);
-                if(fetch.action.callback) {
-                    fetch.action.callback();
-                    delete fetch.action.callback;
+            if(fetch) {
+                if(fetch.action) {
+                    fetch.action.apply(null, fetch.params);
+                    if(fetch.action.callback) {
+                        fetch.action.callback();
+                        delete fetch.action.callback;
+                    }
                 }
             }
         }
@@ -104,7 +106,10 @@ define(function(require, exports, module) {
          * @param hash
          * @param callback 执行完路由后的回调函数
          */
-        trigger: function(hash, callback) {
+        trigger: function(hash, callback, force) {
+            if((force === true || (arguments.length === 2 && callback === true)) && location.hash === '#' + hash) {
+                location.hash = '';
+            }
             location.hash = hash;
             if($.isFunction(callback)) {
                 var fetch = helper.fetch(hash, cache);
@@ -137,6 +142,7 @@ define(function(require, exports, module) {
 
             if(supportHash) {
                 window.onhashchange = function(e) {
+                    e = e || window.event;
                     var prev = e.oldURL || prevURL;
                     var url = e.newURL || location.href;
                     var hash = helper.getHash();
@@ -180,9 +186,7 @@ define(function(require, exports, module) {
             if(initHash) {
                 helper.match(initHash, cache);
             } else {
-                if(defaultHash) {
-                    helper.match(defaultHash, cache);
-                }
+                helper.match(defaultHash, cache);
             }
         }
     };
