@@ -17,6 +17,7 @@ define(function(require, exports, module) {
             height: null,
             zIndex: 99,
             visible: false,
+            repositionOnResize: true, // resize时重新定位
 
             // 定位配置
             align: {
@@ -51,7 +52,7 @@ define(function(require, exports, module) {
             // 加载 iframe 遮罩层并与 overlay 保持同步
             this._setupShim();
             // 窗口resize时，重新定位浮层
-            this._setupResize();
+            this.get('repositionOnResize') && this._setupResize();
             // 统一在显示之后重新设定位置
             this.after('show', function() {
                 that._setPosition();
