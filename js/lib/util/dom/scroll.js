@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     var $ = require('$');
-    var browser = require('../bom/browser');
+    var wheel = require('./wheel');
 
     var helper = {
         detect: function(node) {
@@ -17,8 +17,6 @@ define(function(require, exports, module) {
                 result = node.scrollHeight > Math.ceil(clientHeight) ? 'top' : 'noscroll';
             } else if(scrollTop + Math.ceil(clientHeight) >= node.scrollHeight) {
                 result = 'bottom';
-            } else {
-                result = 'middle';
             }
             return result;
         }
@@ -45,40 +43,15 @@ define(function(require, exports, module) {
          */
         prevent: function(node, action) {
             node = node[0] || node;
-            if(browser.ie) {
-                node.attachEvent('onmousewheel', function(e) {
-                    var result = helper.detect(node);
-                    e = window.event;
-                    node.scrollTop += e.wheelDelta > 0 ? -60 : 60;
-                    e.returnValue = false;
-                    if(result) {
-                        if(action) {
-                            action.call(node, e, result);
-                        }
+            wheel(node, function(e, type, prevent, browser) {
+                var result = helper.detect(node);
+                if(browser === 'ie' || result === 'noscroll' || (result === 'top' && type === 'up') || (result === 'bottom' && type === 'down')) {
+                    prevent();
+                    if(action) {
+                        action.call(node, e, result);
                     }
-                });
-            } else if(browser.firefox) {
-                node.addEventListener('DOMMouseScroll', function(e) {
-                    var result = helper.detect(node);
-                    if(result === 'noscroll' || (result === 'top' && e.detail < 0) || (result === 'bottom' && e.detail > 0)) {
-                        e.preventDefault();
-                        if(action) {
-                            action.call(node, e, result);
-                        }
-                    }
-                }, false);
-            } else {
-                node.addEventListener('mousewheel', function(e) {
-                    var result = helper.detect(node);
-                    if((result === 'top' && e.wheelDelta >= 0) || (result === 'bottom' && e.wheelDelta <= 0)) {
-                        e.returnValue = false;
-                        if(action) {
-                            action.call(node, e, result);
-                        }
-                    }
-                }, false);
-            }
-
+                }
+            });
         },
         listen: function(node, actions, prevent) {
             var status = {};
@@ -117,15 +90,6 @@ define(function(require, exports, module) {
             });
             if(node !== window && prevent !== false) {
                 r.prevent(node);
-            }
-        },
-        unbind: function(node, fn) {
-            if(browser.ie) {
-                node.detachEvent('onmousewheel', fn);
-            } else if(browser.firefox) {
-                node.removeEventListener('DOMMouseScroll', fn, false);
-            } else {
-                node.removeEventListener('mousewheel', fn, false);
             }
         }
     };
