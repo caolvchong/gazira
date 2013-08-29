@@ -134,10 +134,10 @@ define(function(require, exports, module) {
         },
         events: {
             'click [data-role=current-month]': function(e) {
-                this.renderContainer(this.get('mode') === 'months' && this.get('view') === 'date' ? 'dates' : 'months');
+                this.renderContainer(this.get('mode') === 'months' ? this.get('view') + 's' : 'months');
             },
             'click [data-role=current-year]': function(e) {
-                this.renderContainer(this.get('mode') === 'years' && this.get('view') === 'date' ? 'dates' : 'years');
+                this.renderContainer(this.get('mode') === 'years' ? this.get('view') + 's' : this.renderContainer('years'));
             },
             'click [data-role=prev-year]': function(e) {
                 this.years.prev();
