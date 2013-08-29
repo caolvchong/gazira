@@ -37,3 +37,7 @@ body {
   position: absolute;
   bottom: 0;
 }
+
+.widget-dialog .main {
+  overflow: auto;
+}

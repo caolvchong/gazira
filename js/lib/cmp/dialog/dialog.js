@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var mask = require('../mask');
     var Events = require('../../util/event');
     var Sticky = require('../../util/dom/sticky');
+    var Scroll = require('../../util/dom/scroll');
     var tpl = require('./tpl/dialog');
 
     var DEFAULT_HEIGHT = 300;
@@ -53,7 +54,6 @@ define(function(require, exports, module) {
         },
         parseElement: function() {
             Dialog.superclass.parseElement.call(this);
-
             this.contentElement = this.$('[data-role="content"]');
             // 必要的样式
             this.contentElement.css({
@@ -61,6 +61,7 @@ define(function(require, exports, module) {
                 height: '100%',
                 zoom: 1
             });
+
         },
         setup: function() {
             Dialog.superclass.setup.call(this);
@@ -75,6 +76,9 @@ define(function(require, exports, module) {
             if(this.get('fixed') !== false) {
                 Sticky.fix(this.element);
             }
+
+            var self = this;
+            Scroll.prevent(this.$('.main').eq(0));
         },
         show: function(config) {
             if(this._type === 'iframe') { // iframe 要在载入完成才显示
@@ -87,6 +91,9 @@ define(function(require, exports, module) {
                 }
             }
             Dialog.superclass.show.call(this);
+
+            this.$('.main').height(this.get('height') - this.$('.header').outerHeight() - this.$('.footer').outerHeight()); // 内容高度太高处理
+
             return this;
         },
         hide: function() {
