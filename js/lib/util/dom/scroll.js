@@ -14,9 +14,11 @@ define(function(require, exports, module) {
             }
             clientHeight = Math.ceil(node.clientHeight);
             if(scrollTop === 0) {
-                result = 'top';
+                result = node.scrollHeight > Math.ceil(clientHeight) ? 'top' : 'noscroll';
             } else if(scrollTop + Math.ceil(clientHeight) >= node.scrollHeight) {
                 result = 'bottom';
+            } else {
+                result = 'middle';
             }
             return result;
         }
@@ -58,7 +60,7 @@ define(function(require, exports, module) {
             } else if(browser.firefox) {
                 node.addEventListener('DOMMouseScroll', function(e) {
                     var result = helper.detect(node);
-                    if((result === 'top' && e.detail < 0) || (result === 'bottom' && e.detail > 0)) {
+                    if(result === 'noscroll' || (result === 'top' && e.detail < 0) || (result === 'bottom' && e.detail > 0)) {
                         e.preventDefault();
                         if(action) {
                             action.call(node, e, result);
@@ -115,6 +117,15 @@ define(function(require, exports, module) {
             });
             if(node !== window && prevent !== false) {
                 r.prevent(node);
+            }
+        },
+        unbind: function(node, fn) {
+            if(browser.ie) {
+                node.detachEvent('onmousewheel', fn);
+            } else if(browser.firefox) {
+                node.removeEventListener('DOMMouseScroll', fn, false);
+            } else {
+                node.removeEventListener('mousewheel', fn, false);
             }
         }
     };
