@@ -137,7 +137,7 @@ define(function(require, exports, module) {
                 this.renderContainer(this.get('mode') === 'months' ? this.get('view') + 's' : 'months');
             },
             'click [data-role=current-year]': function(e) {
-                this.renderContainer(this.get('mode') === 'years' ? this.get('view') + 's' : this.renderContainer('years'));
+                this.renderContainer(this.get('mode') === 'years' ? this.get('view') + 's' : 'years');
             },
             'click [data-role=prev-year]': function(e) {
                 this.years.prev();
