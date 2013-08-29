@@ -6,6 +6,7 @@
 define(function(require, exports, module) {
     var $ = require('$');
     var Widget = require('../widget');
+    var wheel = require('../../util/dom/wheel');
     var tpl = require('./tpl/time');
 
     var helper = {
@@ -58,12 +59,32 @@ define(function(require, exports, module) {
             }
         },
         show: function() {
+            var self = this;
             this.element.html(tpl.render({
                 hour: helper.patchZero(this.get('hour')),
                 minute: helper.patchZero(this.get('minute')),
                 second: helper.patchZero(this.get('second')),
                 display: this.get('display')
             })).show();
+
+            this.$('[data-input]').each(function(i, input) {
+                input = $(input);
+                wheel(input, function(e, type, prevent) {
+                    prevent();
+                    if(type === 'up') {
+                        helper.change.call(self, input, self.get(input.attr('data-input')) + 1);
+                    } else if(type === 'down') {
+                        helper.change.call(self, input, self.get(input.attr('data-input')) - 1);
+                    }
+                    input.select();
+                });
+
+                input.hover(function() {
+                    this.select();
+                }, function() {
+                    this.blur();
+                });
+            });
             return this;
         },
         output: function() {
