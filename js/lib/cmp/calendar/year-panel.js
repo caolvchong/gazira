@@ -114,8 +114,7 @@ define(function(require, exports, module) {
             arr.unshift('<table class="widget-calendar-year" data-role="year-panel">');
             arr.push('</table>');
 
-            this.element.html(arr.join(''));
-            this.element.show();
+            this.element.html(arr.join('')).show();
             return this;
         }
     });
