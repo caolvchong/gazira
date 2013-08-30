@@ -109,6 +109,6 @@ define(function(require, exports, module) {
                 name: 'Area',
                 data: [1, 8, 2, 7, 3, 6, 4, 5]
             }]
-        })
+        });
     });
 });
