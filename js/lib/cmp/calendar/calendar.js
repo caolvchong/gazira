@@ -278,7 +278,7 @@ define(function(require, exports, module) {
                 self.renderPannel();
                 if(node) {
                     self.renderContainer(mode);
-                    self.get('hideOnSelect') && view === 'date' ? self.output() : self.trigger('selectDate', d);
+                    self.get('hideOnSelect') && mode === 'dates' ? self.output() : self.trigger('selectDate', d);
                 }
                 return false;
             });
@@ -290,7 +290,7 @@ define(function(require, exports, module) {
                 self.renderPannel();
                 if(node && node.attr('data-role') === 'set-month') {
                     self.renderContainer(mode);
-                    self.get('hideOnSelect') && view === 'month' ? self.output() : self.trigger('selectMonth', d);
+                    self.get('hideOnSelect') && mode === 'months' ? self.output() : self.trigger('selectMonth', d);
                 }
             });
             this.years.on('select', function(now, prev, node) {
@@ -300,7 +300,7 @@ define(function(require, exports, module) {
                 self.renderPannel();
                 if(node && node.attr('data-role') === 'set-year') {
                     self.renderContainer(mode);
-                    self.get('hideOnSelect') && view === 'year' ? self.output() : self.trigger('selectYear', d);
+                    self.get('hideOnSelect') && mode === 'years' ? self.output() : self.trigger('selectYear', d);
                 }
             });
         },
@@ -352,6 +352,11 @@ define(function(require, exports, module) {
             } else if(mode === 'years') {
                 this.years.show();
             }
+            return this;
+        },
+        refresh: function() {
+            this.renderPannel();
+            this.renderContainer(this.get('mode'));
             return this;
         },
 

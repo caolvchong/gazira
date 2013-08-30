@@ -11,3 +11,7 @@
 #show1 {
     height: 200px;
 }
+
+.calendar-item {
+  float: left;
+}

@@ -6,6 +6,7 @@
 define(function(require, exports, module) {
     var $ = require('$');
     var Calendar = require('../../../../js/lib/cmp/calendar/calendar');
+    var DoubleCalendar = require('../../../../js/lib/cmp/calendar/double-calendar');
 
     $(function() {
         // 简单实例
@@ -124,5 +125,28 @@ define(function(require, exports, module) {
                 }
             }
         });
+
+        // 另一种双日历：日期选择
+        new DoubleCalendar({
+            trigger: '#cal14'
+        }).on('submit', function(date1, date2) {
+            $(this.get('trigger')).val(date1 + '===' + date2);
+        });
+
+        // 另一种双日历：月份选择
+        new DoubleCalendar({
+            view: 'month',
+            trigger: '#cal15'
+        }).on('submit', function(date1, date2) {
+                $(this.get('trigger')).val(date1 + '===' + date2);
+            });
+
+        // 另一种双日历：年份选择
+        new DoubleCalendar({
+            view: 'year',
+            trigger: '#cal16'
+        }).on('submit', function(date1, date2) {
+                $(this.get('trigger')).val(date1 + '===' + date2);
+            });
     });
 });
