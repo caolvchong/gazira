@@ -52,19 +52,19 @@ define(function(require, exports, module) {
             var disable = {
                 c1: function(date1) {
                     var date2 = self.c2.get('date');
-                    var view = this.get('view');
+                    var mode = this.get('mode');
                     var year = date2.getFullYear();
-                    var month = view !== 'year' ? date2.getMonth() : 0;
-                    var date = view === 'date' ? date2.getDate() : 1;
+                    var month = mode !== 'years' ? date2.getMonth() : 0;
+                    var date = mode === 'dates' ? date2.getDate() : 1;
                     date2 = new Date(year, month, date);
                     return +date1 > +date2;
                 },
                 c2: function(date2) {
                     var date1 = self.c1.get('date');
-                    var view = this.get('view');
+                    var mode = this.get('mode');
                     var year = date1.getFullYear();
-                    var month = view !== 'year' ? date1.getMonth() : 0;
-                    var date = view === 'date' ? date1.getDate() : 1;
+                    var month = mode !== 'years' ? date1.getMonth() : 0;
+                    var date = mode === 'dates' ? date1.getDate() : 1;
                     date1 = new Date(year, month, date);
                     return +date2 < +date1;
                 }
