@@ -100,16 +100,19 @@ define(function(require, exports, module) {
             align: {
                 getter: function(val) {
                     var trigger = $(this.get('trigger'));
+                    var parentNode = $(this.get('parentNode'));
+                    var baseElement;
+                    var baseXY = [0, 0];
                     if(trigger && trigger[0]) {
-                        return {
-                            selfXY: [0, 0],
-                            baseElement: trigger,
-                            baseXY: [0, trigger.height() + 10]
-                        };
+                        baseElement = trigger;
+                        baseXY = [0, trigger.height() + 10];
+                    } else if(parentNode && parentNode[0]) {
+                        baseElement = parentNode;
                     }
                     return {
                         selfXY: [0, 0],
-                        baseXY: [0, 0]
+                        baseElement: baseElement,
+                        baseXY: baseXY
                     };
                 }
             },

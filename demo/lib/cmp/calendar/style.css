@@ -15,3 +15,12 @@
 .calendar-item {
   float: left;
 }
+
+#show18 {
+  border: 1px solid #ddd;
+  margin: 50px;
+  padding: 20px;
+  width: 450px;
+  height: 200px;
+  position: absolute;
+}

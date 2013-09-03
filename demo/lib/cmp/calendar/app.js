@@ -35,12 +35,10 @@ define(function(require, exports, module) {
         });
 
         // 直接显示
-        var c = new Calendar({
+        new Calendar({
             parentNode: '#show4',
             repositionOnResize: false
-        });
-        c.show();
-        c.element.css('position', 'static');
+        }).show();
 
         // 初始化日期
         new Calendar({
@@ -147,6 +145,14 @@ define(function(require, exports, module) {
             trigger: '#cal16'
         }).on('submit', function(date1, date2) {
                 $(this.get('trigger')).val(date1 + '===' + date2);
+            });
+
+        // 双日历直接显示
+        new DoubleCalendar({
+            parentNode: '#show18',
+            hideOnSelect: false
+        }).show().on('submit', function(date1, date2) {
+                $('#output18').text(date1 + '...' + date2);
             });
     });
 });
