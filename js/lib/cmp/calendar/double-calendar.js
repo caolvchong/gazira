@@ -16,6 +16,12 @@ define(function(require, exports, module) {
             view: 'date',
             template: tpl.render(),
             hideOnSelect: true,
+            c1: {
+                date: new Date()
+            },
+            c2: {
+                date: new Date()
+            },
             align: {
                 getter: function(val) {
                     var trigger = $(this.get('trigger'));
@@ -77,6 +83,7 @@ define(function(require, exports, module) {
                 var which = 'c' + v;
                 self[which] = new Calendar($.extend({
                     parentNode: self.$('[data-role="calendar-' + v + '"]'),
+                    date: self.get(which).date,
                     disabled: {
                         date: disable[which],
                         month: disable[which],
