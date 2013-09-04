@@ -134,7 +134,10 @@ define(function(require, exports, module) {
         // 另一种双日历：月份选择
         new DoubleCalendar({
             view: 'month',
-            trigger: '#cal15'
+            trigger: '#cal15',
+            c1: {
+                date: '2009-05'
+            }
         }).on('submit', function(date1, date2) {
                 $(this.get('trigger')).val(date1 + '===' + date2);
             });
@@ -142,7 +145,10 @@ define(function(require, exports, module) {
         // 另一种双日历：年份选择
         new DoubleCalendar({
             view: 'year',
-            trigger: '#cal16'
+            trigger: '#cal16',
+            c1: {
+                date: '2009'
+            }
         }).on('submit', function(date1, date2) {
                 $(this.get('trigger')).val(date1 + '===' + date2);
             });
@@ -150,7 +156,10 @@ define(function(require, exports, module) {
         // 双日历直接显示
         new DoubleCalendar({
             parentNode: '#show18',
-            hideOnSelect: false
+            hideOnSelect: false,
+            c1: {
+                date: '2009-12-08'
+            }
         }).show().on('submit', function(date1, date2) {
                 $('#output18').text(date1 + '...' + date2);
             });
