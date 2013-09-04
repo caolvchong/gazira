@@ -78,7 +78,7 @@ define(function(require, exports, module) {
                     if(!val) {
                         val = new Date();
                     } else if(typeof val === 'string') {
-                        val = DateUtil.stringToDate(val, this.get('format'));
+                        val = DateUtil.stringToDate(val, this.get('format')) || val;
                     }
                     return val;
                 }
@@ -223,6 +223,9 @@ define(function(require, exports, module) {
                     } else if(view === 'year') {
                         this.set('format', 'yyyy');
                     }
+                }
+                if(typeof this.get('date') === 'string') { // 由于date的setter先于setup，而那时format还未自动处理，这里需要额外处理
+                    this.set('date', DateUtil.stringToDate(this.get('date'), this.get('format')));
                 }
             }).call(this, view);
 
