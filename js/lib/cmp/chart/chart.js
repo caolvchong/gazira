@@ -39,6 +39,7 @@ define(function(require, exports, module) {
             this.element.highcharts(config);
         }
     });
+    Chart.highcharts = highcharts;
 
     module.exports = Chart;
 });
