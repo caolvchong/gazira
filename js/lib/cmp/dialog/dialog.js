@@ -41,7 +41,7 @@ define(function(require, exports, module) {
             zIndex: Z_INDEX,
             fixed: true, // 是否fixed
             autoFit: true, // 是否自适应高度
-            effect: 'none', //
+            effect: 'none', // 动画支持，默认没有，需要动画传入一个function
             align: {
                 selfXY: ['50%', '50%'],
                 baseXY: ['50%', '50%']
