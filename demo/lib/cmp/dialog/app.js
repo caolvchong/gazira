@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var $ = require('$');
     var Dialog = require('../../../../js/lib/cmp/dialog/dialog');
     var ConfirmBox = require('../../../../js/lib/cmp/dialog/confirm-box');
+    require('../../../../js/lib/util/dom/easing');
 
     $(function() {
         $('#btn11').click(function() {
@@ -246,6 +247,19 @@ define(function(require, exports, module) {
                     this.element.fadeIn(1750);
                 },
                 content: 'fade'
+            });
+        });
+        $('#btn73').click(function() {
+            ConfirmBox.alert({
+                effect: function() {
+                    this.element.css({
+                        display: 'block',
+                        top: 0
+                    }).animate({
+                        top: ($(window).height() - this.element.height()) / 2
+                    }, 500, 'backIn');
+                },
+                content: '更多动画支持'
             });
         });
     });
