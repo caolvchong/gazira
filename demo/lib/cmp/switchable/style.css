@@ -1,0 +1,41 @@
+#carousel-demo-1 {
+  position: relative;
+  margin: 50px;
+  width: 960px;
+}
+#carousel-demo-1 .ui-switchable-prev-btn, #carousel-demo-1 .ui-switchable-next-btn {
+  position: absolute;
+  top: -30px;
+  color: #666;
+  cursor: pointer;
+}
+#carousel-demo-1 .ui-switchable-prev-btn {
+  left: 10px;
+}
+#carousel-demo-1 .ui-switchable-next-btn {
+  right: 10px;
+}
+#carousel-demo-1 .ui-switchable-disabled-btn {
+  color: #ddd;
+  cursor: default;
+}
+
+#carousel-demo-1 .scroller {
+  width: 1030px;
+  height: 310px;
+  border: 1px solid #ccc;
+  background-color: #F9F9F9;
+  overflow: hidden;
+}
+#carousel-demo-1 .scroller .ui-switchable-content {
+  padding: 20px 0;
+  height: 270px;
+}
+#carousel-demo-1 .scroller .ui-switchable-content img {
+  float: left;
+  display: block;
+  width: 480px;
+  height: 270px;
+  margin: 0 15px;
+  border: 1px solid #ccc;
+}
