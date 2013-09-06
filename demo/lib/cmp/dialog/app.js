@@ -227,5 +227,26 @@ define(function(require, exports, module) {
                 content: '不是fixed'
             });
         });
+        //----------------------------------------
+        $('#btn71').click(function() {
+            new Dialog({
+                content: 'fade',
+                effect: function() {
+                    this.element.fadeIn(750);
+                },
+                width: 500,
+                height: 300
+            }).show().after('hide', function() {
+                    this.destroy();
+                });
+        });
+        $('#btn72').click(function() {
+            ConfirmBox.alert({
+                effect: function() {
+                    this.element.fadeIn(1750);
+                },
+                content: 'fade'
+            });
+        });
     });
 });

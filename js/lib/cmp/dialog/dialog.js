@@ -41,6 +41,7 @@ define(function(require, exports, module) {
             zIndex: Z_INDEX,
             fixed: true, // 是否fixed
             autoFit: true, // 是否自适应高度
+            effect: 'none', //
             align: {
                 selfXY: ['50%', '50%'],
                 baseXY: ['50%', '50%']
@@ -79,6 +80,19 @@ define(function(require, exports, module) {
 
             var self = this;
             Scroll.prevent(this.$('.main').eq(0));
+        },
+        // 覆盖 overlay，提供动画
+        _onRenderVisible: function(val) {
+            var effect = this.get('effect');
+            if (val) {
+                if($.isFunction(effect)) {
+                    effect.call(this, this.element);
+                } else {
+                    this.element.show();
+                }
+            } else {
+                this.element.hide();
+            }
         },
         show: function(config) {
             if(this._type === 'iframe') { // iframe 要在载入完成才显示
