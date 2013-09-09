@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>autocomplete</title>
+    <meta charset="utf-8"/>
+    <link href="../../../../public/theme/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="./style.css" rel="stylesheet" type="text/css" media="all"/>
+    <script src="../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../public/js/config.js"></script>
+    <script>seajs.use('./app');</script>
+</head>
+<body>
+</body>
+<div class="sample">
+    <p>1. 简单autocomplete</p>
+    <p>数据源：['abc', 'abd', 'cbd']</p>
+    <input id="ac1" type="text" class="ac-input"/>
+</div>
+
+
+<div class="sample">
+    <p>2. 阻止回车事件:当输入框在 form 中，直接回车会提交表单，这时需要设置 submitOnEnter</p>
+    <p>数据源：['abc', 'abd', 'cbd']</p>
+    <form name="" action="">
+        <input id="ac2" type="text" value="" />
+    </form>
+</div>
+
+<div class="sample">
+    <p>3. 默认选中第一个</p>
+    <p>数据源：['abc', 'abd', 'cbd']</p>
+    <input id="ac3" type="text" value="" />
+</div>
+
+<div class="sample">
+    <p>4. 高亮匹配值</p>
+    <p>数据源：['abc', 'abd', 'cbd']</p>
+    <input id="ac4" type="text" value="" />
+</div>
+
+<div class="sample">
+    <p>5. ajax请求</p>
+    <p>数据源：data.php</p>
+    <input id="ac5" type="text" value="" />
+</div>
+
+<div class="sample">
+    <p>6. 自定义的ajax请求，返回格式不是value</p>
+    <p>数据源：data2.php</p>
+    <input id="ac6" type="text" value="" />
+</div>
+
+<div class="sample">
+    <p>7. 自定义模板</p>
+    <p>数据源：['abc', 'abd', 'cbd']</p>
+    <input id="ac7" type="text" value="" />
+</div>
+
+<div class="sample">
+    <p>8. Email 自动补全</p>
+    <input id="ac8" type="text" value="" />
+</div>
+
+</html>
