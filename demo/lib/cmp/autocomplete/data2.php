@@ -3,7 +3,9 @@
     $data = Array();
     for($i = 0; $i< 5; $i++) {
         $data[] = Array(
-            "content" => "小明".$i
+            "content" => "小明".$i,
+            "id" => $i,
+            "xxx" => "xxx".$i
         );
     }
     $arr = Array(

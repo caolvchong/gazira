@@ -44,28 +44,35 @@ define(function(require, exports, module) {
         // 另一种ajax
         new AutoComplete({
             trigger: '#ac6',
-            filter: '',
+            filter: function(data) {
+                return data;
+            },
+            itemTemplate: function(data) {
+                return '<li data-role="item" data-value="' + data.content + '->' + data.id + '">' + data.content + ' ' + data.xxx + '</li>';
+            },
             dataSource: function(value) {
                 var that = this;
-                $.ajax('./data.php', {
+                $.ajax({
+                    url: './data2.php',
                     data: {
                         key: value,
                         date: +new Date
                     },
                     dataType: 'json',
                     success: function(data) {
-                        var arr = [];
-                        $.each(data.data, function(i, v) {
-                            arr[i] = v.value;
-                        });
-                        that.trigger('data', arr);
+                        that.trigger('data', data.data);
                     },
                     error: function(data) {
                         that.trigger('data', {});
                     }
                 });
             }
-        }).render();
+        }).render().on('itemSelect', function(data) {
+                var trigger = this.get('trigger');
+                setTimeout(function() {
+                    trigger.val(data.content);
+                }, 1000);
+            });
 
         // 自定义模板
         new AutoComplete({
