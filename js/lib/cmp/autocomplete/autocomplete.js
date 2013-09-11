@@ -203,7 +203,7 @@ define(function(require, exports, module) {
                     var item = data[i];
                     var text = this.get('highlight') ? highlightItem.call(item, classPrefix, data[i].matchKey) : data[i].matchKey;
                     if(this.get('itemTemplate')) {
-                        arr[i] = this.get('itemTemplate').replace(/\{\{value\}\}/g, data[i].matchKey).replace(/\{\{text\}\}/g, text);
+                        arr[i] = $.isFunction(this.get('itemTemplate')) ? this.get('itemTemplate')(data[i]) : this.get('itemTemplate').replace(/\{\{value\}\}/g, data[i].matchKey).replace(/\{\{text\}\}/g, text);
                     } else {
                         arr[i] = '<li data-role="item" class="' + classPrefix + '-item" data-value="' + data[i].matchKey + '">' + text + '</li>';
                     }
