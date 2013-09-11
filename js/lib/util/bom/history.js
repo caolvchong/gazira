@@ -29,6 +29,11 @@ define(function(require, exports, module) {
         getHash: function() {
             return location.hash.replace(/^#/, '');
         },
+        setHash: function(hash, force) {
+            var url = location.href;
+            url = url.replace(/#(.+)/, '#' + hash);
+            force === true ? location.replace(url) : (location.hash = hash);
+        },
         search: function(hash, cache) {
             var match;
             for(var key in cache) {
@@ -105,12 +110,10 @@ define(function(require, exports, module) {
          * 触发某个路由，执行回调函数
          * @param hash
          * @param callback 执行完路由后的回调函数
+         * @param force 是否写入历史记录
          */
         trigger: function(hash, callback, force) {
-            if((force === true || (arguments.length === 2 && callback === true)) && location.hash === '#' + hash) {
-                location.hash = '';
-            }
-            location.hash = hash;
+            helper.setHash(hash, force);
             if($.isFunction(callback)) {
                 var fetch = helper.fetch(hash, cache);
                 if(fetch.action) {
@@ -148,7 +151,7 @@ define(function(require, exports, module) {
                     var hash = helper.getHash();
                     if(prev !== url) {
                         prevURL = url;
-                        helper.match(hash, cache);
+                        helper.match(hash ? hash : defaultHash, cache);
                     }
                 };
             } else {
