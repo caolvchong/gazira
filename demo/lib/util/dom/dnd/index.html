@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dnd</title>
+    <meta charset="utf-8"/>
+    <link href="../../../../../public/theme/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="./style.css" rel="stylesheet" type="text/css" media="all"/>
+    <script src="../../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../../public/js/config.js"></script>
+    <script>seajs.use('./app');</script>
+</head>
+<body>
+<div class="sample clearfix">
+    <p>1. 简单拖拽</p>
+    <div id="drag1">
+        <div class="drag">1</div>
+        <div class="drag">2</div>
+        <div class="drag drag-ext">具有padding，margin</div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>2. 句柄拖拽</p>
+    <div id="drag2">
+        <div class="drag">
+            <div class="handler">header</div>
+        </div>
+
+        <div class="drag">
+            <div class="handler"><div><span>header</span></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>3. 容器限制</p>
+    <div id="drag3" class="container">
+        <div class="drag"></div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>4. x,y方向限制</p>
+    <div id="drag4">
+        <div class="drag" id="drag4_1">x方向固定</div>
+        <div class="drag" id="drag4_2">y方向固定</div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>5. 拖拽排除</p>
+    <div id="drag5">
+        <div class="drag" id="drag5_1">
+            <div class="except">1</div>
+            <div class="except">2</div>
+        </div>
+        <div class="drag" id="drag5_2">
+            <div class="except">1</div>
+            <div class="except">2</div>
+        </div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>6. 每次拖动固定距离</p>
+    <div id="drag6">
+        <div class="drag"></div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>7. 允许拖拽时支持滚动条滚动</p>
+    <div id="drag7">
+        <div class="drag"></div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>8. drop</p>
+    <div id="drag8">
+        <div class="drag"></div>
+    </div>
+    <div class="container" id="drop8">我是容器</div>
+</div>
+
+<div class="sample clearfix">
+    <p>9. 各种事件</p>
+    <div id="drag9">
+        <div class="drag"></div>
+    </div>
+    <textarea id="log9"></textarea>
+    <div class="container" id="drop9">我是容器</div>
+</div>
+
+<div class="sample clearfix">
+    <p>10. 禁用拖拽</p>
+    <div><input id="btn10" type="button" value="禁用拖拽"/></div>
+    <div id="drag10">
+        <div class="drag"></div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>11. 自定义代理节点</p>
+    <div id="drag11">
+        <div class="drag"></div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>12. 同时拖动多个节点（未做）</p>
+    <div id="drag12">
+        <div class="drag"><p><input type="checkbox"/></p>勾选的将被多个同时拖拽</div>
+        <div class="drag"><p><input type="checkbox"/></p>勾选的将被多个同时拖拽</div>
+        <div class="drag"><p><input type="checkbox"/></p>勾选的将被多个同时拖拽</div>
+    </div>
+</div>
+
+<div class="sample clearfix">
+    <p>13. drop多个容器</p>
+    <div id="drag13">
+        <div class="drag"></div>
+    </div>
+    <div class="container" id="drop13_1">我是容器</div>
+    <div class="container" id="drop13_2">我是容器</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+.sample {
+  padding: 20px;
+  border-bottom: 1px solid #005580;
+  min-height: 150px;
+}
+
+.container {
+  background: #eee;
+  border: 1px dashed #ddd;
+  height: 200px;
+  width: 350px;
+  float: left;
+  margin: 20px;
+}
+.drag {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #666;
+  background: #ddd;
+  float: left;
+  margin: 2px;
+}
+.drag-ext {
+  padding: 10px;
+  margin: 5px;
+}
+
+.drag .handler {
+  font-size: 14px;
+  background: #eee8aa;
+  border-bottom: 1px solid #666;
+  height: 24px;
+  line-height: 24px;
+  padding: 3px;
+}
+
+.drag .except {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  background: yellow;
+  float: left;
+  margin: 5px;
+}
+
+.sample textarea {
+  border: 1px solid #ddd;
+  width: 300px;
+  height: 150px;
+  float: left;
+}
+
+.proxy-self {
+  border: 1px dashed #0044cc;
+  width: 50px;
+  height: 50px;
+  background: #0081c2;
+}
