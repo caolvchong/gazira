@@ -1,0 +1,72 @@
+.sample {
+  padding: 20px;
+  border-bottom: 1px solid #005580;
+  min-height: 200px;
+}
+
+.container {
+  background: none repeat scroll 0 0 #CCCCCC;
+  height: 200px;
+  width: 500px;
+}
+
+.sortable {
+  min-height: 175px;
+}
+.sortable-min {
+  width: 400px;
+}
+
+ul,li {
+  list-style: none;
+}
+
+.item {
+  width: 200px;
+  height: 24px;
+  border: 1px solid #dddddd;
+  margin: 10px;
+  background: #eee8aa;
+}
+
+.item2 {
+  width: 150px;
+  height: 150px;
+  border: 1px solid #dddddd;
+  margin: 10px;
+  background: #eee8aa;
+  float: left;
+}
+
+.item3 {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #dddddd;
+  margin: 10px;
+  background: #eee8aa;
+  float: left;
+}
+
+.item .handler {
+  width: 20px;
+  height: 20px;
+  background: blue;
+  display: inline-block;
+  float: right;
+  margin: 2px;
+}
+
+.itemx {
+  background: #98fb98;
+}
+.itemy {
+  background: #db7093;
+}
+
+.sortable-f {
+  width: 220px;
+  min-height: 50px;
+  border: 1px solid #aaa;
+  float: left;
+  margin: 30px;
+}
