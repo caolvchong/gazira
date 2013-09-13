@@ -139,5 +139,18 @@ define(function(require, exports, module) {
             drop: [$('#drop13_1'), $('#drop13_2')]
         });
 
+        /**--------------------------------------------
+         * 实例14： 快速注册
+         * --------------------------------------------*/
+        var d14 = new Dnd({
+            element: '#drag14 .drag',
+            drop: '#drop14',
+            handler: '.handler',
+            except: '.except'
+        });
+        $('#btn14').click(function() {
+            var node = $('<div class="item drag"><div class="handler">我也可以拖拽</div></div>').appendTo($('#drag14'));
+            d14.render(node);
+        });
      });
 });
