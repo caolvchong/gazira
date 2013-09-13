@@ -36,14 +36,7 @@ define(function(require, exports, module) {
                     return val ? val : null;
                 }
             },
-            handler: { // 被拖拽的节点
-                getter: function(val) {
-                    if(val) {
-                        return this.get('element').find(val);
-                    }
-                    return this.get('element');
-                }
-            },
+            handler: '',
             container: { // 限制的容器
                 getter: function(val) {
                     if(typeof val === 'string') {

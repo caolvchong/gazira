@@ -52,10 +52,12 @@ define(function(require, exports, module) {
                 }
             }).call(this);
 
+            var dragElement = typeof this.get('item') === 'string' ? this.get('element').find(this.get('item')) : this.get('item');
             this.dnd = new Dnd({
-                element: typeof this.get('item') === 'string' ? this.get('element').find(this.get('item')) : this.get('item'),
+                element: dragElement,
                 handler: this.get('handler'),
-                drop: box
+                drop: box,
+                position: dragElement.eq(0).css('position') || 'static'
             }).on('beforedrag',function(dnd) {
                     return that.trigger('beforedrag', dnd);
                 }).on('dragstart',function(dataTransfer, dragging, dropping, dnd) {
