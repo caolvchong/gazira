@@ -109,13 +109,21 @@ define(function(require, exports, module) {
          * 实例10： 禁用拖拽
          * --------------------------------------------*/
         var d10 = new Dnd({
-            element: '#drag10 .drag'
+            element: '#drag10 .drag',
+            handler: '.handler'
         });
-        $('#btn10').click((function(flag) {
+        $('#btn10_1').click((function(flag) {
             return function() {
                 flag = !flag;
-                d10.set('disabled', flag);
-                $(this).val(flag ? '启用拖拽' : '禁用拖拽');
+                d10[flag ? 'disable' : 'enable']($('#drag10 .handler').eq(0));
+                $(this).val(flag ? '启用拖拽-1' : '禁用拖拽-1');
+            };
+        })(false));
+        $('#btn10_2').click((function(flag) {
+            return function() {
+                flag = !flag;
+                d10[flag ? 'disable' : 'enable']($('#drag10 .handler').eq(1));
+                $(this).val(flag ? '启用拖拽-2' : '禁用拖拽-2');
             };
         })(false));
 
