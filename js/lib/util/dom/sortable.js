@@ -28,11 +28,10 @@ define(function(require, exports, module) {
             var that = this;
             Sortable.superclass.initialize.apply(this, arguments);
 
-            var placeholder = this.get('placeholder');
+            var placeholder;
             var connect = this.get('connect') || [];
             var connectItem = this.get('connectItem');
             var box = [];
-            var _drop;
             (function() {
                 if(!$.isArray(connect)) {
                     connect = [connect];
@@ -61,8 +60,7 @@ define(function(require, exports, module) {
             }).on('beforedrag',function(dnd) {
                     return that.trigger('beforedrag', dnd);
                 }).on('dragstart',function(dataTransfer, dragging, dropping, dnd) {
-                    _drop = false;
-                    placeholder = placeholder || this.element.clone().empty().css({
+                    placeholder = that.get('placeholder') || this.element.clone().empty().css({
                         visibility: 'visible',
                         border: '1px dashed #ddd',
                         background: '#fff'
@@ -72,17 +70,27 @@ define(function(require, exports, module) {
                 }).on('drag',function(dragging, dropping, dnd) {
                     var proxy = this.get('proxy');
                     $(connect).each(function(m, b) {
-                        if(hover(b.element, proxy)) {
-                            var items = b.element.find(b.item);
+                        var dropPosition = hover(b.element, proxy); // 是否划过容器
+                        if(dropPosition) {
+                            var items = b.element.find(b.item).filter(':visible');
+                            items.filter(function(i) {
+                                return items.eq(i)[0] !== proxy[0];
+                            });
                             var len = items.length;
                             if(len === 0) {
                                 b.element.append(placeholder);
                             } else {
                                 for(var i = 0; i < len; i++) {
                                     var item = items.eq(i);
-                                    if(item.is(':visible')) {
+                                    if(placeholder[0] !== item[0]) {
                                         var position = hover(item, proxy);
                                         if(position) {
+                                            placeholder.remove();
+                                            placeholder = that.get('placeholder') || item.clone().empty().css({
+                                                visibility: 'visible',
+                                                border: '1px dashed #ddd',
+                                                background: '#fff'
+                                            });
                                             item[position](placeholder);
                                             break;
                                         }
@@ -92,22 +100,26 @@ define(function(require, exports, module) {
                         }
                     });
                     that.trigger('drag', dragging, dropping, dnd);
-                }).on('dragenter', function(dragging, dropping, dnd) {
+                }).on('dragenter',function(dragging, dropping, dnd) {
                     that.trigger('dragenter', dragging, dropping, dnd);
-                }).on('dragover', function(dragging, dropping, dnd) {
+                }).on('dragover',function(dragging, dropping, dnd) {
                     that.trigger('dragover', dragging, dropping, dnd);
-                }).on('dragleave', function(dragging, dropping, dnd) {
+                }).on('dragleave',function(dragging, dropping, dnd) {
                     that.trigger('dragleave', dragging, dropping, dnd);
-                }).on('dragend', function(element, dropping, dnd) {
-                    if(!_drop) {
-                        placeholder.replaceWith(this.element.css('position', this.element.data('style').position || '').show());
+                }).on('dragend',function(element, dropping, dnd) {
+                    var node = this.element.css('position', this.element.data('style').position || '').show();
+                    placeholder.replaceWith(node);
+                    if(dropping[0] !== that.get('element')[0]) {
+                        that.dnd.disable(that.get('handler') ? node.find(that.get('handler')) : node);
+                        if(dropping.data('dnd')) {
+                            dropping.data('dnd').render(node);
+                        }
                     }
                     that.trigger('dragend', element, dropping, dnd);
                 }).on('drop', function(dataTransfer, element, dropping, dnd) {
-                    _drop = true;
-                    placeholder.replaceWith(this.element.css('position', this.element.data('style').position || '').show());
                     that.trigger('drop', dataTransfer, element, dropping, dnd);
                 });
+            this.get('element').data('dnd', this.dnd);
         }
     });
 
