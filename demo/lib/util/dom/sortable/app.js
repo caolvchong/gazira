@@ -43,7 +43,7 @@ define(function(require, exports, module) {
         /**--------------------------------------------
          * 实例5： 双容器排序
          * --------------------------------------------*/
-        new Sortable({
+        var s5_1 = new Sortable({
             element: '#sortable5_1',
             item: 'li',
             connect: [{
@@ -51,6 +51,12 @@ define(function(require, exports, module) {
                 item: 'li'
             }]
         });
+        $('#sortable5_1 li').on('click', function(e) {
+            var node = $(this);
+            node.toggleClass('drag-disabled');
+            s5_1.dnd[node.hasClass('drag-disabled') ? 'disable' : 'enable'](node);
+        });
+
 
         new Sortable({
             element: '#sortable5_2',
@@ -68,6 +74,30 @@ define(function(require, exports, module) {
         /**--------------------------------------------
          * 实例6： 多容器排序
          * --------------------------------------------*/
+        new Sortable({
+            element: '#sortable6_1',
+            item: 'li',
+            connect: [{
+                element: '#sortable6_2',
+                item: 'li'
+            }]
+        });
+        new Sortable({
+            element: '#sortable6_2',
+            item: 'li',
+            connect: [{
+                element: '#sortable6_3',
+                item: 'li'
+            }]
+        });
+        new Sortable({
+            element: '#sortable6_3',
+            item: 'li',
+            connect: [{
+                element: '#sortable6_1',
+                item: 'li'
+            }]
+        });
 
         /**--------------------------------------------
          * 实例7： 事件触发

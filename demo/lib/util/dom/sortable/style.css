@@ -57,6 +57,8 @@ ul,li {
 }
 
 .itemx {
+  width: 150px;
+  height: 35px;
   background: #98fb98;
 }
 .itemy {
@@ -69,4 +71,8 @@ ul,li {
   border: 1px solid #aaa;
   float: left;
   margin: 30px;
+}
+
+.drag-disabled {
+  background: #ddd;
 }
