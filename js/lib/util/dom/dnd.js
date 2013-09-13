@@ -67,13 +67,14 @@ define(function(require, exports, module) {
         },
         events: {},
         initialize: function(config) {
-            var that = this;
             Dnd.superclass.initialize.apply(this, arguments);
-
-            var nodes = this.get('element');
-            var handlers = this.get('handler');
+            this.render();
+        },
+        render: function(element) {
+            var that = this;
+            var nodes = element ? $(element) : this.get('element');
+            var handlers = this.get('handler') ? nodes.find(this.get('handler')) : nodes;
             var except = this.get('except');
-
             if(except) { // 拖拽句柄排除
                 nodes.find(except).css('cursor', 'default').mousedown(function(e) {
                     return false;
@@ -93,6 +94,15 @@ define(function(require, exports, module) {
                 })).css('cursor', 'move').attr('data-draggable', true);
                 element.data('style', element.attr('style') || {});
             });
+            return this;
+        },
+        destroy: function(handler) {
+            var nodes = this.get('element');
+            var handlers = handler ? nodes.find(handler) : this.get('handler');
+            handlers.each(function(i, handler) {
+                $(handler).removeData('dnd').css('cursor', 'default').removeAttr('data-draggable');
+            });
+            return this;
         },
         _onChangeDisabled: function(val, prev) {
             var handlers = this.get('handler');
@@ -340,7 +350,7 @@ define(function(require, exports, module) {
     /*
      * 根据revert判断是否要返回并执行
      * 若drop不为null且dropping为null, 则自动回到原处
-     * flag为true表示必须返回的,目前用于esc按下触发返回
+     * flag为true表示必须返回的
      */
     function executeRevert(flag) {
         var element = obj.element;
@@ -373,7 +383,7 @@ define(function(require, exports, module) {
                 xleft = proxy.offset().left;
                 xtop = proxy.offset().top;
             } else {
-                element.css('position', element.data('style').position || '');
+                element.css('position', obj.get('position') || 'relative');
             }
 
             if(visible === false) {
