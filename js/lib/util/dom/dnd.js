@@ -89,9 +89,25 @@ define(function(require, exports, module) {
             });
             return this;
         },
+        enable: function(handler) {
+            var nodes = this.get('element');
+            var handlers = handler ? (typeof handler === 'string' ? nodes.find(handler) : handler) : nodes;
+            handlers.each(function(i, handler) {
+                $(handler).css('cursor', 'move').attr('data-draggable', true);
+            });
+            return this;
+        },
+        disable: function(handler) {
+            var nodes = this.get('element');
+            var handlers = handler ? (typeof handler === 'string' ? nodes.find(handler) : handler) : nodes;
+            handlers.each(function(i, handler) {
+                $(handler).css('cursor', 'default').attr('data-draggable', '');
+            });
+            return this;
+        },
         destroy: function(handler) {
             var nodes = this.get('element');
-            var handlers = handler ? nodes.find(handler) : this.get('handler');
+            var handlers = handler ? (typeof handler === 'string' ? nodes.find(handler) : handler) : nodes;
             handlers.each(function(i, handler) {
                 $(handler).removeData('dnd').css('cursor', 'default').removeAttr('data-draggable');
             });
@@ -100,7 +116,7 @@ define(function(require, exports, module) {
         _onChangeDisabled: function(val, prev) {
             var handlers = this.get('handler');
             handlers.each(function(index, handler) {
-                $(handler).css('cursor', val ? 'default' : 'move');
+                $(handler).css('cursor', val ? 'default' : 'move').attr('data-draggable', val ? '' : true);
             });
         }
     });
@@ -120,14 +136,17 @@ define(function(require, exports, module) {
 
     var handleEvent = function(e) {
         var dnd, proxy, element;
+        var target;
         switch(e.type) {
             case 'mousedown':
                 if(e.which === 1) {
-                    dnd = $(e.target).data('dnd');
+                    target = $(e.target);
+                    dnd = target.data('dnd');
                     if(!dnd) {
-                        dnd = $(e.target).closest('[data-draggable]').data('dnd');
+                        target = target.closest('[data-draggable]');
+                        dnd = target.data('dnd');
                     }
-                    if(dnd && dnd.get('disabled') === false) { // 判断是否为可拖放元素
+                    if(dnd && dnd.get('disabled') === false && target.attr('data-draggable')) { // 判断是否为可拖放元素
                         obj = dnd;
                         element = obj.element;
                         obj.set('proxy', obj.proxy ? obj.proxy : element.clone());
