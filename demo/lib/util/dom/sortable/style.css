@@ -66,11 +66,18 @@ ul,li {
 }
 
 .sortable-f {
-  width: 220px;
-  min-height: 50px;
+  width: 250px;
+  min-height: 100px;
   border: 1px solid #aaa;
   float: left;
   margin: 30px;
+  padding: 10px;
+}
+
+.sortable-f ul {
+  width: 220px;
+  min-height: 50px;
+  border: 1px dashed #C6E746;
 }
 
 .drag-disabled {

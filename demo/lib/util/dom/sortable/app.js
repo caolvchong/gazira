@@ -96,6 +96,8 @@ define(function(require, exports, module) {
             connect: [{
                 element: '#sortable6_1',
                 item: 'li'
+            }, {
+                element: '#sortable6_4'
             }]
         });
 
