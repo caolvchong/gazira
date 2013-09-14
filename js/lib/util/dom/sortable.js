@@ -22,7 +22,9 @@ define(function(require, exports, module) {
             handler: null,
             connect: null,
             connectItem: '',
-            placeholder: null
+            placeholder: null,
+            connectSelf: true,
+            revert: false
         },
         initialize: function(config) {
             var that = this;
@@ -32,6 +34,8 @@ define(function(require, exports, module) {
             var connect = this.get('connect') || [];
             var connectItem = this.get('connectItem');
             var box = [];
+            var lastContainer; // 最后存放的容器
+
             (function() {
                 if(!$.isArray(connect)) {
                     connect = [connect];
@@ -60,6 +64,7 @@ define(function(require, exports, module) {
             }).on('beforedrag',function(dnd) {
                     return that.trigger('beforedrag', dnd);
                 }).on('dragstart',function(dataTransfer, dragging, dropping, dnd) {
+                    lastContainer = null;
                     placeholder = that.get('placeholder') || this.element.clone().empty().css({
                         visibility: 'visible',
                         border: '1px dashed #ddd',
@@ -69,36 +74,43 @@ define(function(require, exports, module) {
                     that.trigger('dragstart', dataTransfer, dragging, dropping, dnd);
                 }).on('drag',function(dragging, dropping, dnd) {
                     var proxy = this.get('proxy');
-                    $(connect).each(function(m, b) {
-                        var dropPosition = hover(b.element, proxy); // 是否划过容器
-                        if(dropPosition) {
-                            var items = b.element.find(b.item).filter(':visible');
-                            items.filter(function(i) {
-                                return items.eq(i)[0] !== proxy[0];
-                            });
-                            var len = items.length;
-                            if(len === 0) {
-                                b.element.append(placeholder);
-                            } else {
-                                for(var i = 0; i < len; i++) {
-                                    var item = items.eq(i);
-                                    if(placeholder[0] !== item[0]) {
-                                        var position = hover(item, proxy);
-                                        if(position) {
-                                            placeholder.remove();
-                                            placeholder = that.get('placeholder') || item.clone().empty().css({
-                                                visibility: 'visible',
-                                                border: '1px dashed #ddd',
-                                                background: '#fff'
-                                            });
-                                            item[position](placeholder);
-                                            break;
+                    var element = this.element;
+
+                    if(dropping) { // 划过可接纳的容器
+                        lastContainer = dropping;
+                        $(connect).each(function(m, b) {
+                            if(dropping[0] === b.element[0]) {
+                                var items = b.element.find(b.item).filter(':visible');
+                                items.filter(function(i) {
+                                    return items.eq(i)[0] !== proxy[0];
+                                });
+                                var inserted = false;
+                                var len = items.length;
+                                if(len === 0) { // 容器内无元素
+                                    b.element.append(placeholder);
+                                } else { // 容器内有元素
+                                    for(var i = 0; i < len; i++) {
+                                        var item = items.eq(i);
+                                        if(placeholder[0] !== item[0]) {
+                                            var position = hover(item, proxy);
+                                            if(position) { // 划过某个元素
+                                                item[position](element);
+                                                element.after(placeholder);
+                                                inserted = true;
+                                                break;
+                                            }
                                         }
                                     }
+                                    if(!inserted) {
+                                        b.element['prepend'](element);
+                                        element.after(placeholder);
+                                    }
                                 }
+                                return false;
                             }
-                        }
-                    });
+                        });
+                    }
+
                     that.trigger('drag', dragging, dropping, dnd);
                 }).on('dragenter',function(dragging, dropping, dnd) {
                     that.trigger('dragenter', dragging, dropping, dnd);
@@ -109,17 +121,18 @@ define(function(require, exports, module) {
                 }).on('dragend',function(element, dropping, dnd) {
                     var node = this.element.css('position', this.element.data('style').position || '').show();
                     placeholder.replaceWith(node);
-                    if(dropping[0] !== that.get('element')[0]) {
-                        that.dnd.disable(that.get('handler') ? node.find(that.get('handler')) : node);
-                        if(dropping.data('dnd')) {
-                            dropping.data('dnd').render(node);
+                    if(lastContainer && lastContainer[0] !== that.get('element')[0]) { // 存在dropping表明是拖放到可以存放的容器，若不是原来容器，则需要重新注册拖拽
+                        that.dnd.destroy(that.get('handler') ? node.find(that.get('handler')) : node); // 将原来拖拽销毁
+                        if(lastContainer.data('dnd')) { // 新容器存在拖放，则注册
+                            lastContainer.data('dnd').render(node);
                         }
+                        lastContainer = null;
                     }
                     that.trigger('dragend', element, dropping, dnd);
                 }).on('drop', function(dataTransfer, element, dropping, dnd) {
                     that.trigger('drop', dataTransfer, element, dropping, dnd);
                 });
-            this.get('element').data('dnd', this.dnd);
+            this.get('element').data('dnd', this.dnd); // 在容器缓存拖拽，以便给添加进来的对象注册
         }
     });
 
