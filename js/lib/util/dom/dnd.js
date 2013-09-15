@@ -162,7 +162,7 @@ define(function(require, exports, module) {
                                 left: element.offset().left,
                                 top: element.offset().top,
                                 visibility: 'hidden'
-                            });
+                            }).data('proxy', true);
                             proxy.appendTo(element.parent());
                             if(obj.get('scroll') !== true) { // 拖动时候不影响滚动条，设置true则可以在拖动到边缘的同时让滚动条滚动
                                 e.preventDefault();
