@@ -46,12 +46,9 @@ define(function(require, exports, module) {
         var s5_1 = new Sortable({
             element: '#sortable5_1',
             item: 'li',
-            connect: [{
-                element: '#sortable5_2',
-                item: 'li'
-            }]
+            connect: '#sortable5_2'
         });
-        $('#sortable5_1 li').on('click', function(e) {
+        $('#sortable5_1').on('click', 'li', function(e) {
             var node = $(this);
             node.toggleClass('drag-disabled');
             s5_1.dnd[node.hasClass('drag-disabled') ? 'disable' : 'enable'](node);
@@ -61,11 +58,8 @@ define(function(require, exports, module) {
         new Sortable({
             element: '#sortable5_2',
             item: 'li',
-            connect: [{
-                element: '#sortable5_1',
-                item: 'li'
-            }]
-        }).on('drop', function(dataTransfer, element, dropping, dnd) {
+            connect: '#sortable5_1'
+        }).on('dragend', function(element, dropping, dnd) {
                 element.fadeOut(function() {
                     element.fadeIn();
                 });
@@ -77,28 +71,17 @@ define(function(require, exports, module) {
         new Sortable({
             element: '#sortable6_1',
             item: 'li',
-            connect: [{
-                element: '#sortable6_2',
-                item: 'li'
-            }]
+            connect: '#sortable6_2'
         });
         new Sortable({
             element: '#sortable6_2',
             item: 'li',
-            connect: [{
-                element: '#sortable6_3',
-                item: 'li'
-            }]
+            connect: '#sortable6_3'
         });
         new Sortable({
             element: '#sortable6_3',
             item: 'li',
-            connect: [{
-                element: '#sortable6_1',
-                item: 'li'
-            }, {
-                element: '#sortable6_4'
-            }]
+            connect: ['#sortable6_1', '#sortable6_4']
         });
 
         /**--------------------------------------------
