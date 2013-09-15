@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var $ = require('$');
     var Base = require('../base');
     var Dnd = require('./dnd');
+    var undef;
 
     var Sortable = Base.extend({
         attrs: {
@@ -18,10 +19,9 @@ define(function(require, exports, module) {
                     return val ? val : null;
                 }
             },
-            item: '',
+            item: '', // 容器内被排序的列表元素
             handler: null,
-            connect: null,
-            connectItem: '',
+            connect: null, // 可拖拽到的容器
             placeholder: null,
             connectSelf: true,
             revert: false
@@ -31,35 +31,25 @@ define(function(require, exports, module) {
             Sortable.superclass.initialize.apply(this, arguments);
 
             var placeholder;
-            var connect = this.get('connect') || [];
-            var connectItem = this.get('connectItem');
-            var box = [];
             var lastContainer; // 最后存放的容器
-
-            (function() {
-                if(!$.isArray(connect)) {
-                    connect = [connect];
-                }
-                for(var i = 0, len = connect.length; i < len; i++) {
-                    var c = connect[i];
-                    c.element = $(c.element);
-                    c.item = c.item || connectItem || this.get('item');
-                    box.push(c.element);
-                }
-                if(this.get('connectSelf') !== false) {
-                    connect.push({
-                        element: this.get('element'),
-                        item: this.get('item')
-                    });
-                    box.push(this.get('element'));
-                }
-            }).call(this);
-
             var dragElement = typeof this.get('item') === 'string' ? this.get('element').find(this.get('item')) : this.get('item');
+
             this.dnd = new Dnd({
                 element: dragElement,
                 handler: this.get('handler'),
-                drop: box,
+                drop: (function() {
+                    var arr = [];
+                    var connect = this.get('connect');
+                    if(connect) {
+                        $(connect).each(function(i, el) {
+                            arr.push($(el));
+                        });
+                    }
+                    if(this.get('connectSelf') !== false) {
+                        arr.push(this.get('element'));
+                    }
+                    return arr;
+                }).call(this),
                 position: dragElement.eq(0).css('position') || 'static'
             }).on('beforedrag',function(dnd) {
                     return that.trigger('beforedrag', dnd);
@@ -69,48 +59,28 @@ define(function(require, exports, module) {
                         visibility: 'visible',
                         border: '1px dashed #ddd',
                         background: '#fff'
-                    });
-                    this.element.hide().after(placeholder);
+                    }).data('placeholder', true);
+                    this.element.hide().after(placeholder); // todo: 插入位置计算
                     that.trigger('dragstart', dataTransfer, dragging, dropping, dnd);
                 }).on('drag',function(dragging, dropping, dnd) {
                     var proxy = this.get('proxy');
                     var element = this.element;
-
                     if(dropping) { // 划过可接纳的容器
                         lastContainer = dropping;
-                        $(connect).each(function(m, b) {
-                            if(dropping[0] === b.element[0]) {
-                                var items = b.element.find(b.item).filter(':visible');
-                                items.filter(function(i) {
-                                    return items.eq(i)[0] !== proxy[0];
-                                });
-                                var inserted = false;
-                                var len = items.length;
-                                if(len === 0) { // 容器内无元素
-                                    b.element.append(placeholder);
-                                } else { // 容器内有元素
-                                    for(var i = 0; i < len; i++) {
-                                        var item = items.eq(i);
-                                        if(placeholder[0] !== item[0]) {
-                                            var position = hover(item, proxy);
-                                            if(position) { // 划过某个元素
-                                                item[position](element);
-                                                element.after(placeholder);
-                                                inserted = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if(!inserted) {
-                                        b.element['prepend'](element);
-                                        element.after(placeholder);
-                                    }
-                                }
-                                return false;
-                            }
+                        var items = dropping.find(that.get('item'));
+                        items = items.filter(function(i) {
+                            var item = items.eq(i);
+                            return !(item.data('proxy') || item.data('placeholder'));
                         });
+                        var len = items.length;
+                        if(len === 0) { // 容器内无元素
+                            dropping.append(placeholder);
+                        } else { // 容器内有元素
+                            var result = getCurrentItem(proxy, items);
+                            result.item[result.position](element);
+                            element.after(placeholder);
+                        }
                     }
-
                     that.trigger('drag', dragging, dropping, dnd);
                 }).on('dragenter',function(dragging, dropping, dnd) {
                     that.trigger('dragenter', dragging, dropping, dnd);
@@ -136,33 +106,43 @@ define(function(require, exports, module) {
         }
     });
 
-    function hover(node, target) {
+    /**
+     * 获取对应排序的元素及其插入的位置
+     * @param node 拖拽的代理元素
+     * @param list 容器内的列表元素
+     * @returns {{item: *, position: string}}
+     */
+    function getCurrentItem(node, list) {
         var o = node.offset();
-        var w = node.outerWidth();
-        var h = node.outerHeight();
-        var pTop = o.top;
-        var pLeft = o.left;
-        var pHTop = pTop + h / 2;
-        var pHLeft = pLeft + w / 2;
-        var pBottom = pTop + h;
-        var pRight = pLeft + w;
-
-        var t = target.offset();
-        var top = t.top;
-        var left = t.left;
-        var bottom = top + target.outerHeight();
-        var right = left + target.outerWidth();
-
-        var result = false;
-        var flag = (left > pLeft && left < pHLeft) || (right < pRight && right > pHLeft);
-        if(flag) {
-            if(top > pTop && top < pHTop) {
-                result = 'before';
-            } else if(bottom < pBottom && bottom > pHTop) {
-                result = 'after';
+        var o2;
+        var x = o.left + node.outerWidth() / 2;
+        var y = o.top + node.outerHeight() / 2;
+        var n;
+        var item; // 命中的节点
+        var rule = 'top'; // 判断是由top判断插入位置还是left
+        var top;
+        list.each(function(i, v) {
+            v = $(v);
+            var vo = v.offset();
+            var vx = vo.left + v.outerWidth() / 2;
+            var vy = vo.top + v.outerHeight() / 2;
+            if(top === undef) {
+                top = vo.top;
+            } else if(top === vo.top) {
+                rule = 'left';
             }
-        }
-        return result;
+            var d = Math.pow(vx - x, 2) + Math.pow(vy - y, 2);
+            if(!n || d < n) {
+                n = d;
+                item = v;
+                o2 = vo;
+            }
+        });
+
+        return {
+            item: item,
+            position : o[rule] < o2[rule] ? 'before' : 'after'
+        };
     }
 
     module.exports = Sortable;
