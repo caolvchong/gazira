@@ -15,6 +15,10 @@ define(function(require, exports, module) {
             element: '#drag1 .drag'
         });
 
+        $('#drag1').click(function() {
+            alert(1234);
+        });
+
         /**--------------------------------------------
          * 实例2： 句柄拖拽
          * --------------------------------------------*/
@@ -81,7 +85,7 @@ define(function(require, exports, module) {
         var logArea = $('#log9');
         var log = function(val) {
             var date = new Date();
-            logArea.val(date.getMinutes() + ':' + date.getSeconds() + ': ' + val + '\n' + logArea.val());
+            logArea.val(date.getMinutes() + ':' + date.getSeconds() + ' - ' + date.getMilliseconds() + ': ' + val + '\n' + logArea.val());
         };
         var d9 = new Dnd({
             element: '#drag9 .drag',
