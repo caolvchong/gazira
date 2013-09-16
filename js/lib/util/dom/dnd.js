@@ -16,6 +16,12 @@ define(function(require, exports, module) {
     var dropping = null; // 当前的目标元素
     var dataTransfer = {}; // 存储拖放信息, 在dragstart可设置,在drop中可读取
 
+    var isIOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
+    var onDragging = false; // 判断是否正在拖拽，ios中经常不触发touchend
+    var detectOnDragTimer; // 定时器
+    var draggingTimer;
+    var undef;
+
     var zIndex = 10000;
 
     var Dnd = Base.extend({
@@ -124,22 +130,25 @@ define(function(require, exports, module) {
      * 开启页面Dnd功能,绑定鼠标按下、移动、释放以及ecs按下事件
      */
     Dnd.open = function() {
-        $(document).on('mousedown mousemove mouseup', handleEvent);
+        $(document).on('mousedown mousemove mouseup touchstart touchmove touchend', handleEvent);
     };
 
     /*
      * 关闭页面Dnd功能,解绑鼠标按下、移动、释放以及ecs按下事件
      */
     Dnd.close = function() {
-        $(document).off('mousedown mousemove mouseup', handleEvent);
+        $(document).off('mousedown mousemove mouseup touchstart touchmove touchend', handleEvent);
     };
 
     var handleEvent = function(e) {
         var dnd, proxy, element;
         var target;
+        var pageX = e.pageX || e.originalEvent.targetTouches[0].pageX;
+        var pageY = e.pageY || e.originalEvent.targetTouches[0].pageY;
         switch(e.type) {
             case 'mousedown':
-                if(e.which === 1) {
+            case 'touchstart':
+                if(!e.which || e.which === 1) {
                     target = $(e.target);
                     dnd = target.data('dnd');
                     if(!dnd) {
@@ -153,8 +162,8 @@ define(function(require, exports, module) {
                         proxy = obj.get('proxy');
 
                         if(obj.trigger('beforedrag', obj) !== false) {
-                            diffX = e.pageX - element.offset().left;
-                            diffY = e.pageY - element.offset().top;
+                            diffX = pageX - element.offset().left;
+                            diffY = pageY - element.offset().top;
                             draggingPre = true;
                             proxy.css({
                                 position: 'absolute',
@@ -172,17 +181,18 @@ define(function(require, exports, module) {
                 }
                 break;
             case 'mousemove':
+            case 'touchmove':
                 if(draggingPre === true) {
                     executeDragStart(); // 开始拖放
                 }
                 if(dragging !== null) {
-                    executeDrag(e); // 根据边界和方向一起判断是否drag并执行
+                    executeDrag({pageX: pageX, pageY: pageY}); // 根据边界和方向一起判断是否drag并执行
                     executeDragEnterLeaveOver(); // 是否要dragenter, dragleave和dragover并执行
-                    e.preventDefault();
                 }
                 break;
 
             case 'mouseup':
+            case 'touchend':
                 executeDragEnd();
                 break;
         }
@@ -197,6 +207,17 @@ define(function(require, exports, module) {
         var proxy = obj.get('proxy');
         var visible = obj.get('visible');
         var zIndex = getMaxZIndex();
+
+        if(isIOS) {
+            detectOnDragTimer = setInterval(function() {
+                if(onDragging === false) {
+                    onDragging = undef;
+                    clearInterval(detectOnDragTimer);
+                    detectOnDragTimer = undef;
+                    executeDragEnd();
+                }
+            }, 100);
+        }
 
         if(visible === false) { // 按照设置显示或隐藏element
             element.css('visibility', 'hidden');
@@ -230,6 +251,14 @@ define(function(require, exports, module) {
         var left, top;
         var grid = obj.get('grid');
 
+        if(isIOS) {
+            onDragging = true;
+            clearTimeout(draggingTimer);
+            draggingTimer = setTimeout(function() {
+                onDragging = false;
+            }, 100);
+        }
+
         if(container) {
             var cw = container.outerWidth();
             var ch = container.outerHeight();
@@ -258,7 +287,6 @@ define(function(require, exports, module) {
             left = offset.left + floorNumber(left - offset.left, grid);
             top = offset.top + floorNumber(top - offset.top, grid);
         }
-
         dragging.css({
             left: Math.min(Math.max(left, minL), maxL),
             top: Math.min(Math.max(top, minT), maxT)
