@@ -1,0 +1,103 @@
+@charset "utf-8";
+html, body {
+  height: 100%;
+}
+.link {
+  margin: 20px 10px;
+}
+.upload-box {
+    height: 400px;
+}
+.font {
+  text-align: center;
+  line-height: 400px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.result-box {
+  border: 1px dashed #ddd;
+  min-height: 350px;
+}
+
+
+.upload-box2 {
+  height: 400px;
+  margin-top: 20px;
+}
+
+.bar {
+  text-align: center;
+  height: 32px;
+  line-height: 32px;
+}
+
+.item {
+  height: 100px;
+  width: 100px;
+  float: left;
+  margin: 10px;
+  border: 1px solid #666;
+  background: #efefef;
+  position: relative;
+  text-align: center;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.item .file-name {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 10px;
+}
+
+.item .tip {
+  height: 100%;
+  line-height: 100px;
+}
+.item .error {
+  color: #ff0000;
+}
+
+.item .success {
+  color: #006699;
+}
+
+.item .progress {
+  height: 100%;
+  line-height: 100px;
+  color: #374e0c;
+}
+
+.box {
+  float: left;
+  border: 1px solid;
+  min-height: 500px;
+  width: 30%;
+  margin: 10px;
+}
+
+.container {
+  height: 250px;
+  border-bottom: 1px dashed;
+  text-align: center;
+  line-height: 250px;
+  font-size: 24px;
+  font-weight: bold;
+  width: 100%;
+}
+
+.box .bar {
+  border-bottom: 1px dashed;
+}
+
+.xbtn {
+  position: fixed;
+  top:150px;
+  right: 50px;
+}
+
+.del {
+  position: absolute;
+  right: 0;
+}
