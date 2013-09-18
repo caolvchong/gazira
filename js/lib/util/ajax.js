@@ -174,6 +174,7 @@ define(function(require, exports, module) {
                     }
                     var completeFn = params.complete;
                     params.complete = function(xhr, status) {
+                        single[name] = {}; // 完成后清理
                         if($.isFunction(completeFn)) {
                             completeFn(xhr, status);
                         }
