@@ -4,7 +4,7 @@
  * Time: 10:23 AM
  */
 define(function(require, exports, module) {
-    var r = {
+    var Timer = {
         /**
          * 单位时间间隔wait 内最多只能执行一次fn
          * 如果单位时间内多次触发，接受第一次，此时第二次，第二次将在第一次执行完wait后执行
@@ -66,5 +66,5 @@ define(function(require, exports, module) {
             };
         }
     };
-    module.exports = r;
+    module.exports = Timer;
 });
