@@ -24,7 +24,7 @@ define(function(require, exports, module) {
             if(!node.data('placeholder')) {
                 text = text || node.attr('placeholder');
                 var p = $('<span class="placeholder">' + text + '</span>');
-                var h = node.outerHeight();
+                var h = parseInt(node.css('line-height')) + 4;
                 node.after(p);
                 p.css({
                     color: '#bbb',
