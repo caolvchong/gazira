@@ -58,7 +58,7 @@ define(function(require, exports, module) {
         $.ajaxSetup({cache: false});
     }
 
-    var r = {
+    var Ajax = {
         /**
          * 设置默认的成功判断规则
          * @param callback
@@ -158,11 +158,15 @@ define(function(require, exports, module) {
                 send: function(params) {
                     var flag = single[name].url && (params.url === single[name].url);
                     if(flag) { // 请求URL相同
-                        for(var i in params.data) {
-                            if(params.data[i] !== single[name].data[i]) { // 请求的数据也相同，则认为是发起同一个请求
-                                flag = false;
-                                break;
+                        if(typeof params.data === typeof single[name].data && typeof params.data === 'object') {
+                            for(var i in params.data) {
+                                if(params.data[i] !== single[name].data[i]) { // 请求的数据也相同，则认为是发起同一个请求
+                                    flag = false;
+                                    break;
+                                }
                             }
+                        } else {
+                            flag = params.data === single[name].data;
                         }
                     }
                     if(flag) { // 请求的URL和参数相同则保留上一个
@@ -289,5 +293,5 @@ define(function(require, exports, module) {
             }
         }
     };
-    module.exports = r;
+    module.exports = Ajax;
 });
