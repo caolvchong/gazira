@@ -127,6 +127,11 @@ define(function(require, exports, module) {
          */
         _buildItem: function(data, index) {
             var select = this.$('select').eq(index || 0);
+            var type = (function(option) {
+                return option.innerText !== undef ? 'innerText' : 'text';
+            })(new Option());
+            var model = this.get('model');
+
             if(data && data.length) {
                 var flagment = document.createDocumentFragment();
                 for(var i = 0, len = data.length; i < len; i++) {
@@ -136,8 +141,8 @@ define(function(require, exports, module) {
                         option.value = item;
                         option.text = item;
                     } else {
-                        option.value = item[this.get('model').val];
-                        option.text = item[this.get('model').text] === undef ? item[this.get('model').val] : item[this.get('model').text];
+                        option.value = item[model.val];
+                        option[type] = item[model.text] === undef ? item[model.val] : item[model.text];
                         if(item.selected) {
                             option.selected = true;
                         }
@@ -149,7 +154,6 @@ define(function(require, exports, module) {
             } else {
                 select.hide();
             }
-            return this;
         },
         _cascadeEvent: function() {
             var that = this;
