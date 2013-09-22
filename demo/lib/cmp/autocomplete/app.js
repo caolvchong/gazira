@@ -41,7 +41,7 @@ define(function(require, exports, module) {
             dataSource: './data.php?key={{query}}'
         }).render();
 
-        // 另一种ajax
+        // 另一种ajax，结合自定义模板
         new AutoComplete({
             trigger: '#ac6',
             filter: function(data) {
