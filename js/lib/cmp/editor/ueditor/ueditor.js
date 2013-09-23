@@ -84,6 +84,7 @@ define(function(require, exports, module) {
     require('./plugins/selectall'); // 全选: SelectAll
     require('./plugins/shortcutmenu'); // 快捷菜单
     require('./plugins/source'); // 查看源码: Source
+    require('./plugins/link'); // 插入链接
     // 表格
     // 插入表格: InsertTable , 删除表格: DeleteTable , 表格前插入一行: InsertParagraphBeforeTable , 插入行: InsertRow , 删除行: DeleteRow , 插入列: InsertCol ,
     // 删除列: DeleteCol , 合并单元格: MergeCells , 向右合并: MergeRight , 向下合并: MergeDown ,
@@ -98,6 +99,9 @@ define(function(require, exports, module) {
     require('./myplugins/plugins');
     require('./myplugins/example/plugin');
     require('./myplugins/dialog/plugin');
+    require('./myplugins/links/plugin');
+    require('./myplugins/photo/plugin');
+    require('./myplugins/bdmap/plugin');
 
 
     // lang

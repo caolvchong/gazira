@@ -1,0 +1,15 @@
+.edui-for-example .edui-icon {
+  background-position: -300px -40px;
+}
+.edui-for-dialog .edui-icon {
+  background-position: -420px -40px;
+}
+.edui-for-photo .edui-icon {
+  background-position: -380px 0;
+}
+.edui-for-links .edui-icon {
+  background-position: -500px 0;
+}
+.edui-for-bdmap .edui-icon {
+  background-position: -40px -40px;
+}

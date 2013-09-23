@@ -1,0 +1,12 @@
+.ue-plugin-links {
+  width: 450px;
+  padding-top: 10px;
+}
+
+.ue-plugin-links .control-label {
+  width: 80px;
+}
+
+.ue-plugin-links .controls {
+  margin-left: 80px;
+}

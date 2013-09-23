@@ -1,0 +1,1 @@
+define(function(){return {render:function(map) {var p=[],v =[];for(var i in map) {p.push(i);v.push(map[i]);}return (new Function(p, "var _s=[];_s.push(' <div data-role=\"content\" class=\"ue-plugin-dialog\"> <input type=\"text\" class=\"ipt\"/> <input type=\"button\" value=\"确定\" data-action=\"UEPluginDialogBtn\"/> </div>'); return _s;")).apply(null, v).join("");}};});

@@ -1,0 +1,52 @@
+.ue-plugin-photo {
+  width: 700px;
+  padding-top: 10px;
+}
+
+.ue-plugin-photo .upload-result {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.ue-plugin-photo .item {
+  height: 100px;
+  width: 100px;
+  float: left;
+  margin: 10px;
+  border: 1px solid #666;
+  background: #efefef;
+  position: relative;
+  text-align: center;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.ue-plugin-photo .item .file-name {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 10px;
+}
+
+.ue-plugin-photo .item .tip {
+  height: 100%;
+  line-height: 100px;
+}
+.ue-plugin-photo .item .error {
+  color: #ff0000;
+}
+
+.ue-plugin-photo .item .success {
+  color: #006699;
+}
+
+.ue-plugin-photo .item .progress {
+  height: 100%;
+  line-height: 100px;
+  color: #374e0c;
+}
+
+.ue-plugin-photo .del {
+  position: absolute;
+  right: 0;
+}

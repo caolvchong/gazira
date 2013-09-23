@@ -237,7 +237,7 @@ define(function(require, exports, module) {
                     uiUtils.startDrag(evt, {
                         ondragstart: function (){
                             rect = uiUtils.getClientRect(me.getDom());
-                            me.getDom('contmask').style.visibility = 'visible';
+                            me.getDom('contmask') && (me.getDom('contmask').style.visibility = 'visible'); // 增加判断，防止异常
                             me.dragMask.show(me.getDom().style.zIndex - 1);
                         },
                         ondragmove: function (x, y){
@@ -249,7 +249,7 @@ define(function(require, exports, module) {
                             });
                         },
                         ondragstop: function (){
-                            me.getDom('contmask').style.visibility = 'hidden';
+                            me.getDom('contmask') && (me.getDom('contmask').style.visibility = 'hidden'); // 增加判断，防止异常
                             domUtils.removeClasses(me.getDom(), ['edui-state-centered']);
                             me.dragMask.hide();
                         }
