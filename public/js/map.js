@@ -2,26 +2,16 @@ define(function(require, exports, module) {
     var loc = this.location;
     var search = loc.search;
 
-    var map = [];
-    var plugins = ['shim'];
+    var local = 'meifa.com/';
+    var remote = 'api.hair.121.207.242.210.xip.io/backend/';
 
-    var local = 'localhost/mobi/';
-    var remote = 'remote.com/';
-
-    if (search.indexOf('online') > -1) {
-        map.push(function(url) {// 本地发布形式
-            return url.replace(remote, local);
-        });
-    } else {
-        map.push(function(url) {// 本地源码形式
-            return url.replace(remote + 'public/js/dist/', local + 'js/');
-        });
-    }
-    plugins.push('nocache');
-
-    seajs.config.data.map = [];
-    seajs.config({
-        plugins: plugins,
-        map: map
+    seajs.on('fetch', function(data) {
+        if (data.uri) {
+            if (search.indexOf('online') > -1 || seajs.development) {
+                data.requestUri = data.uri.replace(remote, local);
+            } else {
+                data.requestUri = data.uri.replace(remote + 'public/js/dist/', local + 'js/');
+            }
+        }
     });
 });
