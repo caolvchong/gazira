@@ -14,17 +14,14 @@
             if(url.indexOf(dist) > 0) {
                 url = url.replace(dist, src);
             }
-            return url;
-        });
-        map.push([/^.*$/, function(url) {
             url += (url.indexOf('?') === -1 ? '?' : '&') + '_ts=' + _ts;
             return url;
-        }]);
+        });
     } else {
-        map.push([/^.*$/, function(url) {
+        map.push(function(url) {
             url += (url.indexOf('?') === -1 ? '?' : '&') + '_v=' + version;
             return url;
-        }]);
+        });
     }
 
     seajs.development = development;
