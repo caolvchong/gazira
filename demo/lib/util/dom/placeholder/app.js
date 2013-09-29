@@ -4,5 +4,9 @@ define(function(require, exports, module) {
 
     $(function() {
         Placeholder.render();
+
+        $('#btn').click(function() {
+            $('#area').toggleClass('hide');
+        });
     });
 });

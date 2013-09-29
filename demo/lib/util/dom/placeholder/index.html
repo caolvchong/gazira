@@ -13,8 +13,14 @@
 
 
 <form class="form-inline">
-    <input type="text" class="input-small" placeholder="Email"/>
-    <input type="password" class="input-small" placeholder="Password"/>
+    <div class="controls">
+        <input type="text" class="input-small" placeholder="Email"/>
+        <input type="password" class="input-small" placeholder="Password"/>
+    </div>
+    <div class="controls">
+        <input id="btn" type="button" value="toggle一块区域"/>
+        <div id="area" class="hide"></div>
+    </div>
     <div class="controls">
         <input class="span5" type="text" placeholder=".span5"/>
     </div>
