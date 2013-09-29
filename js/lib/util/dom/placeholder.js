@@ -65,5 +65,21 @@ define(function(require, exports, module) {
         });
     };
 
+    $(function() {
+        if(!detect()) {
+            $(window).bind('resize.placeholder', function() {
+                $('[placeholder]').each(function(i, node) {
+                    node = $(node);
+                    var p = node.next();
+                    Position.pin({
+                        element: p
+                    }, {
+                        element: node
+                    });
+                });
+            });
+        }
+    });
+
     module.exports = Placeholder;
 });
