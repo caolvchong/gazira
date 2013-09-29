@@ -70,7 +70,7 @@ define(function(require, exports, module) {
                         var items = dropping.find(that.get('item'));
                         items = items.filter(function(i) {
                             var item = items.eq(i);
-                            return !(item.data('proxy') || item.data('placeholder'));
+                            return !item.data('proxy');
                         });
                         var len = items.length;
                         if(len === 0) { // 容器内无元素
