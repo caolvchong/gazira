@@ -70,7 +70,7 @@ define(function(require, exports, module) {
             $(window).bind('resize.placeholder', function() {
                 $('[placeholder]').each(function(i, node) {
                     node = $(node);
-                    var p = node.next();
+                    var p = node.nextAll('.placeholder').eq(0);
                     Position.pin({
                         element: p
                     }, {
