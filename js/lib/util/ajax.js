@@ -67,7 +67,7 @@ define(function(require, exports, module) {
             defaultRule.success = function(data) {
                 return callback(data);
             };
-            r.setSuccessRule = null;
+            Ajax.setSuccessRule = null;
         },
         /**
          * 设置默认的无权限判断规则
@@ -77,7 +77,7 @@ define(function(require, exports, module) {
             defaultRule.permission = function(data) {
                 return callback(data);
             };
-            r.setPermissionRule = null;
+            Ajax.setPermissionRule = null;
         },
         /**
          * 设置无权限时候的默认动作，该方法只能用一次
@@ -85,7 +85,7 @@ define(function(require, exports, module) {
          */
         setNoPermissionAction: function(callback) {
             config.noPermissionAction = callback;
-            r.setNoPermissionAction = null;
+            Ajax.setNoPermissionAction = null;
         },
         /**
          * 设置失败时候的默认动作，该方法只能用一次
@@ -93,7 +93,7 @@ define(function(require, exports, module) {
          */
         setErrorAction: function(callback) {
             config.errorAction = callback;
-            r.setErrorAction = null;
+            Ajax.setErrorAction = null;
         },
         /**
          * 基类ajax，要求服务端返回的结果格式必须是JSON，建议按code,data格式返回，如：
@@ -184,7 +184,7 @@ define(function(require, exports, module) {
                         }
                     };
                     single[name] = {
-                        xhr: r.base(params),
+                        xhr: Ajax.base(params),
                         url: params.url,
                         data: params.data
                     };
@@ -253,7 +253,7 @@ define(function(require, exports, module) {
                                             send(); // 递归，执行下一个请求
                                         };
                                     })(xhrId);
-                                    activeXHR[xhrId] = r.base(obj);
+                                    activeXHR[xhrId] = Ajax.base(obj);
                                     break;
                                 }
                             }
