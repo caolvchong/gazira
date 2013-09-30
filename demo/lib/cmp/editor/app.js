@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                 [
                     'ToUpperCase', 'ToLowerCase', 'DirectionalityLtr', 'DirectionalityRtl', '|', 'FontColor', 'BackColor', 'FontSize', 'FontFamily', 'Underline', 'StrikeThrough', '|', 'FormatMatch', 'Horizontal'],
                 [
-                    'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', 'InsertImage', '|', 'Paragraph', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'LineHeight', 'InsertOrderedList', 'InsertUnorderedList'],
+                    'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'Paragraph', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'LineHeight', 'InsertOrderedList', 'InsertUnorderedList'],
                 [
                     'Preview', 'Print', 'PastePlain', 'RemoveFormat', 'RowSpacingBottom', 'RowSpacingTop', '|', 'SelectAll'],
                 [
