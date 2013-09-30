@@ -19,7 +19,9 @@ define(function(require, exports, module) {
             console.log('after say', word);
         }
     });
-
+    p1.on('say', function(word) {
+        console.log('on say 2 ', word);
+    });
     p1.say('hello');
     p1.set('age', 22);
 
