@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var $ = require('$');
+    var Inputor = require('../../util/dom/inputor');
     var Overlay = require('../overlay');
     var DataSource = require('./data-source');
     var Filter = require('./filter');
@@ -57,7 +58,7 @@ define(function(require, exports, module) {
                 var i = this.items.index(e.currentTarget);
                 this.set('selectedIndex', i);
 
-                if (this.get('selectItem')) {
+                if(this.get('selectItem')) {
                     this.selectItem();
                     this._firstMousedown = true;
                 }
@@ -67,13 +68,13 @@ define(function(require, exports, module) {
             },
             'click [data-role=item]': function() {
                 // 在非 selectItem 时隐藏浮层 
-                if (!this.get('selectItem')) {
+                if(!this.get('selectItem')) {
                     this.hide();
                 }
             },
             'mouseenter [data-role=item]': function(e) {
                 var className = this.get('classPrefix') + '-item-hover';
-                if (this.currentItem) this.currentItem.removeClass(className);
+                if(this.currentItem) this.currentItem.removeClass(className);
                 $(e.currentTarget).addClass(className);
             },
             'mouseleave [data-role=item]': function(e) {
@@ -99,14 +100,11 @@ define(function(require, exports, module) {
             trigger.attr('autocomplete', 'off');
             this.delegateEvents(trigger, 'blur.autocomplete', $.proxy(this._blurEvent, this));
             this.delegateEvents(trigger, 'keydown.autocomplete', $.proxy(this._keydownEvent, this));
-            this.delegateEvents(trigger, 'keyup.autocomplete', function() {
-                clearTimeout(that._timeout);
-                that._timeout = setTimeout(function() {
-                    that._timeout = null;
-                    that._keyupEvent.call(that);
-                }, that.get('delay'));
+            Inputor(trigger, function(text) {
+                that._keyupEvent.call(that);
+            }, {
+                timer: that.get('delay')
             });
-
         },
 
         destroy: function() {
@@ -117,7 +115,7 @@ define(function(require, exports, module) {
 
         hide: function() {
             // 隐藏的时候取消请求或回调
-            if (this._timeout) clearTimeout(this._timeout);
+            if(this._timeout) clearTimeout(this._timeout);
             this.dataSource.abort();
             AutoComplete.superclass.hide.call(this);
         },
@@ -128,11 +126,9 @@ define(function(require, exports, module) {
         selectItem: function() {
             this.hide();
 
-            var item = this.currentItem,
-                index = this.get('selectedIndex'),
-                data = this.get('data')[index];
+            var item = this.currentItem, index = this.get('selectedIndex'), data = this.get('data')[index];
 
-            if (item) {
+            if(item) {
                 var matchKey = item.attr('data-value');
                 this.get('trigger').val(matchKey);
                 this.set('inputValue', matchKey, {silent: true});
@@ -142,13 +138,13 @@ define(function(require, exports, module) {
         },
 
         setInputValue: function(val) {
-            if (this.get('inputValue') !== val) {
+            if(this.get('inputValue') !== val) {
                 // 进入处理流程
                 this._start = true;
                 this.set('inputValue', val);
                 // 避免光标移动到尾部 #44
                 var trigger = this.get('trigger');
-                if (trigger.val() !== val) {
+                if(trigger.val() !== val) {
                     trigger.val(val);
                 }
             }
@@ -159,18 +155,18 @@ define(function(require, exports, module) {
 
         // 1. 判断输入值，调用数据源
         _onRenderInputValue: function(val) {
-            if (this._start && val) {
+            if(this._start && val) {
                 var oldQueryValue = this.queryValue;
                 this.queryValue = this.get('inputFilter').call(this, val);
                 // 如果 query 为空或者相等则不处理
-                if (this.queryValue && this.queryValue !== oldQueryValue) {
+                if(this.queryValue && this.queryValue !== oldQueryValue) {
                     this.dataSource.abort();
                     this.dataSource.getData(this.queryValue);
                 }
             } else {
                 this.queryValue = '';
             }
-            if (val === '' || !this.queryValue) {
+            if(val === '' || !this.queryValue) {
                 this.set('data', []);
                 this.hide();
             }
@@ -179,8 +175,7 @@ define(function(require, exports, module) {
 
         // 2. 数据源返回，过滤数据
         _filterData: function(data) {
-            var filter = this.get('filter'),
-                locator = this.get('locator');
+            var filter = this.get('filter'), locator = this.get('locator');
 
             // 获取目标数据
             data = locateResult(locator, data);
@@ -215,12 +210,12 @@ define(function(require, exports, module) {
             this.items = this.$('[data-role=items]').children();
             this.currentItem = null;
 
-            if (this.get('selectFirst')) {
+            if(this.get('selectFirst')) {
                 this.set('selectedIndex', 0);
             }
 
             // data-role=items 无内容才隐藏
-            if ($.trim(this.$('[data-role=items]').text())) {
+            if($.trim(this.$('[data-role=items]').text())) {
                 this.show();
             } else {
                 this.hide();
@@ -229,14 +224,12 @@ define(function(require, exports, module) {
 
         // 键盘控制上下移动
         _onRenderSelectedIndex: function(index) {
-            if (index === -1) return;
+            if(index === -1) return;
             var className = this.get('classPrefix') + '-item-hover';
-            if (this.currentItem) {
+            if(this.currentItem) {
                 this.currentItem.removeClass(className);
             }
-            this.currentItem = this.items
-                .eq(index)
-                .addClass(className);
+            this.currentItem = this.items.eq(index).addClass(className);
 
             this.trigger('indexChange', index, this.lastIndex);
             this.lastIndex = index;
@@ -246,9 +239,9 @@ define(function(require, exports, module) {
             var filter = this.get('filter');
 
             // 设置 filter 的默认值
-            if (filter === undefined) {
+            if(filter === undefined) {
                 // 异步请求的时候一般不需要过滤器
-                if (this.dataSource.get('type') === 'url') {
+                if(this.dataSource.get('type') === 'url') {
                     filter = null;
                 } else {
                     filter = {
@@ -265,8 +258,8 @@ define(function(require, exports, module) {
                 //   name: '',
                 //   options: {}
                 // }
-                if ($.isPlainObject(filter)) {
-                    if (Filter[filter.name]) {
+                if($.isPlainObject(filter)) {
+                    if(Filter[filter.name]) {
                         filter = {
                             name: filter.name,
                             func: Filter[filter.name],
@@ -275,13 +268,13 @@ define(function(require, exports, module) {
                     } else {
                         filter = null;
                     }
-                } else if ($.isFunction(filter)) {
+                } else if($.isFunction(filter)) {
                     filter = {
                         func: filter
                     };
                 } else {
                     // 从组件内置的 FILTER 获取
-                    if (Filter[filter]) {
+                    if(Filter[filter]) {
                         filter = {
                             name: filter,
                             func: Filter[filter]
@@ -292,7 +285,7 @@ define(function(require, exports, module) {
                 }
             }
             // filter 为 null，设置为 default
-            if (!filter) {
+            if(!filter) {
                 filter = {
                     name: 'default',
                     func: Filter['default']
@@ -302,12 +295,12 @@ define(function(require, exports, module) {
         },
 
         _blurEvent: function() {
-            if (isIE) return;
+            if(isIE) return;
 
             // https://github.com/aralejs/autocomplete/issues/26
-            if (!this._secondMousedown) {
+            if(!this._secondMousedown) {
                 this.hide();
-            } else if (this._firstMousedown) {
+            } else if(this._firstMousedown) {
                 this.get('trigger').focus();
                 this.hide();
             }
@@ -316,23 +309,23 @@ define(function(require, exports, module) {
         },
 
         _keyupEvent: function() {
-            if (this.get('disabled')) return;
+            if(this.get('disabled')) return;
 
-            if (this._keyupStart) {
-                delete this._keyupStart;
-                // 获取输入的值
-                var v = this.get('trigger').val();
-                this.setInputValue(v);
-            }
+            //if (this._keyupStart) {
+            //delete this._keyupStart;
+            // 获取输入的值
+            var v = this.get('trigger').val();
+            this.setInputValue(v);
+            //}
         },
 
         _keydownEvent: function(e) {
-            if (this.get('disabled')) return;
+            if(this.get('disabled')) return;
 
             // 先清空状态
-            delete this._keyupStart;
+            //delete this._keyupStart;
 
-            switch (e.which) {
+            switch(e.which) {
                 case KEY.ESC:
                     this.hide();
                     break;
@@ -360,14 +353,14 @@ define(function(require, exports, module) {
 
                 // default 继续执行 keyup
                 default:
-                    this._keyupStart = true;
+                //this._keyupStart = true;
             }
         },
 
         _keyUp: function(e) {
             e.preventDefault();
-            if (this.get('data').length) {
-                if (!this.get('visible')) {
+            if(this.get('data').length) {
+                if(!this.get('visible')) {
                     this.show();
                     return;
                 }
@@ -377,8 +370,8 @@ define(function(require, exports, module) {
 
         _keyDown: function(e) {
             e.preventDefault();
-            if (this.get('data').length) {
-                if (!this.get('visible')) {
+            if(this.get('data').length) {
+                if(!this.get('visible')) {
                     this.show();
                     return;
                 }
@@ -387,11 +380,11 @@ define(function(require, exports, module) {
         },
 
         _keyEnter: function(e) {
-            if (this.get('visible')) {
+            if(this.get('visible')) {
                 this.selectItem();
 
                 // 是否阻止回车提交表单
-                if (!this.get('submitOnEnter')) {
+                if(!this.get('submitOnEnter')) {
                     e.preventDefault();
                 }
             }
@@ -400,14 +393,14 @@ define(function(require, exports, module) {
         // 选项上下移动
         _step: function(direction) {
             var currentIndex = this.get('selectedIndex');
-            if (direction === -1) { // 反向
-                if (currentIndex > 0) {
+            if(direction === -1) { // 反向
+                if(currentIndex > 0) {
                     this.set('selectedIndex', currentIndex - 1);
                 } else {
                     this.set('selectedIndex', this.items.length - 1);
                 }
-            } else if (direction === 1) { // 正向
-                if (currentIndex < this.items.length - 1) {
+            } else if(direction === 1) { // 正向
+                if(currentIndex < this.items.length - 1) {
                     this.set('selectedIndex', currentIndex + 1);
                 } else {
                     this.set('selectedIndex', 0);
@@ -438,7 +431,6 @@ define(function(require, exports, module) {
 
     module.exports = AutoComplete;
 
-
     function isString(str) {
         return Object.prototype.toString.call(str) === '[object String]';
     }
@@ -454,16 +446,16 @@ define(function(require, exports, module) {
     //     locator 'a.b'
     // 最后的返回值为 c
     function locateResult(locator, data) {
-        if (!locator) {
+        if(!locator) {
             return data;
         }
-        if ($.isFunction(locator)) {
+        if($.isFunction(locator)) {
             return locator.call(this, data);
-        } else if (isString(locator)) {
+        } else if(isString(locator)) {
             var s = locator.split('.'), p = data;
-            while (s.length) {
+            while(s.length) {
                 var v = s.shift();
-                if (!p[v]) {
+                if(!p[v]) {
                     break;
                 }
                 p = p[v];
@@ -474,12 +466,11 @@ define(function(require, exports, module) {
     }
 
     function highlightItem(classPrefix, matchKey) {
-        var index = this.highlightIndex,
-            cursor = 0, v = matchKey || this.matchKey || '', h = '';
-        if ($.isArray(index)) {
-            for (var i = 0, l = index.length; i < l; i++) {
+        var index = this.highlightIndex, cursor = 0, v = matchKey || this.matchKey || '', h = '';
+        if($.isArray(index)) {
+            for(var i = 0, l = index.length; i < l; i++) {
                 var j = index[i], start, length;
-                if ($.isArray(j)) {
+                if($.isArray(j)) {
                     start = j[0];
                     length = j[1] - j[0];
                 } else {
@@ -487,20 +478,18 @@ define(function(require, exports, module) {
                     length = 1;
                 }
 
-                if (start > cursor) {
+                if(start > cursor) {
                     h += v.substring(cursor, start);
                 }
-                if (start < v.length) {
-                    h += '<span class="' + classPrefix + '-item-hl">' +
-                        v.substr(start, length) +
-                        '</span>';
+                if(start < v.length) {
+                    h += '<span class="' + classPrefix + '-item-hl">' + v.substr(start, length) + '</span>';
                 }
                 cursor = start + length;
-                if (cursor >= v.length) {
+                if(cursor >= v.length) {
                     break;
                 }
             }
-            if (v.length > cursor) {
+            if(v.length > cursor) {
                 h += v.substring(cursor, v.length);
             }
             return h;
