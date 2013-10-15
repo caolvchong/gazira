@@ -1,0 +1,39 @@
+.box {
+  width: 300px;
+  border: 1px solid #ddd;
+}
+
+.widget-selector {
+
+}
+.widget-selector-items {
+  float: left;
+}
+.widget-selector .widget-selector-input {
+  border: 0;
+  width:10px;
+  float: left;
+  overflow: auto;
+}
+.widget-selector .widget-selector-input:focus {
+  border:0;
+}
+.widget-selector-item {
+  float: left;
+  border: 1px solid #ddd;
+  padding: 1px;
+  margin: 2px;
+}
+.widget-autocomplete-item {
+  width: 280px;
+}
+
+.widget-selector-item em {
+  font-style: normal;
+  font-size: 13px;
+}
+.widget-selector-item span {
+  margin-left: 5px;
+  color: #0081c2;
+  cursor: pointer;
+}

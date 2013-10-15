@@ -78,14 +78,12 @@ define(function(require, exports, module) {
         new AutoComplete({
             trigger: '#ac7',
             dataSource: ['abc', 'abd', 'cbd'],
-            itemTemplate: '<li data-value="{{value}}">---{{text}}---</li>'
+            itemTemplate: '<li data-role="item" data-value="{{value}}">---{{text}}---</li>'
         }).render();
 
         // Email 自动补全
         var data = [
-            '163.com',
-            '126.com',
-            'gmail.com'
+            '163.com', '126.com', 'gmail.com'
         ];
         new AutoComplete({
             trigger: '#ac8',
@@ -96,9 +94,37 @@ define(function(require, exports, module) {
                 return a;
             },
             filter: '',
-            inputFilter: function(v){
-                return v.replace(/^(.*)@.*$/,'$1');
+            inputFilter: function(v) {
+                return v.replace(/^(.*)@.*$/, '$1');
             }
+        }).render();
+
+        // 默认展示静态数据，输入展示远程数据
+        var local = ['小明x', '大明x', 'abc', 'abd', 'abe', 'bfc'];
+        new AutoComplete({
+            trigger: '#ac9',
+            dataSource: function(value) {
+                var that = this;
+                $.ajax('./data.php', {
+                    dataType: 'json'
+                }).success(function(data) {
+                        that.trigger('data', data.data.concat(local));
+                    }).error(function(data) {
+                        that.trigger('data', {});
+                    });
+            },
+            itemTemplate: '<li data-role="item" data-value="{{value}}">---{{text}}---</li>',
+            emptyAction: function() {
+                return local;
+            }
+        }).render();
+
+        // 自定义模板
+        new AutoComplete({
+            trigger: '#ac10',
+            dataSource: ['abc', 'abd', 'cbd'],
+            template: '<div class="widget-autocomplete">dddddddddddddddd<ul class="widget-autocomplete-ctn" data-role="items"></ul></div>',
+            itemTemplate: '<li data-role="item" data-value="{{value}}">---{{text}}---</li>'
         }).render();
     });
 });
