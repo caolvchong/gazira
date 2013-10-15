@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var template = require('./tpl/autocomplete');
 
     var isIE = (window.navigator.userAgent || "").toLowerCase().indexOf("msie") !== -1;
+    var undef;
 
     // keyCode
     var KEY = {
@@ -39,14 +40,14 @@ define(function(require, exports, module) {
             selectItem: true, // 选中时是否调用 selectItem 方法
             dataSource: [], //数据源，支持 Array, URL, Object, Function
             locator: 'data',
-            filter: undefined, // 输出过滤
+            filter: undef, // 输出过滤
             inputFilter: function(v) {return v;}, // 输入过滤
             disabled: false,
             highlight: false,
             selectFirst: false,
             delay: 100,
             // 以下仅为组件使用
-            selectedIndex: undefined,
+            selectedIndex: undef,
             inputValue: null, // 同步输入框的 value
             data: null
         },
@@ -84,8 +85,10 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            var trigger = this.get('trigger'), that = this;
-
+            var trigger = this.get('trigger');
+            var that = this;
+            var inputor = this.get('inputor');
+            var inputorIsFunction = $.isFunction(inputor);
             AutoComplete.superclass.setup.call(this);
 
             // 初始化数据源
@@ -102,6 +105,9 @@ define(function(require, exports, module) {
             this.delegateEvents(trigger, 'keydown.autocomplete', $.proxy(this._keydownEvent, this));
             Inputor(trigger, function(text) {
                 that._keyupEvent.call(that);
+                if(inputorIsFunction) {
+                    inputor.call(that, text);
+                }
             }, {
                 timer: that.get('delay')
             });
@@ -138,15 +144,16 @@ define(function(require, exports, module) {
         },
 
         setInputValue: function(val) {
-            if(this.get('inputValue') !== val) {
-                // 进入处理流程
-                this._start = true;
-                this.set('inputValue', val);
-                // 避免光标移动到尾部 #44
-                var trigger = this.get('trigger');
-                if(trigger.val() !== val) {
-                    trigger.val(val);
-                }
+            // 进入处理流程
+            this._start = true;
+            this.set('inputValue', val);
+            // 避免光标移动到尾部 #44
+            var trigger = this.get('trigger');
+            if(trigger.val() !== val) {
+                trigger.val(val);
+            }
+            if(val === '' && $.isFunction(this.get('emptyAction'))) {
+                this._emptyAction();
             }
         },
 
@@ -167,8 +174,12 @@ define(function(require, exports, module) {
                 this.queryValue = '';
             }
             if(val === '' || !this.queryValue) {
-                this.set('data', []);
-                this.hide();
+                if($.isFunction(this.get('emptyAction'))) {
+                    this._emptyAction();
+                } else {
+                    this.set('data', []);
+                    this.hide();
+                }
             }
             delete this._start;
         },
@@ -239,7 +250,7 @@ define(function(require, exports, module) {
             var filter = this.get('filter');
 
             // 设置 filter 的默认值
-            if(filter === undefined) {
+            if(filter === undef) {
                 // 异步请求的时候一般不需要过滤器
                 if(this.dataSource.get('type') === 'url') {
                     filter = null;
@@ -416,10 +427,22 @@ define(function(require, exports, module) {
             delete this.currentItem;
         },
 
+        _emptyAction: function() { // 输入为空时候处理
+            var locator = this.get('locator');
+            var data = this.get('emptyAction').call(this);
+            if(data) {
+                data = locateResult(locator, data);
+                data = Filter.default(data);
+                this.set('data', data);
+            }
+        },
+
         // 调整 align 属性的默认值
         _tweakAlignDefaultValue: function() {
             var align = this.get('align');
-            align.baseElement = this.get('trigger');
+            if(!align.baseElement) {
+                align.baseElement = this.get('trigger');
+            }
             this.set('align', align);
         }
 
