@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var $ = require('$');
     var Inputor = require('../../util/dom/inputor');
+    var Position = require('../../util/dom/position');
     var Overlay = require('../overlay');
     var DataSource = require('./data-source');
     var Filter = require('./filter');
@@ -440,7 +441,7 @@ define(function(require, exports, module) {
         // 调整 align 属性的默认值
         _tweakAlignDefaultValue: function() {
             var align = this.get('align');
-            if(!align.baseElement) {
+            if(align.baseElement === Position.VIEWPORT) {
                 align.baseElement = this.get('trigger');
             }
             this.set('align', align);
