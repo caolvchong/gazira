@@ -121,5 +121,25 @@ define(function(require, exports, module) {
                 console.log('6', data);
             }
         }).render();
+
+        //----------------------------------------
+        new Pagination({
+            parentNode: '#box7',
+            url: './data.php',
+            data: {
+                name: 'tom',
+                age: 22
+            },
+            size: 10,
+            pageName: 'pageIndex',
+            pageIndexOffset: -1,
+            before: function() {
+                $('#content7').html('正在请求数据');
+            },
+            success: function(page, data) {
+                $('#content7').html('载入第<em class="super">' + page + '</em>页数据，这里自行拼接显示');
+                console.log('7', data);
+            }
+        }).render();
     });
 });
