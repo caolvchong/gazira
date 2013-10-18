@@ -27,7 +27,7 @@ define(function(require, exports, module) {
             pageName: 'page', // 传递给后端的页数参数名
             sizeName: 'pagesize', // 传递给后端的每页数量参数名
             totalName: 'data.total', // 后端返回总条数的参数名
-            pageIndexOffset: '0', //定义获取后端页码的偏移量
+            pageIndexOffset: 0, //定义获取后端页码的偏移量
             size: 12, // 每页数量
             current: { // 当前页
                 value: 1,
@@ -184,7 +184,7 @@ define(function(require, exports, module) {
             };
             var params = this.get('data');
             params = $.isFunction(params) ? params.call(this) : params;
-            data[this.get('pageName')] = this.get('current') + this.get('pageIndexOffset') - 0;
+            data[this.get('pageName')] = +this.get('current') + (+this.get('pageIndexOffset'));
             data[this.get('sizeName')] = this.get('size');
             obj.data = typeof params === 'object' ? $.extend(data, params) : params;
             obj.type = this.get('method');
