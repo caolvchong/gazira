@@ -58,6 +58,7 @@ define(function(require, exports, module) {
             var widthNode = this.$('[data-role=width]');
             Selector.superclass.setup.call(this);
 
+            var hasInCache = this.get('hasInCache');
             var config = this.get('autocomplete');
             var filter = config.filter || Filter.startsWith;
             config.trigger = trigger;
@@ -70,14 +71,19 @@ define(function(require, exports, module) {
                 var cache = this.selectedCache;
                 $.each(data, function(index, value) {
                     var flag = true;
-                    if($.inArray(value, cache) > -1) {
-                        flag = false;
+                    if(hasInCache) {
+                        flag = !hasInCache(value, cache);
+                    } else {
+                        value = value.value ? value.value : value;
+                        if($.inArray(value, cache) > -1) {
+                            flag = false;
+                        }
                     }
                     if(flag) {
                         result.push(value);
                     }
                 });
-                result = filter(result, query);
+                result = filter(result, query, cache);
                 return result;
             };
             config.inputor = function(text) {
