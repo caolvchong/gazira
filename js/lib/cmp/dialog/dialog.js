@@ -84,7 +84,7 @@ define(function(require, exports, module) {
         // 覆盖 overlay，提供动画
         _onRenderVisible: function(val) {
             var effect = this.get('effect');
-            if (val) {
+            if(val) {
                 if($.isFunction(effect)) {
                     effect.call(this, this.element);
                 } else {
@@ -96,8 +96,14 @@ define(function(require, exports, module) {
         },
         show: function(config) {
             if(this._type === 'iframe') { // iframe 要在载入完成才显示
-                !this.get('height') && this.element.height(DEFAULT_HEIGHT); // iframe 还未请求完，先设置一个固定高度
+                if(!this.get('height')) {
+                    this.element.height(DEFAULT_HEIGHT); // iframe 还未请求完，先设置一个固定高度
+                }
                 this._showIframe();
+            } else {
+                if(this.get('height')) {
+                    this.$('.main').height(this.get('height') - this.$('.header').outerHeight() - this.$('.footer').outerHeight()); // 内容高度太高处理
+                }
             }
             if(config) {
                 for(var key in config) {
@@ -105,8 +111,6 @@ define(function(require, exports, module) {
                 }
             }
             Dialog.superclass.show.call(this);
-
-            this.$('.main').height(this.get('height') - this.$('.header').outerHeight() - this.$('.footer').outerHeight()); // 内容高度太高处理
 
             return this;
         },
