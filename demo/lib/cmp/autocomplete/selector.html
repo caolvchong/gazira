@@ -6,6 +6,7 @@
     <link href="../../../../public/theme/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="./style.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="./selector.css" rel="stylesheet" type="text/css" media="all"/>
+    <link rel="stylesheet" href="../../../../public/theme/defalut/tree/zTreeStyle.css" type="text/css" media="all"/>
     <script src="../../../../public/js/seajs/sea.js"></script>
     <script src="../../../../public/js/config.js"></script>
     <script>seajs.use('./selector');</script>
@@ -16,17 +17,18 @@
     <p>1. 简单selector</p>
     <p>数据源：['abc', 'abd', 'cbd', 'csd', 'xxx', 'yyy', 'thank', 'you']</p>
     <div id="box1" class="box"></div>
-    <input type="button" id="btn" value="获取结果"/>
+    <input type="button" id="btn1" value="获取结果"/>
 </div>
 
 <div class="sample">
     <p>2. ajax请求</p>
     <p>数据源：data.php</p>
     <div id="box2" class="box"></div>
+    <input type="button" id="btn2" value="获取结果"/>
 </div>
 
 <div class="sample">
-    <p>3. 非标准返回数据格式的ajax请求</p>
+    <p>3. 非标准返回数据格式的ajax请求，默认展示一棵树</p>
     <p>数据源：data2.php</p>
     <div id="box3" class="box"></div>
 </div>
