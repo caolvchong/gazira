@@ -27,7 +27,6 @@ define(function(require, exports, module) {
                 this.set('inputValue', matchKey, {silent: true});
                 this.trigger('itemSelect', data);
                 this._clear();
-                this.selectedCache.push(matchKey);
                 trigger.focus();
                 this.trigger('selectItem', matchKey, item.text(), data, item);
             }
@@ -54,6 +53,7 @@ define(function(require, exports, module) {
             }
         },
         setup: function() {
+            var that = this;
             var trigger = this.$('[data-role=input]').eq(0);
             var widthNode = this.$('[data-role=width]');
             Selector.superclass.setup.call(this);
@@ -61,6 +61,10 @@ define(function(require, exports, module) {
             var hasInCache = this.get('hasInCache');
             var config = this.get('autocomplete');
             var filter = config.filter || Filter.startsWith;
+            var inputor;
+            if(config.attrs) {
+                inputor = config.attrs.inputor;
+            }
             config.trigger = trigger;
             config.align = config.align || {
                 baseXY: [0, '100%'],
@@ -87,13 +91,15 @@ define(function(require, exports, module) {
                 return result;
             };
             config.inputor = function(text) {
+                if(inputor) {
+                    inputor.call(ac, text);
+                }
                 widthNode.text(text);
                 trigger.width(Math.max(15, widthNode.width()));
             };
-            this.autoComplete = new AC(config).render();
+            var ac = this.autoComplete = new AC(config).render();
             this.autoComplete.on('selectItem', function(val, text, data, item) {
-                var html = '<div class="widget-selector-item" data-role="selectedItem" data-value="' + val + '"><em>' + text + '</em> <span data-role="del">x</span></div>';
-                trigger.before(html);
+                that.addItem(val, text);
             });
             this.autoComplete.after('selectItem', function() {
                 setTimeout(function() {
@@ -105,6 +111,12 @@ define(function(require, exports, module) {
         },
         result: function() {
             return this.autoComplete.selectedCache;
+        },
+        addItem: function(val, text) {
+            var trigger = this.$('[data-role=input]').eq(0);
+            var html = '<div class="widget-selector-item" data-role="selectedItem" data-value="' + val + '"><em>' + text + '</em> <span data-role="del">x</span></div>';
+            this.autoComplete.selectedCache.push(val);
+            trigger.before(html);
         },
         _removeItem: function(node) {
             var val = node.attr('data-value');
