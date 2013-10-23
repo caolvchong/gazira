@@ -143,8 +143,8 @@ define(function(require, exports, module) {
     var handleEvent = function(e) {
         var dnd, proxy, element;
         var target;
-        var pageX = e.pageX || e.originalEvent.targetTouches[0].pageX;
-        var pageY = e.pageY || e.originalEvent.targetTouches[0].pageY;
+        var pageX = e.pageX || (e.originalEvent.targetTouches && e.originalEvent.targetTouches[0].pageX);
+        var pageY = e.pageY || (e.originalEvent.targetTouches && e.originalEvent.targetTouches[0].pageY);
         switch(e.type) {
             case 'mousedown':
             case 'touchstart':
