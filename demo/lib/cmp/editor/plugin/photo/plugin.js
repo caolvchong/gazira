@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var $ = require('$');
 
-    var UE = require('../../../../../../js/lib/cmp/editor/ueditor/ueditor');
+    var UE = require('editor');
     var Upload = require('../../../../../../js/lib/util/dom/upload/upload');
     var tpl = require('./tpl/content');
     var helper = require('./helper');
