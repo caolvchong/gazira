@@ -95,13 +95,9 @@ define(function(require, exports, module) {
     require('./plugins/wordcount'); // 字数统计: wordcount
 
 
-    // my plugins
-    require('./myplugins/plugins');
-    require('./myplugins/example/plugin');
-    require('./myplugins/dialog/plugin');
+    // 插件机制
+    require('./plugin');
     require('./myplugins/links/plugin');
-    require('./myplugins/photo/plugin');
-    require('./myplugins/bdmap/plugin');
 
 
     // lang

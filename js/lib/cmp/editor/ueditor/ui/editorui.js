@@ -8,14 +8,6 @@ define(function(require, exports, module) {
     var browser = require('../core/browser');
     var editorui = require('./ui'); // 提供baidu.editor.ui命名空间
     var _Dialog = require('./dialog');
-    var myplugins = require('../myplugins/plugins');
-    var pluginBtns = (function() {
-        var arr = [];
-        for(var key in myplugins) {
-            arr.push(key);
-        }
-        return arr;
-    })();
 
 
     //ui跟编辑器的适配層
@@ -52,29 +44,7 @@ define(function(require, exports, module) {
         };
 
         var iframeUrlMap = {
-            'anchor':'~/dialogs/anchor/anchor.html',
-            'insertimage':'~/dialogs/image/image.html',
-            'link':'~/dialogs/link/link.html',
-            'spechars':'~/dialogs/spechars/spechars.html',
-            'searchreplace':'~/dialogs/searchreplace/searchreplace.html',
-            'map':'~/dialogs/map/map.html',
-            'gmap':'~/dialogs/gmap/gmap.html',
-            'insertvideo':'~/dialogs/video/video.html',
-            'help':'~/dialogs/help/help.html',
-            //'highlightcode':'~/dialogs/highlightcode/highlightcode.html',
-            'emotion':'~/dialogs/emotion/emotion.html',
-            'wordimage':'~/dialogs/wordimage/wordimage.html',
-            'attachment':'~/dialogs/attachment/attachment.html',
-            'insertframe':'~/dialogs/insertframe/insertframe.html',
-            'edittip':'~/dialogs/table/edittip.html',
-            'edittable':'~/dialogs/table/edittable.html',
-            'edittd':'~/dialogs/table/edittd.html',
-            'webapp':'~/dialogs/webapp/webapp.html',
-            'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
-            'scrawl':'~/dialogs/scrawl/scrawl.html',
-            'music':'~/dialogs/music/music.html',
-            'template':'~/dialogs/template/template.html',
-            'background':'~/dialogs/background/background.html'
+
         };
         //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
         var btnCmds = ['undo', 'redo', 'formatmatch',
@@ -83,15 +53,15 @@ define(function(require, exports, module) {
             'blockquote', 'pasteplain', 'pagebreak',
             'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
             'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
-            'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable'].concat(pluginBtns);
+            'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable'];
 
-        for (var i = 0, ci; ci = btnCmds[i++];) {
+        var addButton = editorui.addButton = function(ci, title) {
             ci = ci.toLowerCase();
             editorui[ci] = function (cmd) {
                 return function (editor) {
                     var ui = new editorui.Button({
                         className:'edui-for-' + cmd,
-                        title:editor.options.labelMap[cmd] || editor.getLang("labelMap." + cmd) || myplugins[cmd] || '',
+                        title:editor.options.labelMap[cmd] || editor.getLang('labelMap.' + cmd) || title || '',
                         onclick:function () {
                             editor.execCommand(cmd);
                         },
@@ -114,6 +84,10 @@ define(function(require, exports, module) {
                     return ui;
                 };
             }(ci);
+        };
+
+        for (var i = 0, ci; ci = btnCmds[i++];) {
+            addButton(ci);
         }
 
         //清除文档
