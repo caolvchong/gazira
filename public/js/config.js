@@ -31,6 +31,7 @@
         map: map,
         alias: {
             $: 'jquery/jquery.js',
+            editor: 'editor/ueditor/ueditor',
             'seajs-debug': 'seajs/seajs-debug'
         }
     });
