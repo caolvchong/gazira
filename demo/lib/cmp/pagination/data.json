@@ -1,0 +1,27 @@
+{
+    "data": [
+    {
+        "surveyid": "14",
+        "title": "ok-\u526f\u672c",
+        "createtime": "2013-10-24 19:01:50",
+        "endtime": "7",
+        "status": "3",
+        "author": "",
+        "endsum": "0",
+        "sort": "yy"
+    },
+    {
+        "surveyid": "13",
+        "title": "ok",
+        "createtime": "2013-10-24 18:19:04",
+        "endtime": "7",
+        "status": "1",
+        "author": "",
+        "endsum": "0",
+        "sort": "yy"
+    }],
+    "pagenow": 1,
+    "pagesum": 4,
+    "pagesize": "2",
+    "raf": true
+}
