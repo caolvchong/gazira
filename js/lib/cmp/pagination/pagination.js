@@ -80,11 +80,7 @@ define(function(require, exports, module) {
             this.set('current', +val);
             return this;
         },
-        /**
-         * 视图，自定义显示的话需要重写此方法
-         * flag
-         */
-        view: function(flag) {
+        classicHTML: function() {
             var isPost = this.get('method').toLowerCase() === 'post';
             var url = this.get('url');
             var x = this.get('x') || 2; // 当前页码附近显示页数
@@ -131,7 +127,16 @@ define(function(require, exports, module) {
                     html.push(helper.tpl(url, 1, isPost), split, helper.tpl(url, current - 1, isPost), helper.tpl(url, current, isPost), helper.tpl(url, current + 1, isPost), split, helper.tpl(url, totalPage, isPost));
                 }
             }
-            this.element.html(pn[0] + html.join('') + pn[1]);
+            return pn[0] + html.join('') + pn[1];
+        },
+        /**
+         * 视图，自定义显示的话需要重写此方法
+         * flag
+         */
+        view: function(flag) {
+            var size = this.get('size');
+            var current = this.get('current'); // 当前页
+            this.element.html(this.classicHTML());
             this.reflow();
             if(this.get('type') === 'ajax') {
                 if(flag !== false) {

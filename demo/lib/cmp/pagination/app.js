@@ -169,13 +169,9 @@ define(function(require, exports, module) {
              * @returns {*}
              */
             view: function(flag) {
-                var total = this.get('total');
-                var totalPage = Math.ceil(total / this.get('size'));
+                var totalPage = Math.ceil(this.get('total') / this.get('size'));
                 var html = '<span>共<em>' + totalPage + '</em>页</span>';
-                for(var i = 0; i < totalPage; i++) {
-                    html += '<a href="#" data-action="page" data-page="' + (i + 1) + '">' + (i + 1) + '</a>'
-                }
-                html += '<a href="#" data-action="next">下一页</a>';
+                html += this.classicHTML();
                 this.element.html(html);
                 this.reflow();
                 if(flag !== false) {
@@ -189,7 +185,12 @@ define(function(require, exports, module) {
             total: 0,
             size: 2,
             success: function(page, data) {
-                console.log(arguments);
+                var html = '<div>第' + page + '页数据</div>';
+                var list = data.data;
+                for(var i = 0, len = list.length; i < len; i++) {
+                    html += '<div>' + list[i].title + '</div>';
+                }
+                $('#content8').html(html);
             }
         }).render();
 
