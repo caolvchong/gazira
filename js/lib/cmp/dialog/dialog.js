@@ -95,6 +95,7 @@ define(function(require, exports, module) {
             }
         },
         show: function(config) {
+            Dialog.superclass.show.call(this);
             if(this._type === 'iframe') { // iframe 要在载入完成才显示
                 if(!this.get('height')) {
                     this.element.height(DEFAULT_HEIGHT); // iframe 还未请求完，先设置一个固定高度
@@ -110,8 +111,6 @@ define(function(require, exports, module) {
                     this.set(key, config[key]);
                 }
             }
-            Dialog.superclass.show.call(this);
-
             return this;
         },
         hide: function() {
