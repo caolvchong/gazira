@@ -162,23 +162,12 @@ define(function(require, exports, module) {
                     var totalName = that.get('totalName').split('.');
                     var total = data;
                     var prev = +that.get('total');
-                    var size = that.get('size');
-                    var current = that.get('current');
                     for(var i = 0, len = totalName.length; i < len; i++) {
                         if(total) {
                             total = total[totalName[i]];
                         }
                     }
-                    total = +total || 0;
-                    if(prev !== total) {
-                        var totalPage = Math.ceil(total / size);
-                        that.set('total', total, {silent: true});
-                        if(current > totalPage) {
-                            that.set('current', totalPage);
-                        } else {
-                            that.view(false); // 只刷新分页视图，false避免递归请求
-                        }
-                    }
+                    that.checkTotal(total, prev);
                     that.get('success') && that.get('success').call(that, that.get('current'), data);
                 }
             };
@@ -196,6 +185,20 @@ define(function(require, exports, module) {
                 }
             }
             return sa.send(obj);
+        },
+        checkTotal: function(total, prev) {
+            var current = this.get('current');
+            var size = this.get('size');
+            total = +total || 0;
+            if(prev !== total) {
+                var totalPage = Math.ceil(total / size);
+                this.set('total', total, {silent: true});
+                if(current > totalPage) {
+                    this.set('current', totalPage);
+                } else {
+                    this.view(false); // 只刷新分页视图，false避免递归请求
+                }
+            }
         },
         _onRenderCurrent: function(val, prev) {
             this.view();
