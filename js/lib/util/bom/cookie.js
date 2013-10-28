@@ -81,13 +81,19 @@ define(function(require, exports, module) {
             return result;
         },
         /**
-         * 删除一个或者多个cookie
+         * 删除一个或多个cookie
+         * 如果最后一个参数是一个对象，则删除指定域上的指定cookie(1-倒数第二个)
+         * 如果最后一个参数是字符串，表明全部都是当前域上的指定cookie
          */
         del:function() {
             var expires = new Date();
+            var len = arguments.length;
+            var params = arguments[len - 1];
+            var hasParams = typeof params === 'object';
+            params = hasParams ? params : '';
             expires.setTime(expires.getTime() - 1 * 24 * 3600 * 1000);
-            for(var i = 0, len = arguments.length; i < len; i++) {
-                r.set(arguments[i], '', expires);
+            for(var i = 0, l = hasParams ? len - 1 : len; i < l; i++) {
+                r.set(arguments[i], '', expires, params);
             }
         }
     };
