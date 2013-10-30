@@ -25,5 +25,9 @@ define(function(require, exports, module) {
     p1.say('hello');
     p1.set('age', 22);
 
+    p1.after('say', function(x) {
+        alert('xxx' + x);
+    });
+
     console.log(p1);
 });
