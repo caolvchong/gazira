@@ -83,3 +83,32 @@ ul,li {
 .drag-disabled {
   background: #ddd;
 }
+
+.del-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: #0044cc;
+  cursor: pointer;
+}
+
+.placeholder-node {
+  width:200px;
+  height: 10px;
+  border: 1px solid #ddd;
+  background: #C6E746;
+}
+.proxy-node {
+  width:200px;
+  height: 50px;
+  border: 1px solid #ddd;
+  background: #bbbbbb;
+}
+.dropped-node {
+  position: relative;
+  width:200px;
+  height: 30px;
+  margin: 3px auto;
+  border: 1px solid #ddd;
+  background: #e0f2be;
+}

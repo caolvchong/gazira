@@ -6,6 +6,7 @@
 define(function(require, exports, module) {
     var $ = require('$');
     var Sortable = require('../../../../../js/lib/util/dom/sortable');
+    var Action = require('../../../../../js/lib/util/dom/action');
 
     $(function() {
         /**--------------------------------------------
@@ -87,29 +88,36 @@ define(function(require, exports, module) {
         /**--------------------------------------------
          * 实例7：
          * --------------------------------------------*/
-        new Sortable({
+        var s7_1 = new Sortable({
             element: '#sortable7_1',
             item: 'li',
             connect: '#sortable7_2',
             connectSelf: false,
             revert: false,
             placeholder: function(element) {
-                var div = $('<div style="width:200px;height: 10px; border: 1px solid #ddd; background: #C6E746"></div>');
-                return div;
+                var node = $('<div class="placeholder-node"></div>');
+                return node;
             },
             proxy: function(element) {
-                var div = $('<div style="width:200px;height: 50px; border: 1px solid #ddd;">代理节点：' + element.text() + '</div>');
-                return div;
+                var node = $('<div class="proxy-node">代理节点：' + element.text() + '</div>');
+                return node;
             },
             dropped: function(element, dropping) {
-                var div = $('<li style="width:200px;height: 50px; border: 1px solid #ddd;">drop节点：' + element.text() + '</li>');
-                return div;
+                var node = $('<li class="dropped-node">drop节点：' + element.text() + '<span class="del-btn" data-action="del">X</span></li>');
+                return node;
             },
             visible: true
         });
         new Sortable({
             element: '#sortable7_2',
             item: 'li'
+        });
+        Action.listen({
+            del: function(e) {
+                var node = $(e.target).closest('li');
+                s7_1.dnd.destroy(node); // 移除该节点的拖拽
+                node.remove();
+            }
         });
 
         /**--------------------------------------------
