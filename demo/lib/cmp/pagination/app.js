@@ -145,23 +145,33 @@ define(function(require, exports, module) {
         //----------------------------------------
         // 非规范数据示例
         var P2 = Pagination.extend({
+            attrs: {
+                ajaxData: function() {
+                    //  dom
+                    return {
+                        url: 'data.json',
+                        data: {},
+                        type: 'get',
+                        dataType: 'json'
+                    };
+                }
+            },
             /**
              * AJAX自定义，这里参数随意，但要确保view里面调用是一致的传参
              * @param page
              */
             ajax: function(page) {
                 var that = this;
-                $.ajax({
-                    url: './data.json?page=' + page,
-                    dataType: 'json',
-                    success: function(data) {
-                        var total = data.pagesum * data.pagesize;
-                        var prev = +that.get('total');
-                        that.checkTotal(total, prev);
-                        that.get('success') && that.get('success').call(that, that.get('current'), data);
+                var config = this.get('ajaxData');
+                config.data.page = page;
+                config.success = function(data) {
+                    var total = data.pagesum * data.pagesize;
+                    var prev = +that.get('total');
+                    that.checkTotal(total, prev);
+                    that.get('success') && that.get('success').call(that, that.get('current'), data);
 
-                    }
-                });
+                };
+                $.ajax(config);
             },
             /**
              * 视图
@@ -184,6 +194,9 @@ define(function(require, exports, module) {
             parentNode: '#box8',
             total: 0,
             size: 2,
+            ajaxData: function() {
+
+            },
             success: function(page, data) {
                 var html = '<div>第' + page + '页数据</div>';
                 var list = data.data;
