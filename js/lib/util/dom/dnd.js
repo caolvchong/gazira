@@ -62,6 +62,7 @@ define(function(require, exports, module) {
             disabled: false, // 是否禁用拖拽
             except: null, // 排除的句柄
             visible: false, // 拖拽时候是否显示拖拽的元素
+            animate: true, // 是否显示revert或者到指定位置的动画
             keepTop: true // 是否保持拖拽的节点始终位于最前
         },
         events: {},
@@ -84,12 +85,17 @@ define(function(require, exports, module) {
             });
             handlers.each(function(index, handler) { // 支持多个拖拽
                 var element = nodes.eq(index);
+                var t = that.get('proxy');
+                var proxy;
+                if($.isFunction(t)) {
+                    proxy = t.call(that, element, handler);
+                }
                 handler = $(handler);
                 handler.data('dnd', $.extend({}, that, {
                     index: index,
                     element: element, // 当前拖动的元素
                     handler: handler, // 当前拖动的句柄
-                    proxy: that.get('proxy')
+                    proxy: proxy
                 })).css('cursor', 'move').attr('data-draggable', true);
                 element.data('style', element.attr('style') || {});
             });
@@ -392,7 +398,7 @@ define(function(require, exports, module) {
      * 若drop不为null且dropping为null, 则自动回到原处
      * flag为true表示必须返回的
      */
-    function executeRevert(flag) {
+    function executeRevert() {
         var element = obj.element;
         var proxy = obj.get('proxy');
         var drop = obj.get('drop');
@@ -402,18 +408,23 @@ define(function(require, exports, module) {
         var xleft = proxy.offset().left - element.offset().left;
         var xtop = proxy.offset().top - element.offset().top;
 
-        if(revert === true || flag === true || (dropping === null && drop !== null)) {
+        if(revert === true || (dropping === null && drop !== null)) {
             //代理元素返回源节点初始位置
             element.attr('style', element.data('style'));
             if(visible === false) {
                 element.css('visibility', 'hidden');
             }
-
-            proxy.animate({left: element.offset().left,
-                top: element.offset().top}, revertDuration, function() {
-                element.css('visibility', '');
+            if(obj.get('animate') !== false) {
+                proxy.animate({
+                    left: element.offset().left,
+                    top: element.offset().top
+                }, revertDuration, function() {
+                    element.css('visibility', '');
+                    proxy.remove();
+                });
+            } else {
                 proxy.remove();
-            });
+            }
         } else {
             // 源节点移动到代理元素处
             if(element.css('position') === 'relative') {
@@ -434,9 +445,13 @@ define(function(require, exports, module) {
                 });
                 proxy.remove();
             } else {
-                element.animate({left: xleft, top: xtop}, revertDuration, function() {
+                if(obj.get('animate') !== false) {
+                    element.animate({left: xleft, top: xtop}, revertDuration, function() {
+                        proxy.remove();
+                    });
+                } else {
                     proxy.remove();
-                });
+                }
             }
             if(obj.get('keepTop') === true) {
                 element.css('zIndex', getMaxZIndex());
