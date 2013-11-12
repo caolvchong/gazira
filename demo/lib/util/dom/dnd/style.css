@@ -61,3 +61,29 @@ body {
   height: 50px;
   background: #0081c2;
 }
+
+.itemx {
+  width: 200px;
+  height: 24px;
+  border: 1px solid #dddddd;
+  background: #eee8aa;
+}
+.tablex, .tabley {
+  float: left;
+  margin: 20px;
+  width: 250px;
+}
+.tablex td, .tabley td {
+  height: 32px;
+  padding: 5px;
+}
+.tabley {
+  border: 1px solid;
+}
+.tabley td {
+  border: 1px solid;
+  height: 36px;
+}
+.hover-item {
+  background: #e0f2be;
+}

@@ -164,5 +164,34 @@ define(function(require, exports, module) {
             var node = $('<div class="item drag"><div class="handler">我也可以拖拽</div></div>').appendTo($('#drag14'));
             d14.render(node);
         });
+
+
+        var d15 = new Dnd({
+            element: '#drag15 .itemx',
+            drop: '#drop15 td'
+        });
+        d15.on('dragenter',function(item, td) {
+                td.addClass('hover-item');
+            }).on('dragleave',function(item, td) {
+                td.removeClass('hover-item');
+            }).on('drop', function(obj, item, td) {
+                td.removeClass('hover-item');
+                var old = td.find('.itemx').eq(0);
+                if(old && old[0]) { // 里面原来已经有
+                    if(old[0] !== item[0]) { // 非自己
+                        item.parent().append(old);
+                        td.html(item);
+                    }
+                } else {
+                    td.html(item);
+                }
+            }).on('dragend', function(item, td) {
+                if(td && td.find('.itemx').length) {
+                    item.css({
+                        top: 0,
+                        left: 0
+                    });
+                }
+            });
      });
 });
