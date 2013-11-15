@@ -106,8 +106,6 @@ define(function(require, exports, module) {
                     trigger.focus();
                 }, 1);
             });
-
-            this._span = $('<span/>');
         },
         result: function() {
             return this.autoComplete.selectedCache;
@@ -115,7 +113,7 @@ define(function(require, exports, module) {
         addItem: function(val, text) {
             var trigger = this.$('[data-role=input]').eq(0);
             var html = '<div class="widget-selector-item" data-role="selectedItem" data-value="' + val + '"><em>' + text + '</em> <span data-role="del">x</span></div>';
-            this.autoComplete.selectedCache.push(val);
+            this.autoComplete.selectedCache.push(val + '');
             trigger.before(html);
         },
         _removeItem: function(node) {
