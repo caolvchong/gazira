@@ -322,7 +322,7 @@ define(function(require, exports, module) {
                                     }
 
 
-                                    if (opera) {
+                                    if (browser.opera) {
                                         setTimeout(function () {
                                             range.setStart(span, 0).collapse(true);
                                             mergesibling(range, cmdName,value);
