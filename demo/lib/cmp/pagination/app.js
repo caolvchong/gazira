@@ -111,6 +111,7 @@ define(function(require, exports, module) {
                     }
                 };
             },
+            current: 3,
             method: 'post',
             size: 10,
             before: function() {

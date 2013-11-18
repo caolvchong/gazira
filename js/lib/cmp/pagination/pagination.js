@@ -31,9 +31,13 @@ define(function(require, exports, module) {
             size: 12, // 每页数量
             current: { // 当前页
                 value: 1,
-                setter: function(val) {
-                    var totalPage = Math.ceil(this.get('total') / this.get('size'));
-                    return Math.min(Math.max(val, 1), totalPage);
+                setter: function(val, prev) {
+                    if(!val) {
+                        var totalPage = Math.ceil(this.get('total') / this.get('size'));
+                        return Math.min(Math.max(val, 1), totalPage);
+                    } else {
+                        return val;
+                    }
                 }
             },
             total: 0, // 数据总数
