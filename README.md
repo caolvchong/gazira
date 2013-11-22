@@ -29,3 +29,6 @@ gazira 源于arale 提供一套成熟稳健快速的前端开发方案
 * /js 目录为js开发目录，分为 工具库lib/ 和 业务逻辑app/
 * 工具库的代码必须在 /test目录下写单元测试，目录结构和/js目录下的结构一一对应
 * 提交代码前，请确保jshint，qunit通过后再提交
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/caolvchong/gazira/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
