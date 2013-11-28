@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
   var $ = require('$');
-  var selection = require('selection');
+  var selection = require('../../util/dom/selection');
   var AutoComplete = require('./autocomplete');
 
   var TextareaComplete = AutoComplete.extend({
