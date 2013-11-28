@@ -85,7 +85,7 @@ define(function(require, exports, module) {
             width: 100,
             height: 24,
             text: '', // 按钮文本
-            textStyle: {}, // 文本样式
+            textStyle: '', // 文本样式
             description: '选择文件', // 描述
             cursor: SWFUpload.CURSOR.ARROW, // 设置鼠标划过Flash Button时的光标状态。默认为SWFUpload.CURSOR.ARROW，如果设置为SWFUpload.CURSOR.HAND，则为手形
             mode: SWFUpload.WINDOW_MODE.TRANSPARENT, // 设置浏览器具体以哪种模式显示该SWF影片, 包括： SWFUpload.WINDOW_MODE.WINDOW是默认的模式. 该SWF将位于页面元素的最高层级。SWFUpload.WINDOW_MODE.OPAQUE　该SWF可以被页面类的其他元素通过层级的设置来覆盖它。SWFUpload.WINDOW_MODE.TRANSPARENT 该SWF的背景是透明的，可以透过它看到背后的页面元素
@@ -130,6 +130,7 @@ define(function(require, exports, module) {
             settings.file_types_description = this.get('description');
             settings.button_cursor = this.get('cursor');
             settings.button_window_mode = this.get('mode');
+            settings.button_text_style = this.get('textStyle');
 
             if(!!window.ActiveXObject || this.get('cache')) { // IE 强制设置不用缓存
                 settings.prevent_swf_caching = true;

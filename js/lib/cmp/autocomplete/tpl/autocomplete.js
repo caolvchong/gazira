@@ -1,1 +1,0 @@
-define(function(){return {render:function(map) {var p=[],v =[];for(var i in map) {p.push(i);v.push(map[i]);}return (new Function(p, "var _s=[];_s.push(' <div class=\"widget-autocomplete\"> <ul class=\"widget-autocomplete-ctn\" data-role=\"items\"> </ul> </div>'); return _s;")).apply(null, v).join("");}};});

@@ -25,7 +25,9 @@ define(function(require, exports, module) {
             dataType: 'json',
             customSettings: {},
 
-            text: '上传'
+            height: 48,
+            text: '<span class="redText">上传</span>',
+            textStyle: '.redText { color: #f00; font-size:36px;}'
         }).on('flashLoaded',function() { // flash载入
                 console.log('flashLoaded');
             }).on('dialogStart',function() { // 对话框弹出
