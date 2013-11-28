@@ -14,14 +14,14 @@ define(function(require, exports, module) {
     ///import core
     ///import uicore
     (function () {
-//        var utils = baidu.editor.utils,
-//            uiUtils = baidu.editor.ui.uiUtils,
-//            domUtils = baidu.editor.dom.domUtils,
-//            UIBase = baidu.editor.ui.UIBase;
+        //        var utils = baidu.editor.utils,
+        //            uiUtils = baidu.editor.ui.uiUtils,
+        //            domUtils = baidu.editor.dom.domUtils,
+        //            UIBase = baidu.editor.ui.UIBase;
         var Popup = baidu.editor.ui.Popup = function (options){
-                this.initOptions(options);
-                this.initPopup();
-            };
+            this.initOptions(options);
+            this.initPopup();
+        };
 
         var allPopups = [];
         function closeAllPopup( evt,el ){
@@ -95,10 +95,11 @@ define(function(require, exports, module) {
                         content = this.getDom('content'),
                         me = this;
 
-                    while( _top + _height > winHeight ) {
-                        _height -= 30;
-                        content.style.height = _height + 'px';
-                    }
+                    // 某些情况下会导致pop高度不够，暂时去掉
+                    //while( _top + _height > winHeight ) {
+                    //_height -= 30;
+                    content.style.height = _height + 'px';
+                    //}
 
                     //阻止在combox上的鼠标滚轮事件, 防止用户的正常操作被误解
                     if( window.XMLHttpRequest ) {
