@@ -79,12 +79,16 @@ module.exports = function(grunt) {
         transport: {
             options: {
                 debug: false,
-                format: 'dist/{{filename}}'  // id format
+                format: 'dist/{{filename}}',  // id format
+                alias: {
+                    $: '$'
+                }
             },
             all: {
                 files: [
                     {
                         cwd: 'js',
+                        expand: true,
                         src: '**/*.js',
                         dest: '.build'
                     }
@@ -97,6 +101,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         cwd: 'js/lib/cmp/editor',
+                        expand: true,
                         src: '**/*.js',
                         dest: '.build/editor'
                     }
