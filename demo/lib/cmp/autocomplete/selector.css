@@ -12,8 +12,9 @@
 .widget-selector .widget-selector-input {
   border: 0;
   width:10px;
+  height:30px;
   float: left;
-  overflow: auto;
+  overflow: hidden;
 }
 .widget-selector .widget-selector-input:focus {
   border:0;
