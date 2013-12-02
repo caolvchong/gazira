@@ -6,6 +6,15 @@
 define(function(require, exports, module) {
     var $ = require('$');
 
+    var isSupportHTML5Upload = false;
+
+    (function() {
+        if(typeof XMLHttpRequest != 'undefined') {
+            var xhr = new XMLHttpRequest();
+            isSupportHTML5Upload = !!xhr.upload;
+        }
+    })();
+
     var helper = {
         addEventListener: function(node, type, action) {
             node.addEventListener(type, function(e) {
@@ -46,14 +55,17 @@ define(function(require, exports, module) {
                     });
                 }
             };
-        }
+        },
+        isSupportHTML5Upload: isSupportHTML5Upload
     };
 
     $(function() {
-        helper.addEventListener(document.body, 'drop', function(e) { // 防止拖拽到非目标区域，浏览器直接打开
-            e.stopPropagation();
-            e.preventDefault();
-        });
+        if(isSupportHTML5Upload) {
+            helper.addEventListener(document.body, 'drop', function(e) { // 防止拖拽到非目标区域，浏览器直接打开
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        }
     });
 
     module.exports = DragUpload;

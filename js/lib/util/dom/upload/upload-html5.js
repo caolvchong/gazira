@@ -38,14 +38,7 @@ define(function(require, exports, module) {
         }
     };
 
-    var isSupportHTML5Upload = false;
-
-    (function () {
-        if (typeof XMLHttpRequest != 'undefined') {
-            var xhr = new XMLHttpRequest();
-            isSupportHTML5Upload = !!xhr.upload;
-        }
-    })();
+    var isSupportHTML5Upload = DragUpload.isSupportHTML5Upload;
 
     var Upload = Base.extend({
         attrs: {
