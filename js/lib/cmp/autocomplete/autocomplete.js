@@ -6,7 +6,6 @@ define(function(require, exports, module) {
     var Overlay = require('../overlay');
     var DataSource = require('./data-source');
     var Filter = require('./filter');
-
     var template = require('./tpl/autocomplete');
 
     var isIE = (window.navigator.userAgent || "").toLowerCase().indexOf("msie") !== -1;
@@ -69,7 +68,7 @@ define(function(require, exports, module) {
                 this._secondMousedown = true;
             },
             'click [data-role=item]': function() {
-                // 在非 selectItem 时隐藏浮层 
+                // 在非 selectItem 时隐藏浮层
                 if(!this.get('selectItem')) {
                     this.hide();
                 }
@@ -433,7 +432,7 @@ define(function(require, exports, module) {
             var data = this.get('emptyAction').call(this);
             if(data) {
                 data = locateResult(locator, data);
-                data = Filter.default(data);
+                data = Filter['default'](data);
                 this.set('data', data);
             }
         },
