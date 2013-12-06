@@ -9,7 +9,6 @@ define(function(require, exports, module) {
     $(function() {
         require.async(['editor', './plugin/photo/plugin'], function(Editor) {
             var ue = Editor.getEditor('myEditor', {
-                UEDITOR_HOME_URL: 'http://localhost/gazira/js/lib/cmp/editor/ueditor/',
                 //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
                 toolbars: [
                     ['FullScreen', 'Source', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'SubScript', 'SuperScript', 'AutoTypeSet', 'BlockQuote', 'ClearDoc'],
