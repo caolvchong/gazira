@@ -30,7 +30,7 @@
         plugins: plugins,
         map: map,
         alias: {
-            $: 'jquery/jquery.js',
+            $: 'jquery/jquery',
             editor: 'editor/ueditor/ueditor',
             'seajs-debug': 'seajs/seajs-debug'
         }
