@@ -19,4 +19,5 @@ Thumbs.db
 *.class
 *.tmp_*
 node_modules/
+node_modules
 .build/
