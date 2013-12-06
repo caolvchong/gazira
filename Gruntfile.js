@@ -96,7 +96,7 @@ module.exports = function(grunt) {
             },
             editor: {
                 options: {
-                    format: 'editor/{{filename}}'
+                    idleading: 'editor/'
                 },
                 files: [
                     {
@@ -194,7 +194,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // 默认任务：代码检查，单元测试，转化，合并，压缩，清理
-    grunt.registerTask('default', ['transport', 'concat', 'uglify']);
+    grunt.registerTask('default', ['transport', 'concat', 'uglify', 'clean']);
     // jquery任务：压缩jquery
     grunt.registerTask('jquery', ['uglify:jquery', 'clean']);
     // editor任务：压缩合并editor
