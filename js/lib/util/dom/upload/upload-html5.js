@@ -3,13 +3,13 @@
  * Date: 9/16/13
  * Time: 1:38 PM
  */
-define(function(require, exports, module) {
+define(function (require, exports, module) {
     var $ = require('$');
     var Base = require('../../base');
     var DragUpload = require('./upload-draggable');
 
     var helper = {
-        unit:function (str) {
+        unit: function (str) {
             var s = $.trim(str.replace(/\d+/, '')).toUpperCase();
             var d = $.trim(str.replace(/\D+/g, ''));
             var a = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -22,17 +22,17 @@ define(function(require, exports, module) {
             }
             return d * Math.pow(1000, n);
         },
-        search: function(index, arr) {
-            for(var i = 0, f; f = arr[i]; i++) {
-                if(+index === +f.index) {
+        search: function (index, arr) {
+            for (var i = 0, f; f = arr[i]; i++) {
+                if (+index === +f.index) {
                     return i;
                 }
             }
             return -1;
         },
-        del: function(index, arr) {
+        del: function (index, arr) {
             var i = helper.search(index, arr);
-            if(i !== -1) {
+            if (i !== -1) {
                 return arr.splice(i, 1)[0];
             }
         }
@@ -55,25 +55,26 @@ define(function(require, exports, module) {
             fileName: 'Filedata', // 该参数设置了POST信息中上传文件的name值
             data: {}, // 每个文件上传的时候，其中的值对都会被一同发送到服务端，键值对的值只能是字符串或者数字
             dataType: 'json',
-            resultCheck: function(){}, // 结果过滤函数，判断服务端返回成功还是失败
+            resultCheck: function () {
+            }, // 结果过滤函数，判断服务端返回成功还是失败
 
             postType: 'form', // 默认form方式上传，还有blob, buffer，非这三个值则认为是DOM上传
             max: 2 // 并发上传数量
         },
-        initialize: function() {
+        initialize: function () {
             var that = this;
             Upload.superclass.initialize.apply(this, arguments);
 
-            if(this.get('type') !== '*') {
-                this.set('type', (function(type) {
+            if (this.get('type') !== '*') {
+                this.set('type', (function (type) {
                     var arr = type.split(';');
-                    for(var i = 0, len = arr.length; i < len; i++) {
+                    for (var i = 0, len = arr.length; i < len; i++) {
                         arr[i] = $.trim(arr[i].toLowerCase());
                     }
                     return arr;
                 })(this.get('type')));
             }
-            if(this.get('maxSize')) {
+            if (this.get('maxSize')) {
                 this._maxSize = this.get('maxSize');
                 this.set('maxSize', helper.unit(this.get('maxSize')));
             }
@@ -87,25 +88,25 @@ define(function(require, exports, module) {
 
             this._fixUploadNode();
 
-            if(this.get('draggable')) {
+            if (this.get('draggable')) {
                 DragUpload.bind({
                     node: $(this.get('container')).eq(0)[0],
-                    dragenter: function(e, files) {
+                    dragenter: function (e, files) {
                         that.trigger('dragenter', files);
                     },
-                    dragover: function(e, files) {
+                    dragover: function (e, files) {
                         that.trigger('dragover', files);
                     },
-                    dragleave: function(e, files) {
+                    dragleave: function (e, files) {
                         that.trigger('dragleave', files);
                     },
-                    drop: function(e, files) {
+                    drop: function (e, files) {
                         that.trigger('drop', files);
                     }
                 });
             }
 
-            if(this.get('disabled')) {
+            if (this.get('disabled')) {
                 this.disable();
             }
         },
@@ -114,24 +115,24 @@ define(function(require, exports, module) {
          * @param files
          * @return {*}
          */
-        add: function(files) {
-            if(this.get('disabled') === false) {
+        add: function (files) {
+            if (this.get('disabled') === false) {
                 var that = this;
                 var arr = files.length ? files : [files];
                 var maxCount = this.get('maxCount');
-                if(maxCount !== -1 && (files.length + this.successList.length + this.fileList.length + this.status > maxCount)) {
+                if (maxCount !== -1 && (files.length + this.successList.length + this.fileList.length + this.status > maxCount)) {
                     this.trigger('overCountLimit', maxCount);
                 } else {
                     var type = this.get('type');
-                    if(type != '*') { // 过滤扩展名
-                        (function(extArr) {
+                    if (type != '*') { // 过滤扩展名
+                        (function (extArr) {
                             var temp = [];
-                            for(var i = 0, file; file = arr[i]; i++) {
+                            for (var i = 0, file; file = arr[i]; i++) {
                                 var ext = file.name.split('.');
                                 ext = ext[ext.length - 1].toLowerCase();
                                 ext = '*.' + ext;
                                 file.index = this.index++;
-                                if($.inArray(ext, extArr) !== -1) {
+                                if ($.inArray(ext, extArr) !== -1) {
                                     temp.push(file);
                                 } else {
                                     file.error = true;
@@ -142,18 +143,18 @@ define(function(require, exports, module) {
                             arr = temp;
                         }).call(this, type);
                     } else {
-                        $.each(arr, function(i, file) {
+                        $.each(arr, function (i, file) {
                             file.index = that.index++;
                         });
                     }
-                    if(arr !== false) {
-                        for(var i = 0, file; file = arr[i]; i++) {
+                    if (arr !== false) {
+                        for (var i = 0, file; file = arr[i]; i++) {
                             var size = file.size;
-                            if(size == 0) {
+                            if (size == 0) {
                                 file.error = true;
                                 this.trigger('zeroSize', file);
                                 this.trigger('errerAdd', file);
-                            } else if(size > this.get('maxSize')) {
+                            } else if (size > this.get('maxSize')) {
                                 file.error = true;
                                 this.trigger('overSizeLimit', this._maxSize, file);
                                 this.trigger('errerAdd', file);
@@ -169,8 +170,8 @@ define(function(require, exports, module) {
             }
             return this;
         },
-        remove: function(index) {
-            var file = (function() {
+        remove: function (index) {
+            var file = (function () {
                 var f1 = helper.del(index, this.fileList);
                 var f2 = helper.del(index, this.successList);
                 var f3 = helper.del(index, this.failureList);
@@ -180,9 +181,9 @@ define(function(require, exports, module) {
             this.trigger('remove', file, index);
             return this;
         },
-        abort: function(index) {
+        abort: function (index) {
             index = +index;
-            var file = (function() {
+            var file = (function () {
                 var f1 = helper.del(index, this.fileList);
                 var f2 = helper.del(index, this.successList);
                 var f3 = helper.del(index, this.failureList);
@@ -192,10 +193,10 @@ define(function(require, exports, module) {
             this.trigger('abort', file, index);
             return this;
         },
-        _abortCore: function(index) {
+        _abortCore: function (index) {
             index = +index;
             var xhr = this.xhrList[index];
-            if(xhr) { // 正在上传
+            if (xhr) { // 正在上传
                 this.status--;
                 xhr.abort();
                 delete this.xhrList[index];
@@ -212,51 +213,52 @@ define(function(require, exports, module) {
          * @param params
          * @return {*}
          */
-        upload: function() {
+        upload: function () {
             var that = this;
+            var postType = this.get('postType');
             this.status = Math.max(this.status, 0);
-            if(this.status < this.get('max')) {
+            if (this.status < this.get('max')) {
                 var file = this.fileList.shift(); // 取队列头的文件上传
-                if(file) {
+                if (file) {
                     this.status++;
-                    if(isSupportHTML5Upload) {
+                    if (isSupportHTML5Upload) {
                         var xhr = new XMLHttpRequest();
                         this.xhrList[file.index] = xhr;
 
-                        if(this.trigger('uploadStart', file) === false) {
+                        if (this.trigger('uploadStart', file) === false) {
                             that.trigger('error', file, 'refuse');
                         } else {
-                            xhr.upload.addEventListener('progress', function(e) {
+                            xhr.upload.addEventListener('progress', function (e) {
                                 that.trigger('progress', file, e.loaded, e.total);
                             }, false);
 
-                            var finish = function(file) {
+                            var finish = function (file) {
                                 that.status--;
                                 delete that.xhrList[file.index];
-                                if(that.fileList.length == 0 && that.status <= 0) {
+                                if (that.fileList.length == 0 && that.status <= 0) {
                                     that.trigger('complete', file);
                                 } else {
                                     that.upload();
                                 }
                             };
-                            xhr.onload = function(e) {
+                            xhr.onload = function (e) {
                                 var result = xhr.responseText;
                                 try {
                                     var flag = true;
-                                    if(that.get('dataType') === 'json') {
+                                    if (that.get('dataType') === 'json') {
                                         result = JSON.parse(xhr.responseText);
                                     }
-                                    if($.isFunction(that.get('resultCheck'))) {
+                                    if ($.isFunction(that.get('resultCheck'))) {
                                         flag = that.get('resultCheck')(result) !== false;
                                     }
-                                    if(flag) {
+                                    if (flag) {
                                         that.trigger('success', file, result);
                                         that.successList.push(file);
                                     } else {
                                         that.trigger('error', file, result);
                                         that.failureList.push(file);
                                     }
-                                } catch(e) {
+                                } catch (e) {
                                     that.trigger('error', file, result);
                                     that.failureList.push(file);
                                 } finally {
@@ -264,16 +266,15 @@ define(function(require, exports, module) {
                                     finish(file);
                                 }
                             };
-                            xhr.onerror = function(e) {
+                            xhr.onerror = function (e) {
                                 that.trigger('finish', file);
                                 finish(file);
                             };
                             xhr.open('POST', this.get('url'), true);
-
-                            if(this.type === 'form') {
+                            if (postType === 'form') {
                                 var formData = new FormData();
-                                (function() {
-                                    for(var key in this.get('data')) { // 附加表单字段
+                                (function () {
+                                    for (var key in this.get('data')) { // 附加表单字段
                                         formData.append(key, this.get('data')[key]);
                                     }
                                 }).call(this);
@@ -281,21 +282,21 @@ define(function(require, exports, module) {
                                 xhr.send(formData);
                             } else {
                                 xhr.setRequestHeader(this.get('fileName'), file.name); // 提供给服务端的file name
-                                (function() {
-                                    for(var key in this.get('data')) { // 附加字段
+                                (function () {
+                                    for (var key in this.get('data')) { // 附加字段
                                         xhr.setRequestHeader(key, this.get('data')[key]);
                                     }
                                 }).call(this);
-                                if(this.type === 'blob') {
+                                if (postType === 'blob') {
                                     var BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder || window.BlobBuilder;
                                     var bb = new BlobBuilder(), blob;
                                     bb.append(file);
                                     blob = bb.getBlob();
                                     xhr.send(blob);
-                                } else if(this.type === 'buffer') {
+                                } else if (postType === 'buffer') {
                                     var reader = new FileReader();
                                     reader.readAsArrayBuffer(file);
-                                    reader.onload = function() {
+                                    reader.onload = function () {
                                         xhr.send(this.result);
                                     };
                                 } else {
@@ -309,10 +310,10 @@ define(function(require, exports, module) {
             }
             return this;
         },
-        reset: function() {
-            for(var key in this.xhrList) {
+        reset: function () {
+            for (var key in this.xhrList) {
                 var xhr = this.xhrList[key];
-                if(xhr && xhr.abort) {
+                if (xhr && xhr.abort) {
                     xhr.abort();
                 }
                 delete this.xhrList[key];
@@ -326,19 +327,19 @@ define(function(require, exports, module) {
             this.trigger('reset');
             return this;
         },
-        enable: function() {
+        enable: function () {
             this.set('disabled', false);
             return this;
         },
-        disable: function() {
+        disable: function () {
             this.set('disabled', true);
             return this;
         },
-        _onChangeDisabled: function(val) {
+        _onChangeDisabled: function (val) {
             var node = this.get('node');
-            if(node) {
+            if (node) {
                 node = node.children('input:file');
-                if(val) {
+                if (val) {
                     node.prop('disabled', 'disabled');
                 } else {
                     node.removeProp('disabled');
@@ -349,26 +350,26 @@ define(function(require, exports, module) {
          * 获取状态，返回值为0上传完成， 1存在未上传完成的文件
          * @return {Number}
          */
-        getStatus: function() {
+        getStatus: function () {
             var status = this.status;
             var result = 0; // 0 上传完成， 1 存在未上传完成的文件
-            if(status > 0) { // 正在上传
+            if (status > 0) { // 正在上传
                 result = 1;
             } else {
-                if(this.fileList.length > 0) { // 还存在未上传的文件
+                if (this.fileList.length > 0) { // 还存在未上传的文件
                     result = 1;
                 }
             }
             return result;
         },
-        _fixUploadNode: function() {
+        _fixUploadNode: function () {
             var that = this;
             var node = this.get('node');
-            if(node) {
-                var replaceNode = $('<a class="upload-select-btn" href="javascript:;"><input type="file" ' + (this.get('multi') ? ' multiple="true"' : '') + '/></a>');
+            if (node) {
+                var replaceNode = $('<a class="upload-select-btn" href="javascript:;"><input type="file" ' + (this.get('multi') ? ' multiple="true"' : '') + ' name="' + this.get('fileName') + '" /></a>');
                 $(node).replaceWith(replaceNode);
                 this.set('node', replaceNode);
-                replaceNode.children('input:file').change(function() {
+                replaceNode.children('input:file').change(function () {
                     that.add(this.files);
                 });
             }
@@ -376,10 +377,10 @@ define(function(require, exports, module) {
     });
 
 
-    Upload.preview = function(file, callback) {
+    Upload.preview = function (file, callback) {
         var reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = function() {
+        reader.onload = function () {
             callback && callback.call(this, file, this.result)
         };
     };
