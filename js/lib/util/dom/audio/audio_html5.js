@@ -2,6 +2,10 @@ define(function(require, exports, module) {
     var $ = require('$');
     var helper = require('./helper');
 
+    helper.create = function() {
+
+    };
+
     /**
      * mp3音乐播放工具，流程包括：
      *     载入mp3（load），触发事件：loadStart, progress, loaded，异常触发：error
@@ -10,19 +14,13 @@ define(function(require, exports, module) {
      *     结束，触发事件：ended
      *     跳转，触发事件：skip
      *
-     * 当不支持audio播放mp3时，使用flash来播放，该flash内部暴露以下方法：
-     *     init: 调用load
-     *     load: 载入资源
-     *     playPause: 播放/暂停
-     *     pplay: 播放
-     *     ppause: 暂停
-     *     skipTo: 跳转
-     *     setVolume: 设置音量
-     *     updatePlayhead: 播放进度
-     *     loadProgress: 载入进度
-     *     loadError: 载入异常
-     *     trackEnded: 结束
      * @param params
+     *     params如果是string，则直接是mp3的地址
+     *     params也可以是object，结构为：
+     *         src: {String} mp3地址，必须
+     *         preload: {Boolean} 是否启用预加载，可选，默认true
+     *         autoplay: {Boolean} 是否自动播放，可选，默认true
+     *         loop: {Boolean} 是否循环播放，可选，默认flase
      */
     var audio = function(params) {
         var _this = this;
