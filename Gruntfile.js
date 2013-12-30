@@ -84,12 +84,12 @@ module.exports = function(grunt) {
                     $: '$'
                 }
             },
-            all: {
+            app: {
                 files: [
                     {
                         cwd: 'js',
                         expand: true,
-                        src: '**/*.js',
+                        src: ['**/*.js', '!js/lib/cmp/editor/**/*.js'],
                         dest: '.build'
                     }
                 ]
@@ -195,8 +195,10 @@ module.exports = function(grunt) {
 
     // 默认任务：代码检查，单元测试，转化，合并，压缩，清理
     grunt.registerTask('default', ['transport', 'concat', 'uglify', 'clean']);
+    // app
+    grunt.registerTask('app', ['transport:app', 'concat:app', 'uglify:app', 'clean']);
     // jquery任务：压缩jquery
     grunt.registerTask('jquery', ['uglify:jquery', 'clean']);
     // editor任务：压缩合并editor
-    grunt.registerTask('editor', ['transport:editor', 'concat:editor', 'uglify:editor', 'clean']);
+    grunt.registerTask('editor', ['transport:editor', 'concat:editor', 'uglify:editor']);
 }
