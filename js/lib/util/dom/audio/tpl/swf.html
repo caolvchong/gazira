@@ -1,0 +1,12 @@
+<!--
+    makeId: 是否对object创建name和id，用于非firefox
+    flash: flash地址
+    id: flash的id
+    random: 避免缓存的随机数
+    flashName: 提供给flash内部的name
+-->
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" {{if(makeId)}} name="{{id}}" id="{{id}}"{{endif}} width="1" height="1" style="position: absolute; left: -1px;">
+    <param name="movie" value="{{flash}}?playerInstance={{flashName}}[\'{{id}}\']&datetime={{random}}">
+    <param name="allowscriptaccess" value="always">
+    <embed name="{{id}}" src="{{flash}}?playerInstance={{flashName}}[\'{{id}}\']&datetime={{random}}" width="1" height="1" allowscriptaccess="always"></embed>
+</object>

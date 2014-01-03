@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>audio-auto detected</title>
+    <meta charset="utf-8"/>
+    <link href="../../../../../public/theme/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+    <script src="../../../../../public/js/seajs/sea.js"></script>
+    <script src="../../../../../public/js/config.js"></script>
+    <script>seajs.use('./facade');</script>
+</head>
+<body>
+</body>
+<div class="demo">
+    <p>
+        <label>
+            mp3地址：
+            <input type="text" id="song_src" value="./babaqunali.mp3"/>(网络地址也可以)
+        </label>
+        加载进度：<span id="song_loaded">0</span>
+        播放进度：<span id="song_played">0</span>
+    </p>
+    <p>
+        <label>
+            预加载<input type="checkbox" id="song_preload" value="true" checked="checked"/>
+        </label>
+
+        <label>
+            自动播放<input type="checkbox" id="song_autoplay" value="true" checked="checked"/>
+        </label>
+
+        <label>
+            循环播放<input type="checkbox" id="song_loop" value="true" checked="checked"/>
+        </label>
+    </p>
+    <p>
+        <button id="song_load">加载</button>
+        <button id="song_play">播放</button>
+        <button id="song_pause">暂停</button>
+        <button id="song_stop">停止</button>
+        <button id="song_skip">跳转到</button><input type="text" id="percent" value="50" class="span1"/>%
+    </p>
+
+    <div id="log_area" style="width: 500px; height: 400px; border: 1px solid #ddd; padding: 3px; overflow: auto;"></div>
+</div>
+</html>

@@ -84,26 +84,13 @@ module.exports = function(grunt) {
                     $: '$'
                 }
             },
-            all: {
+            app: {
                 files: [
                     {
                         cwd: 'js',
                         expand: true,
                         src: '**/*.js',
                         dest: '.build'
-                    }
-                ]
-            },
-            editor: {
-                options: {
-                    idleading: 'editor/'
-                },
-                files: [
-                    {
-                        cwd: 'js/lib/cmp/editor',
-                        expand: true,
-                        src: '**/*.js',
-                        dest: '.build/editor'
                     }
                 ]
             }
@@ -129,8 +116,8 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {
-                        src: ['.build/editor/ueditor/ueditor.js'],
-                        dest: 'public/js/editor/ueditor/ueditor.js'
+                        src: '.build/lib/cmp/editor/ueditor/ueditor.js',
+                        dest: 'public/js/dist/lib/cmp/editor/ueditor/ueditor.js'
                     }
                 ]
             }
@@ -153,14 +140,6 @@ module.exports = function(grunt) {
                     {
                         src: 'public/js/jquery/jquery-1.10.1.js',
                         dest: 'public/js/jquery/jquery.js'
-                    }
-                ]
-            },
-            editor: {
-                files: [
-                    {
-                        src: 'public/js/editor/ueditor/ueditor.js',
-                        dest: 'public/js/editor/ueditor/ueditor.js'
                     }
                 ]
             }
@@ -196,7 +175,5 @@ module.exports = function(grunt) {
     // 默认任务：代码检查，单元测试，转化，合并，压缩，清理
     grunt.registerTask('default', ['transport', 'concat', 'uglify', 'clean']);
     // jquery任务：压缩jquery
-    grunt.registerTask('jquery', ['uglify:jquery', 'clean']);
-    // editor任务：压缩合并editor
-    grunt.registerTask('editor', ['transport:editor', 'concat:editor', 'uglify:editor', 'clean']);
+    grunt.registerTask('jquery', ['uglify:jquery']);
 }

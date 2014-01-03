@@ -1,0 +1,33 @@
+body {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+    -webkit-border-radius: 0.41em;
+    -moz-border-radius: 0.41em;
+    border: 1px solid #999;
+    font-size: 12px;
+}
+
+table td {
+    padding-left: 0.41em;
+    padding-right: 0.41em;
+}
+
+table th {
+    font-weight: bold;
+    text-align: left;
+    background: #BBB;
+    color: #333;
+    font-size: 14px;
+    padding: 0.41em;
+}
+
+table tbody tr:nth-child(even) {
+    background: #dedede;
+}
+
+table tbody td {
+    padding: 0.41em;
+}
