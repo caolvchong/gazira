@@ -36,8 +36,7 @@ define(function(require, exports, module) {
             element: null,
             target: null,
 
-            data: [],
-            optionTemplate: function(data){ return "<img title=" + data.title +  " alt='" + data.title + "' src='" + "smile/" + data.filename + "' />";  },
+            optionTemplate: function(data){ return "<a title=" + data.title + " href='#' />";  },
             transport: function(option) {
                 var output;
                 if (option.type === '默认') {
@@ -50,38 +49,67 @@ define(function(require, exports, module) {
             }
         },
         setup: function() {
-            this._parseOpitions();
             ExpressionSelector.superclass.setup.call(this);
-            this._setupTabs();
-            this._setupSelector();
+            this._initDOM();
 
             this._blurHide();
         },
-        _parseOpitions: function() {
-            var data = this.get('data');
-            var groups = [];
-            var options = [];
-
-            $.each(data, function(index, group) {
-                groups.push({ id: group.id, title: group.title });
-                options[index] = group.smileys;
-            });
-
-            this.set('options', options);
-            this.set('groups', groups);
-        },
-        _setupTabs: function() {
+        _initDOM: function() {
             var element = this.get('element');
-            var groups = this.get('groups');
             var triggers = $("<div>").addClass('expr-tabs');
             var panels = $("<div>").addClass('expr-panels');
 
-            $.each(groups, function(index, group) {
-                triggers.append($("<div>").addClass('expr-tab').html(group.title));
-                panels.append($("<div>").addClass('expr-panel'));
-            });
-
             element.append(triggers).append(panels);
+        },
+        addGroup: function(options) {
+            // add type to option
+            this._addType(options);
+            this._addTab(options);
+            this._addSelector(options);
+        },
+        _addType: function(options) {
+            $.each(options.data, function(index, option) {
+                option.type = options.name;
+            });
+        },
+        _addTab: function(options) {
+            var element = this.get('element');
+            var triggers = $('.expr-tabs', element);
+            var panels = $('.expr-panels', element);
+
+            var name = options.name;
+
+            triggers.append($("<div>").addClass('expr-tab').html(name));
+            panels.append($("<div>").addClass('expr-panel'));
+        },
+        _addSelector: function(options) {
+            var self = this;
+            var element = this.get('element');
+            var panels = $('.expr-panels', element);
+
+            var data = options.data;
+
+            var Export = options.transport || this.get('transport');
+            var optionTemplate = options.optionTemplate || this.get('optionTemplate');
+            var onSelect = function(target, option, seleted) {
+                this.get('Export').call(self, option);
+                this.get('selected').length = 0;
+                self.hide();
+            };
+
+            new Selector({
+                number: 1,
+                optionClassName: 'expr-option',
+                options: data,
+                element: panels.children().last(),
+                optionTemplate: optionTemplate,
+                onSelect: onSelect,
+                Export: Export
+            });
+        },
+        _setupTabs: function() {
+            var element = this.get('element');
+            var triggers = $("<div>").addClass('expr-tabs');
 
             new Tabs({
                 element: element,
@@ -91,32 +119,10 @@ define(function(require, exports, module) {
                 triggerType: 'click'
             });
 
-            // for setup selector
-            this.set('panels', panels);
         },
-        _setupSelector: function() {
-            var self = this;
-            var options = this.get('options');
-            var panels = $(this.get('panels'));
-            var Export = this.get('transport');
-            var optionTemplate = this.get('optionTemplate');
-            var onSelect = function(target, option, seleted) {
-                this.get('Export').call(self, option);
-                this.get('selected').length = 0;
-                self.hide();
-            };
-
-            $.each(options, function(index, option) {
-                new Selector({
-                    number: 1,
-                    optionClassName: 'expr-option',
-                    options: option,
-                    element: panels.children().eq(index),
-                    optionTemplate: optionTemplate,
-                    onSelect: onSelect,
-                    Export: Export
-                });
-            });
+        render: function() {
+            this._setupTabs();
+            Overlay.prototype.render.call(this);
         }
     });
 

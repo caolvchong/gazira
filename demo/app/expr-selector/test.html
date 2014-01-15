@@ -27,31 +27,43 @@
       alias: {$: 'jquery/jquery'}
     });
 
-        console.log(seajs.resolve('$'));
     seajs.use(['/js/lib/cmp/selector/expr-selector', '$'], function(ESelector, $) {
         var container = $('#container');
         var target = $('#target');
 
 
-        $.getJSON('./result.json', function(data) {
-            var base = $('#base').on('click', function() {
-              selector.show();
+        var base = $('#base').on('click', function() {
+          selector.show();
+        });
+
+        var selector;
+
+        $.getJSON('./smiley.json', function(smiley) {
+
+            $.getJSON('./emoji.json', function(emoji) {
+                console.log(smiley.length);
+                console.log(emoji.length);
+                selector = new ESelector({
+                  element: container,
+                  target: target,
+
+                  align: {
+                      selfXY: ['50%', '100%'],
+                      baseElement: base,
+                      baseXY: ['50%', 0]
+                  },
+
+                });
+                selector.addGroup({
+                    name: '默认',
+                    data: smiley
+                });
+                selector.addGroup({
+                    name: '符号表情',
+                    data: emoji
+                });
+                selector.render();
             });
-
-            var options = data;
-            var selector = new ESelector({
-              element: container,
-              target: target,
-
-              align: {
-                  selfXY: ['50%', '100%'],
-                  baseElement: base,
-                  baseXY: ['50%', 0]
-              },
-
-              data: data
-
-            }).render();
         });
 
 
