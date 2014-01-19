@@ -189,7 +189,7 @@ define(function(require, exports, module) {
     }
 
     function getSelectionElement(sel) {
-        // start point and end poininsertTextt maybe in the different elements.
+        // start point and end point maybe in the different elements.
         // then we find their common father.
         var element = null;
         var anchorNode = sel.anchorNode;
