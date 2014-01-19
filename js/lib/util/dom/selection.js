@@ -103,6 +103,10 @@ define(function(require, exports, module) {
         return value.slice(start, end);
     };
 
+    Selection.prototype.insertText = function(text, cursor) {
+        return insertText(this, text, cursor[0], cursor[1], undefined);
+    };
+
     // Selection on document
     // TODO: should it support this feature ?
     function DocumentSelection(isIE) {
@@ -185,7 +189,7 @@ define(function(require, exports, module) {
     }
 
     function getSelectionElement(sel) {
-        // start point and end point maybe in the different elements.
+        // start point and end poininsertTextt maybe in the different elements.
         // then we find their common father.
         var element = null;
         var anchorNode = sel.anchorNode;
