@@ -103,6 +103,10 @@ define(function(require, exports, module) {
         return value.slice(start, end);
     };
 
+    Selection.prototype.insertText = function(text, cursor) {
+        return insertText(this, text, cursor[0], cursor[1], undefined);
+    };
+
     // Selection on document
     // TODO: should it support this feature ?
     function DocumentSelection(isIE) {
