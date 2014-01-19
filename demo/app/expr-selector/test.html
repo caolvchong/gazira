@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+    <style type="text/css">
+        #container { position: relative; border: 1px solid #999; }
+        .expr-tabs { position: relative; }
+        .expr-tab { padding: 2px 5px; display: inline-block; *display: inline; *zoom: 1; }
+        .expr-tab.active { background: #ddd; }
+        .expr-panels {}
+        .expr-panel { display: none; width: 462px; height: 265px; overflow: auto; margin: 10px; line-height: 5px;}
+        .expr-option { display: inline-block; width: 24px; height: 24px; padding: 4px; border:1px solid #eee; overflow: hidden;}
+        .expr-option:hover { border: 1px solid #999; cursor: pointer; }
+
+    </style>
+  <script src="/public/js/seajs/sea.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="container">
+    </div>
+
+  <button id="base" style="position: absolute; top: 50%; left: 50%">click</button>
+  <textarea id="target" name="" rows="10" cols="30"></textarea>
+  <script type="text/javascript">
+    seajs.config({
+      alias: {$: 'jquery/jquery'}
+    });
+
+    seajs.use(['/js/lib/cmp/selector/expr-selector', '$'], function(ESelector, $) {
+        var container = $('#container');
+        var target = $('#target');
+
+
+        var base = $('#base').on('click', function() {
+          selector.show();
+        });
+
+        var selector;
+
+        $.getJSON('./smiley.json', function(smiley) {
+
+            $.getJSON('./emoji.json', function(emoji) {
+                console.log(smiley.length);
+                console.log(emoji.length);
+                selector = new ESelector({
+                  element: container,
+                  target: target,
+
+                  align: {
+                      selfXY: ['50%', '100%'],
+                      baseElement: base,
+                      baseXY: ['50%', 0]
+                  },
+
+                });
+                selector.addGroup({
+                    name: '默认',
+                    data: smiley
+                });
+                selector.addGroup({
+                    name: '符号表情',
+                    data: emoji
+                });
+                selector.render();
+            });
+        });
+
+
+    });
+
+  </script>
+</body>
+</html>
