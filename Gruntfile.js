@@ -53,7 +53,6 @@ module.exports = function(grunt) {
                 immed: false, // 允许使用匿名函数并立即执行
                 forin: false, // 允许for in中不强制hasOwnProperty检测
                 bitwise: false, // 允许位运算
-                es5: true, // 允许使用ES5特性
                 expr: true, // 允许表达式用做函数调用或者语句使用
                 evil: false // 不允许使用eval和new Function
             },
@@ -66,14 +65,15 @@ module.exports = function(grunt) {
                     src: ['js/lib/util/dom/position.js']
                 }
             },
-            testUnit: {
+            testUnit: { // 单元测试
                 options: {
                     undef: false // 允许使用未声明的变量
                 },
                 files: {
                     src: ['test/**/*.js']
                 }
-            }
+            },
+            debug: [] // 用于调试部分文件
         },
         // 转化
         transport: {
@@ -173,7 +173,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // 默认任务：代码检查，单元测试，转化，合并，压缩，清理
-    grunt.registerTask('default', ['transport', 'concat', 'uglify', 'clean']);
+    grunt.registerTask('default', ['jshint', 'transport', 'concat', 'uglify', 'qunit', 'clean']);
     // jquery任务：压缩jquery
     grunt.registerTask('jquery', ['uglify:jquery']);
 }
