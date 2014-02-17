@@ -104,7 +104,9 @@ define(function(require, exports, module) {
     };
 
     Selection.prototype.insertText = function(text, cursor) {
-        return insertText(this, text, cursor[0], cursor[1], undefined);
+        insertText(this, text, cursor[0], cursor[1], undefined);
+        cursor = this.cursor();
+        return this.cursor(cursor[1], cursor[1]);
     };
 
     // Selection on document
