@@ -103,10 +103,13 @@ define(function(require, exports, module) {
         return value.slice(start, end);
     };
 
-    Selection.prototype.insertText = function(text, cursor) {
-        insertText(this, text, cursor[0], cursor[1], undefined);
-        cursor = this.cursor();
-        return this.cursor(cursor[1], cursor[1]);
+    Selection.prototype.insertText = function(text, cursor, collapse) {
+        var ret = insertText(this, text, cursor[0], cursor[1], undefined);
+        if (collapse) {
+            cursor = this.cursor();
+            this.cursor(cursor[1], cursor[1]);
+        }
+        return ret;
     };
 
     // Selection on document
