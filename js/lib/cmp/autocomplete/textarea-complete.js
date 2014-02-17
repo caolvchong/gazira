@@ -21,7 +21,7 @@ define(function(require, exports, module) {
       });
 
       if (this.get('cursor')) {
-        this.mirror = Mirror.init(this.get('trigger'));
+        this.mirror = $.extend({}, Mirror.init(this.get('trigger')));
         this.dataSource.before('getData', function() {
           that.mirror.setContent(
             that.get('inputValue'),
@@ -30,6 +30,7 @@ define(function(require, exports, module) {
           );
         });
       }
+
     },
 
     _keyUp: function(e) {
@@ -66,15 +67,22 @@ define(function(require, exports, module) {
     show: function() {
       var cursor = this.get('cursor');
       if (cursor) {
+        var offset;
         if ($.isArray(cursor)) {
-          var offset = cursor;
+          offset = cursor;
         } else {
-          var offset = [0, 0];
+          offset = [0, 0];
         }
+
         var pos = this.mirror.getFlagRect();
         var align = this.get('align');
         align.baseXY = [pos.left + offset[0], pos.bottom + offset[1]];
         align.selfXY = [0, 0];
+
+        var txtarea = this.get('trigger');
+        align.baseXY[0] -= $(txtarea).scrollLeft();
+        align.baseXY[1] -= $(txtarea).scrollTop();
+
         this.set('align', align);
       }
       TextareaComplete.superclass.show.call(this);
@@ -98,7 +106,7 @@ define(function(require, exports, module) {
 
         var value = this.get('trigger').val();
         this.set('inputValue', value);
-        this.mirror && this.mirror.setContent(value, '', this.sel.cursor());
+        this.mirror && this.mirror.setContent(value || '', '', this.sel.cursor());
         this.trigger('itemSelect', data);
         this._clear();
       }
