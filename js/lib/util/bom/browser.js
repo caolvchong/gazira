@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     module.exports = (function() {
+        var ua = navigator.userAgent.toLowerCase();
         var ie = !!window.ActiveXObject;
         var webkit = !!window.devicePixelRatio;
         return {
@@ -10,7 +11,7 @@ define(function(require, exports, module) {
             ie9: ie && +'\v1',
             firefox: !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
             opera: webkit && !!window.opera,
-            safari: /a/['__proto__'] === '//',
+            safari: !!window.openDatabase && !!ua.match(/version\/([\d.]+)/)[1],
             chrome: webkit && !!window.chrome
         };
     })();
