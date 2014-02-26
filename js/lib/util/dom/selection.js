@@ -143,35 +143,29 @@ define(function(require, exports, module) {
 
     // IE sucks. This is how to get cursor position in IE.
     // Thanks to [ichord](https://github.com/ichord/At.js)
+    // ichord的方法在IE第一次使用时候有误，修改为以下方式
     function getIECursor(inputor) {
-        var range = document.selection.createRange();
-        if(range && range.parentElement() === inputor) {
-            var start, end;
-            var normalizedValue = inputor.value.replace(/\r\n/g, '\n');
-            var len = normalizedValue.length;
-            var textInputRange = inputor.createTextRange();
-            textInputRange.moveToBookmark(range.getBookmark());
-            var endRange = inputor.createTextRange();
-            endRange.collapse(false);
-            if(textInputRange.compareEndPoints('StartToEnd', endRange) > -1) {
-                start = end = len;
-            } else {
-                start = -textInputRange.moveStart('character', -len);
-                end = -textInputRange.moveEnd('character', -len);
-            }
-            // when select to the last character, end = 1
-            if(end < start) {
-                end = len;
-            }
-            return [start, end];
+        var st = document.selection.createRange();
+        var cr = document.selection.createRange();
+        var start = 0;
+        var end = 0;
+
+        st.moveToElementText(inputor);
+        st.collapse();
+        st.setEndPoint('EndToStart', cr);
+        start = st.text.length;
+        end = start + cr.text.length;
+        if(end < start) {
+            end = inputor.value.replace(/\r\n/g, '\n').length;
         }
-        return [0, 0];
+        return [start, end];
     }
 
     function setIECursor(inputor, start, end) {
-        var range = inputor.createTextRange();
-        range.move('character', start);
-        // why should it be named as ``moveEnd`` ?
+        var range = document.selection.createRange();
+        range.moveToElementText(inputor);
+        range.collapse();
+        range.moveStart('character', start);
         range.moveEnd('character', end - start);
         range.select();
     }
