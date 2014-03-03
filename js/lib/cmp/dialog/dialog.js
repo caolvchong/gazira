@@ -70,10 +70,6 @@ define(function(require, exports, module) {
             this._setupKeyEvents();
             this._setupFocus();
             toTabed(this.element);
-            this.set('zIndex', Z_INDEX, {
-                silent: true
-            });
-            Z_INDEX += 2;
             if(this.get('fixed') !== false) {
                 Sticky.fix(this.element);
             }
@@ -168,6 +164,8 @@ define(function(require, exports, module) {
                 that.hide();
             };
             this.before('show', function() {
+                this.set('zIndex', Z_INDEX);
+                Z_INDEX += 2;
                 var zIndex = parseInt(this.get('zIndex'), 10);
                 var hasMask = this.get('hasMask');
                 if(hasMask) {
