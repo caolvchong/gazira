@@ -61,6 +61,13 @@ define(function(require, exports, module) {
                     var fetch = cache.action[index];
                     var fetchAction = fetch[actionKey];
                     if(fetchAction) {
+                        if($.isFunction(fetchAction.not)) { // 存在not
+                            if(fetchAction.node && fetchAction.node[0] !== xnode[0]) { // 可能触发的是同一个action，但节点不同
+                                fetchAction.not.call(fetchAction.scope || target, e, fetchAction.node, actionKey);
+                            }
+                            fetchAction.node = xnode; // 缓存住，提供给not使用
+                            fetchAction.using = true;
+                        }
                         if($.isFunction(fetchAction)) {
                             flag = fetchAction.call(target, e, xnode, actionKey);
                         } else {
@@ -73,8 +80,9 @@ define(function(require, exports, module) {
                     for(var i = 0, len = cache.action.length; i < len; i++) {
                         var temp = cache.action[i];
                         for(var key in temp) {
-                            if(key !== actionKey && temp[key] && temp[key].not && $.isFunction(temp[key].not)) {
-                                temp[key].not.call(temp[key].scope || target, e, node.find('[' + actionKeyVal + '=' + key + ']'), actionKey);
+                            if(key !== actionKey && temp[key] && temp[key].not && $.isFunction(temp[key].not) && temp[key].using) {
+                                temp[key].not.call(temp[key].scope || target, e, temp[key].node, actionKey);
+                                temp[key].using = false;
                             }
                         }
                     }
