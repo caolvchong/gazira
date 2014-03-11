@@ -163,7 +163,7 @@ define(function(require, exports, module) {
              */
             ajax: function(page) {
                 var that = this;
-                var config = this.get('ajaxData');
+                var config = this.get('ajaxData')();
                 config.data.page = page;
                 config.success = function(data) {
                     var total = data.pagesum * data.pagesize;
@@ -196,7 +196,12 @@ define(function(require, exports, module) {
             total: 0,
             size: 2,
             ajaxData: function() {
-
+                return {
+                    url: 'data.json',
+                    data: {},
+                    type: 'get',
+                    dataType: 'json'
+                }
             },
             success: function(page, data) {
                 var html = '<div>第' + page + '页数据</div>';
