@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             node = node[0] || node;
             wheel(node, function(e, type, prevent, browser) {
                 var result = helper.detect(node);
-                if(browser === 'ie' || result === 'noscroll' || (result === 'top' && type === 'up') || (result === 'bottom' && type === 'down')) {
+                if(node === e.target && (browser === 'ie' || result === 'noscroll' || (result === 'top' && type === 'up') || (result === 'bottom' && type === 'down'))) {
                     prevent();
                     if(action) {
                         action.call(node, e, result);
