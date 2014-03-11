@@ -25,9 +25,9 @@ define(function(require, exports, module) {
     p1.say('hello');
     p1.set('age', 22);
 
-    p1.after('say', function(x) {
-        alert('xxx' + x);
+    p1.after('say', function() {
+        console.log('trigger after say');
     });
 
-    console.log(p1);
+    p1.say('hello');
 });
