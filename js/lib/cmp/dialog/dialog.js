@@ -73,9 +73,7 @@ define(function(require, exports, module) {
             if(this.get('fixed') !== false) {
                 Sticky.fix(this.element);
             }
-
-            var self = this;
-            Scroll.prevent(this.$('.main').eq(0));
+            Scroll.prevent(this.element);
         },
         // 覆盖 overlay，提供动画
         _onRenderVisible: function(val) {
