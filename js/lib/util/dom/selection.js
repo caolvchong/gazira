@@ -143,29 +143,46 @@ define(function(require, exports, module) {
 
     // IE sucks. This is how to get cursor position in IE.
     // Thanks to [ichord](https://github.com/ichord/At.js)
-    // ichord的方法在IE第一次使用时候有误，修改为以下方式
     function getIECursor(inputor) {
-        var st = document.selection.createRange();
-        var cr = document.selection.createRange();
-        var start = 0;
-        var end = 0;
+        var start, end;
+        var range = document.selection.createRange();
+        var len = inputor.value.length;
 
-        st.moveToElementText(inputor);
-        st.collapse();
-        st.setEndPoint('EndToStart', cr);
-        start = st.text.length;
-        end = start + cr.text.length;
-        if(end < start) {
-            end = inputor.value.replace(/\r\n/g, '\n').length;
+        var normalizedValue = inputor.value.replace(/\r\n/g, "\n");
+
+        // Create a working TextRange that lives only in the input
+        var textInputRange = inputor.createTextRange();
+        textInputRange.moveToBookmark(range.getBookmark());
+
+        // Check if the start and end of the selection are at the very end
+        // of the input, since moveStart/moveEnd doesn't return what we want
+        // in those cases
+        var endRange = inputor.createTextRange();
+        endRange.collapse(false);
+
+        if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+            start = end = len;
+        } else {
+            start = -textInputRange.moveStart("character", -len);
+            start += normalizedValue.slice(0, start).split("\n").length - 1;
+
+            if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+                end = len;
+            } else {
+                end = -textInputRange.moveEnd("character", -len);
+                end += normalizedValue.slice(0, end).split("\n").length - 1;
+            }
         }
+
         return [start, end];
     }
 
     function setIECursor(inputor, start, end) {
-        var range = document.selection.createRange();
-        range.moveToElementText(inputor);
-        range.collapse();
-        range.moveStart('character', start);
+        var range = inputor.createTextRange();
+        var line = inputor.value.slice(0, start).match(/\r\n/g, "\n");
+        line = line ? line.length : 0;
+        range.move('character', start - line);
+        // why should it be named as ``moveEnd`` ?
         range.moveEnd('character', end - start);
         range.select();
     }
