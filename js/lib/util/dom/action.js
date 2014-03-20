@@ -81,8 +81,7 @@ define(function(require, exports, module) {
                         var temp = cache.action[i];
                         for(var key in temp) {
                             if(key !== actionKey && temp[key] && temp[key].not && $.isFunction(temp[key].not) && temp[key].using) {
-                                temp[key].not.call(temp[key].scope || target, e, temp[key].node, actionKey);
-                                temp[key].using = false;
+                                temp[key].using = !!temp[key].not.call(temp[key].scope || target, e, temp[key].node, actionKey);
                             }
                         }
                     }
