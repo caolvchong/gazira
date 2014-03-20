@@ -19,16 +19,17 @@ define(function(require, exports, module) {
             // https://i.alipayobjects.com/e/201307/jBty06lQT.png
             arrowPosition: 7,
 
-            align: {
-                setter: function(val) {
-                    // 用户初始化时主动设置了 align
-                    // 且并非来自 arrowPosition 的设置
-                    if (val && !val.comeFromArrowPosition) {
-                        this._specifiedAlign = true;
-                    }
-                    return val;
-                }
-            },
+//            align: {
+//                setter: function(val) {
+//                    // 用户初始化时主动设置了 align
+//                    // 且并非来自 arrowPosition 的设置
+//                    if (val && !val.comeFromArrowPosition) {
+//                        console.log('-d--')
+//                        this._specifiedAlign = true;
+//                    }
+//                    return val;
+//                }
+//            },
 
             // 颜色 [yellow|blue|white]
             theme: 'yellow',
