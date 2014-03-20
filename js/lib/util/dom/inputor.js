@@ -24,6 +24,7 @@ define(function(require, exports, module) {
             run(true);
         });
         node.bind('blur.timer', function() {
+            fn(node.val(), node);
             flag = false;
         });
     };
