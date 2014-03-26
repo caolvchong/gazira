@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             node = node[0] || node;
             wheel(node, function(e, type, prevent, browser) {
                 var result = helper.detect(node);
-                if(browser === 'ie' || result === 'noscroll' || (result === 'top' && type === 'up') || (result === 'bottom' && type === 'down')) {
+                if(node === e.target && (browser === 'ie' || result === 'noscroll' || (result === 'top' && type === 'up') || (result === 'bottom' && type === 'down'))) {
                     prevent();
                     if(action) {
                         action.call(node, e, result);
@@ -61,6 +61,9 @@ define(function(require, exports, module) {
                     var result = helper.detect(node);
                     var top = $(node).scrollTop();
                     status.bottom = (node === document ? document.body : node).scrollHeight - parseFloat((node === document) ? document.documentElement.clientHeight : node.clientHeight);
+                    if(actions.other) {
+                        actions.other(e, top, dir, status);
+                    }
                     if(result) {
                         if(actions.top) {
                             if(result === 'top' && dir === 'up') {
@@ -72,9 +75,6 @@ define(function(require, exports, module) {
                                 actions.bottom(e, top, dir, status);
                             }
                         }
-                    }
-                    if(actions.other) {
-                        actions.other(e, top, dir, status);
                     }
                 }
             };

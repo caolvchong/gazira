@@ -24,7 +24,7 @@ define(function(require, exports, module) {
         this.mirror = $.extend({}, Mirror.init(this.get('trigger')));
         this.dataSource.before('getData', function() {
           that.mirror.setContent(
-            that.get('inputValue'),
+            that.get('inputValue') || '',
             that.queryValue,
             that.sel.cursor()
           );
@@ -123,7 +123,7 @@ define(function(require, exports, module) {
       var css = {
         position: 'absolute',
         left: -9999,
-        top: 0,
+        top: 11,
         zIndex: -20000,
         'white-space': 'pre-wrap'
       };
@@ -140,13 +140,13 @@ define(function(require, exports, module) {
       var right = cursor[1];
       var v = [
         '<span>',
-          content.substring(0, left),
+          content.substring(0, left).replace(/\r\n|\n/g, '<br/>'),
         '</span>',
         '<span id="flag">',
-          (query || ''),
+          (query || '').replace(/\r\n|\n/g, '<br/>'),
         '</span>',
         '<span>',
-          content.substring(right),
+          content.substring(right).replace(/\r\n|\n/g, '<br/>'),
         '</span>'
       ].join('');
       this.mirror.html(v);

@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             ie9: ie && +'\v1',
             firefox: !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
             opera: webkit && !!window.opera,
-            safari: /a/['__proto__'] === '//',
+            safari: Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0,
             chrome: webkit && !!window.chrome
         };
     })();

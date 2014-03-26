@@ -70,16 +70,10 @@ define(function(require, exports, module) {
             this._setupKeyEvents();
             this._setupFocus();
             toTabed(this.element);
-            this.set('zIndex', Z_INDEX, {
-                silent: true
-            });
-            Z_INDEX += 2;
             if(this.get('fixed') !== false) {
                 Sticky.fix(this.element);
             }
-
-            var self = this;
-            Scroll.prevent(this.$('.main').eq(0));
+            Scroll.prevent(this.element);
         },
         // 覆盖 overlay，提供动画
         _onRenderVisible: function(val) {
@@ -168,6 +162,8 @@ define(function(require, exports, module) {
                 that.hide();
             };
             this.before('show', function() {
+                this.set('zIndex', Z_INDEX);
+                Z_INDEX += 2;
                 var zIndex = parseInt(this.get('zIndex'), 10);
                 var hasMask = this.get('hasMask');
                 if(hasMask) {

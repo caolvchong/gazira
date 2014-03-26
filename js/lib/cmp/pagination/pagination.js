@@ -36,7 +36,7 @@ define(function(require, exports, module) {
                         var totalPage = Math.ceil(this.get('total') / this.get('size'));
                         return Math.min(Math.max(val, 1), totalPage);
                     } else {
-                        return val;
+                        return +val || 1;
                     }
                 }
             },

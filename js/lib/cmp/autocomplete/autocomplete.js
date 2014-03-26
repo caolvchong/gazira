@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var $ = require('$');
     var Inputor = require('../../util/dom/inputor');
     var Position = require('../../util/dom/position');
@@ -8,7 +7,7 @@ define(function(require, exports, module) {
     var Filter = require('./filter');
     var template = require('./tpl/autocomplete');
 
-    var isIE = (window.navigator.userAgent || "").toLowerCase().indexOf("msie") !== -1;
+    var isIE = (window.navigator.userAgent || '').toLowerCase().indexOf('msie') !== -1;
     var undef;
 
     // keyCode
@@ -41,7 +40,9 @@ define(function(require, exports, module) {
             dataSource: [], //数据源，支持 Array, URL, Object, Function
             locator: 'data',
             filter: undef, // 输出过滤
-            inputFilter: function(v) {return v;}, // 输入过滤
+            inputFilter: function(v) {
+                return v;
+            }, // 输入过滤
             disabled: false,
             highlight: false,
             selectFirst: false,
@@ -75,7 +76,9 @@ define(function(require, exports, module) {
             },
             'mouseenter [data-role=item]': function(e) {
                 var className = this.get('classPrefix') + '-item-hover';
-                if(this.currentItem) this.currentItem.removeClass(className);
+                if(this.currentItem) {
+                    this.currentItem.removeClass(className);
+                }
                 $(e.currentTarget).addClass(className);
             },
             'mouseleave [data-role=item]': function(e) {
@@ -121,7 +124,9 @@ define(function(require, exports, module) {
 
         hide: function() {
             // 隐藏的时候取消请求或回调
-            if(this._timeout) clearTimeout(this._timeout);
+            if(this._timeout) {
+                clearTimeout(this._timeout);
+            }
             this.dataSource.abort();
             AutoComplete.superclass.hide.call(this);
         },
@@ -235,7 +240,9 @@ define(function(require, exports, module) {
 
         // 键盘控制上下移动
         _onRenderSelectedIndex: function(index) {
-            if(index === -1) return;
+            if(index === -1) {
+                return;
+            }
             var className = this.get('classPrefix') + '-item-hover';
             if(this.currentItem) {
                 this.currentItem.removeClass(className);
@@ -306,7 +313,9 @@ define(function(require, exports, module) {
         },
 
         _blurEvent: function() {
-            if(isIE) return;
+            if(isIE) {
+                return;
+            }
 
             // https://github.com/aralejs/autocomplete/issues/26
             if(!this._secondMousedown) {
@@ -320,7 +329,9 @@ define(function(require, exports, module) {
         },
 
         _keyupEvent: function() {
-            if(this.get('disabled')) return;
+            if(this.get('disabled')) {
+                return;
+            }
 
             //if (this._keyupStart) {
             //delete this._keyupStart;
@@ -331,7 +342,9 @@ define(function(require, exports, module) {
         },
 
         _keydownEvent: function(e) {
-            if(this.get('disabled')) return;
+            if(this.get('disabled')) {
+                return;
+            }
 
             // 先清空状态
             //delete this._keyupStart;

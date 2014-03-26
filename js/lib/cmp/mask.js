@@ -10,7 +10,6 @@ define(function(require, exports, module) {
     var doc = $(document);
 
     var zIndex = [];
-    window.ddddd = zIndex;
 
     // Mask
     // ----------

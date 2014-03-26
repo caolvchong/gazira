@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         var run = Timer.debounce(function(force) {
             if(flag) {
                 var val = node.val();
-                if(force === true || val !== cache) {
+                if(params.keep === true || force === true || val !== cache) {
                     fn(val, node);
                     cache = val;
                 }
@@ -24,6 +24,7 @@ define(function(require, exports, module) {
             run(true);
         });
         node.bind('blur.timer', function() {
+            fn(node.val(), node);
             flag = false;
         });
     };
