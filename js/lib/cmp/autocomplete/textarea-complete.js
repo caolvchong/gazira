@@ -120,6 +120,12 @@ define(function(require, exports, module) {
     css: ["overflowY", "height", "width", "paddingTop", "paddingLeft", "paddingRight", "paddingBottom", "marginTop", "marginLeft", "marginRight", "marginBottom", 'fontFamily', 'borderStyle', 'borderWidth', 'wordWrap', 'fontSize', 'lineHeight', 'overflowX'],
     init: function(origin) {
       origin = $(origin);
+      if (origin[0].createTextRange) {
+        this.isIE = true;
+        this.mirror = null;
+        this.origin = origin[0];
+        return this;
+      }
       var css = {
         position: 'absolute',
         left: -9999,
@@ -136,6 +142,9 @@ define(function(require, exports, module) {
       return this;
     },
     setContent: function(content, query, cursor) {
+      if (this.isIE) {
+        return;
+      }
       var left = query ? (cursor[1] - query.length) : cursor[1];
       var right = cursor[1];
       var v = [
@@ -154,6 +163,26 @@ define(function(require, exports, module) {
     },
     getFlagRect: function() {
       var pos, rect, flag;
+      if (this.isIE) {
+        var origin = this.origin;
+        var p = $(origin).offsetParent();
+        var parentPos = p.offset();
+
+        var r = document.selection.createRange();
+
+        var left = r.boundingLeft - parentPos.left - parseInt(p.css('padding-left'));
+        // scrollTop * 2 是为了兼容 line：84
+        var top = r.boundingTop - parentPos.top + parseInt(p.css('padding-top')) + 2 *$(origin).scrollTop() + $(window).scrollTop();
+
+        if (r !== null) {
+          rect = {
+            left: left,
+            bottom: top
+          };
+        }
+        return rect;
+      }
+
       flag = this.mirror.find('span#flag');
       pos = flag.position();
       rect = {
