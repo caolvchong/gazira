@@ -114,8 +114,9 @@ define(function(require, exports, module) {
                     });
             },
             itemTemplate: '<li data-role="item" data-value="{{value}}">---{{text}}---</li>',
-            emptyAction: function() {
-                return local;
+            emptyAction: function(callback) {
+                var data = local;
+                callback(local);
             }
         }).render();
 
@@ -126,5 +127,6 @@ define(function(require, exports, module) {
             template: '<div class="widget-autocomplete">dddddddddddddddd<ul class="widget-autocomplete-ctn" data-role="items"></ul></div>',
             itemTemplate: '<li data-role="item" data-value="{{value}}">---{{text}}---</li>'
         }).render();
+
     });
 });

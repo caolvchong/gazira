@@ -442,12 +442,15 @@ define(function(require, exports, module) {
 
         _emptyAction: function() { // 输入为空时候处理
             var locator = this.get('locator');
-            var data = this.get('emptyAction').call(this);
-            if(data) {
-                data = locateResult(locator, data);
-                data = Filter['default'](data);
-                this.set('data', data);
-            }
+            var that = this;
+            var cb = function(data, type) {
+                if(data) {
+                    data = locateResult(locator, data);
+                    data = Filter['default' || type](data);
+                    that.set('data', data);
+                }
+            };
+            this.get('emptyAction').call(this, cb)
         },
 
         // 调整 align 属性的默认值
