@@ -25,13 +25,18 @@ define(function(require, exports, module) {
                 text = text || node.attr('placeholder');
                 var p = $('<span class="placeholder">' + text + '</span>');
                 var h = parseInt(node.css('line-height')) + 4;
+                var pl = parseInt(node.css('padding-left'));
+                var pt = parseInt(node.css('padding-top'));
+
                 node.after(p);
                 p.css({
                     color: '#bbb',
                     height: h,
                     lineHeight: h + 'px',
-                    paddingLeft: '9px'
+                    paddingLeft: pl + 'px',
+                    paddingTop: pt + 'px'
                 });
+
                 Position.pin({
                     element: p
                 }, {
