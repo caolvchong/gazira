@@ -14,11 +14,13 @@ define(function(require, exports, module) {
         content: '',
         width: 375,
         height: 275,
-        buttons: [{
-            text: '关闭',
-            className: 'btn',
-            action: 'close'
-        }]
+        buttons: [
+            {
+                text: '关闭',
+                className: 'btn',
+                action: 'close'
+            }
+        ]
     };
 
     var ConfirmBox = Dialog.extend({
@@ -37,6 +39,7 @@ define(function(require, exports, module) {
             ConfirmBox.superclass.setup.call(this);
 
             var buttons = this.get('buttons');
+            var container = this.$('[data-role=buttons]').eq(0);
             var html = [];
             for(var i = 0, len = buttons.length; i < len; i++) {
                 var btn = buttons[i];
@@ -55,7 +58,16 @@ define(function(require, exports, module) {
                     })(actionName));
                 }
             }
-            this.$('[data-role=buttons]').eq(0).html(html.join(''));
+            container.html(html.join(''));
+            this.after('show', function() {
+                container.find(':first-child').focus();
+                for(var i = 0, len = buttons.length; i < len; i++) {
+                    var btn = buttons[i];
+                    if(btn.focus === true) {
+                        container.children().eq(i).focus();
+                    }
+                }
+            })
         },
 
         events: {
@@ -92,15 +104,18 @@ define(function(require, exports, module) {
     ConfirmBox.confirm = function(options) {
         options = options || {};
         options = $.extend(true, {
-            buttons: [{
-                text: '确认',
-                className: 'btn',
-                action: 'confirm'
-            }, {
-                text: '取消',
-                className: 'btn',
-                action: 'close'
-            }]
+            buttons: [
+                {
+                    text: '确认',
+                    className: 'btn',
+                    action: 'confirm'
+                },
+                {
+                    text: '取消',
+                    className: 'btn',
+                    action: 'close'
+                }
+            ]
         }, defaultConfig, options);
         options.buttons = options.buttons.slice(0, 2);
         return new ConfirmBox(options).show().after('hide', function() {

@@ -188,7 +188,8 @@ define(function(require, exports, module) {
                     action: 'baby'
                 }, {
                     text: 'close',
-                    action: 'close'
+                    action: 'close',
+                    focus: true
                 }]
             }).on('hello', function() {
                     alert('hello');
