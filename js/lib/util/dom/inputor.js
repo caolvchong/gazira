@@ -2,6 +2,15 @@ define(function(require, exports, module) {
     var $ = require('$');
     var Timer = require('../timer');
 
+    /**
+     *
+     * @param node
+     * @param fn
+     * @param params
+     *     keep:
+     *     timer:
+     *
+     */
     var Inputor = function(node, fn, params) {
         node = $(node);
         params = params || {};
@@ -24,7 +33,9 @@ define(function(require, exports, module) {
             run(true);
         });
         node.bind('blur.timer', function() {
-            fn(node.val(), node);
+            if(params.runOnBlur) {
+                fn(node.val(), node);
+            }
             flag = false;
         });
     };
