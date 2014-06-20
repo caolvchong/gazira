@@ -108,7 +108,7 @@ define(function(require, exports, module) {
                     result.push(arr[i].toLowerCase(), arr[i].toUpperCase());
                 }
                 return result.join(';');
-            })(this.get('type'));
+            })(this.get('type'), this.get('accept'));
             settings.file_size_limit = this.get('maxSize').toUpperCase();
             if(this.get('maxCount') !== -1) {
                 settings.file_upload_limit = this.get('maxCount');

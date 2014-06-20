@@ -20,7 +20,7 @@ define(function (require, exports, module) {
                     break;
                 }
             }
-            return d * Math.pow(1000, n);
+            return d * Math.pow(1024, n);
         },
         search: function (index, arr) {
             for (var i = 0, f; f = arr[i]; i++) {
@@ -366,7 +366,7 @@ define(function (require, exports, module) {
             var that = this;
             var node = this.get('node');
             if (node) {
-                var replaceNode = $('<a class="upload-select-btn" href="javascript:;"><input type="file" ' + (this.get('multi') ? ' multiple="true"' : '') + ' name="' + this.get('fileName') + '" /></a>');
+                var replaceNode = $('<a class="upload-select-btn" href="javascript:;"><input type="file" ' + (this.get('accept')) ? 'accept=' + this.get('accept') : ''  + (this.get('multi') ? ' multiple="true"' : '') + ' name="' + this.get('fileName') + '" /></a>');
                 $(node).replaceWith(replaceNode);
                 this.set('node', replaceNode);
                 replaceNode.children('input:file').change(function () {
