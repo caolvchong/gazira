@@ -7,9 +7,9 @@ define(function(require, exports, module) {
      * @param node
      * @param fn
      * @param params
-     *     keep:
-     *     timer:
-     *
+     *     keep: boolean
+     *     timer: boolean
+     *     runOnBlur: boolean
      */
     var Inputor = function(node, fn, params) {
         node = $(node);

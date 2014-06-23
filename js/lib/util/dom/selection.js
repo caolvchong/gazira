@@ -193,6 +193,7 @@ define(function(require, exports, module) {
         selection.element.value = [
             value.slice(0, start), text, value.slice(end)
         ].join('');
+        selection.element.focus();
         end = start + text.length;
         if(cursor === 'left') {
             selection.cursor(start);
