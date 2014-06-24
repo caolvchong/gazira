@@ -49,11 +49,19 @@ define(function(require, exports, module) {
                 }
                 result = DateUtil.stringToDate(str, format);
             } else {
+                var year = fn(params.year, d.getFullYear()), 
+                    month = fn(params.month, d.getMonth()),
+                    date = d.getDate();
                 if(this.times) {
-                    result = new Date(fn(params.year, d.getFullYear()), fn(params.month, d.getMonth()), d.getDate(), fn(params.hour, this.times.get('hour')), fn(params.minute, this.times.get('minute')), fn(params.second, this.times.get('second')));
+                    var hour = fn(params.hour, this.times.get('hour')),
+                        minute = fn(params.minute, this.times.get('minute')),
+                        second = fn(params.second, this.times.get('second'));
+                    result = new Date(year, month, date, hour, minute, second);
                 } else {
-                    result = new Date(fn(params.year, d.getFullYear()), fn(params.month, d.getMonth()), d.getDate());
+                    result = new Date(year, month, date);
                 }
+                // 日期修复，处理new Date(2014, 5, 31) ,预期结果为2014/06/30，实际结果为2014/07/01的BUG
+                result.getMonth() !== month && (result = (this.times ? new Date(year, result.getMonth(), 0, hour, minute, second): new Date(year, result.getMonth(), 0)));
             }
             this.set('date', result);
             return result;
