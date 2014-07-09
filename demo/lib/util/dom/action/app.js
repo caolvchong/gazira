@@ -12,20 +12,28 @@ define(function(require, exports, module) {
             alert: function() {
                 alert('document接受到冒泡，click');
             },
-            aim: {
+            aim1: {
                 is: function(e, node, key) {
-                    alert('aim');
+                    alert('aim1  只触发一次');
                 },
                 not: function() {
-                    alert('没点击到aim');
+                    alert('没点击到aim1');
+                }
+            },
+            aim2: {
+                is: function(e, node, key) {
+                    alert('aim2 会一直触发');
+                },
+                not: function() {
+                    alert('没点击到aim2');
                 }
             }
         });
 
         action.listen({
-            alert: function() {
+            alert: function(e, node, key) {
+                e.stopPropagation();
                 alert('click other');
-                return -1;
             }
         }, $('#box2'));
 
@@ -37,9 +45,42 @@ define(function(require, exports, module) {
 
         action.listen({
             alert: function(e, node, key) {
+                e.stopPropagation();
                 alert($(e.target).val());
-                return -1;
             }
         }, $('#box4'));
+
+        action.listen({
+            A: function(e, node, key) {
+                alert('A');
+            },
+            B: function(e, node, key) {
+                alert('B');
+            },
+            C: function(e, node, key) {
+                alert('C');
+            }
+        }, $('#box6'));
+
+        var num = 0;
+        action.listen({
+            aspect: {
+                is: function(e, node, key) {
+                    alert('is');
+                },
+                before: function(e, node, key) {
+                    alert('before');
+                    num++;
+                    if (num % 2 === 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                after: function(e, node, key) {
+                    alert('after');
+                }
+            }
+        }, $('#box7'));
     });
 });
