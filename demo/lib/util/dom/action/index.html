@@ -7,7 +7,7 @@
     <script src="../../../../../public/js/config.js"></script>
     <script>seajs.use('./app');</script>
 </head>
-<body>
+<body data-action="body-alert">
     <div id="box1">
         <input type="button" value="alert" data-action="alert"/>
     </div>
@@ -23,7 +23,14 @@
         <input type="button" value="click 3"/>
     </div>
     <div id="box5">
-        <input type="button" value="aim 不点击我会触发" data-action="aim"/>
+        <input type="button" value="aim1 不点击我会触发(仅触发1次 return other)" data-action="aim1"/>
+        <input type="button" value="aim2 不点击我会触发(会不停触发 return false)" data-action="aim2"/>
+    </div>
+    <div id="box6">
+        <input type="button" value="触发事件A、B、C" data-action="A B C"/>
+    </div>
+    <div id="box7">
+        <input type="button" value="奇数次点击触发、偶数则不触发Aspect(before is after)" data-action="aspect"/>
     </div>
 </body>
 </html>

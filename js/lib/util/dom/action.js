@@ -1,17 +1,25 @@
 define(function(require, exports, module) {
     var $ = require('$');
+    var Base = require('../base');
 
     var cache = {
         dom: [],
         eventType: [],
-        action: []
+        events: [],
+        notEvents: []
     };
 
+
     var actionKeyVal = 'data-action';
+    var actionKeySplitter = /\s+/;
     var r = {
         setActionKey: function(key) {
             actionKeyVal = key;
             r.setActionKey = null;
+        },
+        setActionKeySplitter: function(key) {
+            actionKeySplitter = key;
+            r.setActionKeySplitter = null;
         },
         /**
          * 利用冒泡来做监听，这样做有以下优势：
@@ -23,10 +31,12 @@ define(function(require, exports, module) {
          *     值：可能是下面两种格式：
          *         function：回调函数，当事件源触发时候执行该函数，函数的this是事件源的jQuery节点，参数是事件对象
          *         object：对象，包含两个属性：
+         *             before：在is回调函数之前执行，this是事件源的jQuery节点，参数是事件对象, 返回false则不调用is
          *             is：回调函数，事件源触发时候执行，this是事件源的jQuery节点，参数是事件对象
+         *             after：在is回调函数之后执行，this是事件源的jQuery节点，参数是事件对象
          *             not：点击在其他节点上时执行的回调函数，this是事件源的jQuery节点，参数是事件对象,
+         *                  return false将不会移除回调函数;其他return值会或没有return则移除not回调
          *             callback： 同is
-         *             scope：改变callback中的this
          * @param node {Object} jQuery对象，绑定的节点，是父容器
          * @param type 事件类型，默认是click，基本也都是处理click事件
          * @return {object} jQuery对象，父节点
@@ -37,72 +47,111 @@ define(function(require, exports, module) {
             type = type || 'click';
 
             var index = $.inArray(node[0], cache.dom);
-            if(index !== -1) {
-                if(cache.eventType[index] !== type) {
+            if (index !== -1) {
+                if (cache.eventType[index] !== type) {
                     index = -1;
                 }
             }
 
-            if(index === -1) {
+            if (index === -1) {
                 cache.dom.push(node[0]);
                 cache.eventType.push(type);
-                cache.action.push(actions);
-                index = cache.action.length - 1;
+                cache.events.push(new Base());
+                cache.notEvents.push({});
+                index = cache.events.length - 1;
 
-                node[type](function(e) {
+                var events = cache.events[index];
+                var notEvents = cache.notEvents[index];
+                bindAction(events, notEvents, actions);
+
+                $(node).on(type, function(e) {
                     var target = $(e.target);
-                    var actionKey = target.attr(actionKeyVal);
                     var xnode = target;
-                    if(!actionKey) {
+                    var actionKeys = target.attr(actionKeyVal);
+                    if(!actionKeys) {
                         xnode = target.closest('[' + actionKeyVal + ']');
-                        actionKey = xnode.attr(actionKeyVal);
+                        actionKeys = xnode.attr(actionKeyVal);
                     }
-                    var flag = true;
-                    var fetch = cache.action[index];
-                    var fetchAction = fetch[actionKey];
-                    if(fetchAction) {
-                        if($.isFunction(fetchAction.not)) { // 存在not
-                            if(fetchAction.node && fetchAction.node[0] !== xnode[0]) { // 可能触发的是同一个action，但节点不同
-                                fetchAction.not.call(fetchAction.scope || target, e, fetchAction.node, actionKey);
-                            }
-                            fetchAction.node = xnode; // 缓存住，提供给not使用
-                            fetchAction.using = true;
-                        }
-                        if($.isFunction(fetchAction)) {
-                            flag = fetchAction.call(target, e, xnode, actionKey);
-                        } else {
-                            if($.isFunction(fetchAction.is) || $.isFunction(fetchAction.action)) {
-                                var fn = fetchAction.is || fetchAction.action;
-                                flag = fn.call(fetchAction.scope || target, e, xnode, actionKey);
+
+                    $.each(notEvents, function(_actionKey, notEvent) {
+                        var _events = notEvent.events;
+                        var _xnode = notEvent.xnode;
+
+                        if (xnode[0] !== _xnode[0]) {
+                            bindContext(events, target);
+                            if (!!_events.trigger('not:' + _actionKey, e, _xnode, _actionKey)) {
+                                delete notEvents[_actionKey];
                             }
                         }
-                    }
-                    for(var i = 0, len = cache.action.length; i < len; i++) {
-                        var temp = cache.action[i];
-                        for(var key in temp) {
-                            if(key !== actionKey && temp[key] && temp[key].not && $.isFunction(temp[key].not) && temp[key].using) {
-                                temp[key].using = !!temp[key].not.call(temp[key].scope || target, e, temp[key].node, actionKey);
+                    });
+
+                    if (actionKeys) {
+                        actionKeys = actionKeys.split(actionKeySplitter);
+                        $.each(actionKeys, function(_index, actionKey) {
+                            if (actionKey.length) {
+                                bindContext(events, target);
+                                if (events.trigger('before:' + actionKey, e, xnode, actionKey)) {
+                                    events.trigger('is:' + actionKey, e, xnode, actionKey);
+                                    events.trigger('after:' + actionKey, e, xnode, actionKey);
+                                }
                             }
-                        }
-                    }
-                    if(flag === -1) { // 禁用冒泡
-                        e.stopPropagation();
-                    } else if(flag === true) { // 都不禁用
-                        return true;
-                    } else if(flag === false) { // 都禁用
-                        return false;
-                    } else { // 默认无返回值时禁用默认行为，但不禁用冒泡
-                        e.preventDefault();
+                        });
                     }
                 });
             } else {
-                var fetch = cache.action[index];
-                for(var key in actions) {
-                    fetch[key] = actions[key];
-                }
+                bindAction(cache.events[index], cache.notEvents[index], actions);
             }
             return node;
         }
     };
+
+    function bindContext(events, context) {
+        var __events = events.__events;
+        $.each(__events, function(actionKey, arr) {
+            $.each(arr, function(index, val) {
+                if (index % 2 == 1) {
+                    arr[index] = context;
+                }
+            });
+        });
+    }
+
+    function bindAction(events, notEvents, actions) {
+        $.each(actions, function(actionKey, action) {
+            var parsedAction = {
+                /*
+                is: null,
+                not: null,
+                callback: null,
+                before: null,
+                after: null
+                */
+            };
+            if ($.isFunction(action)) {
+                parsedAction.is = action;
+            } else {
+                parsedAction = action;
+                parsedAction.is = parsedAction.is || parsedAction.callback;
+            }
+
+            $.each(parsedAction, function(key, actionCallback) {
+                if ($.isFunction(actionCallback)) {
+                    events.on(key + ":" + actionKey, actionCallback);
+                }
+            });
+
+            // 如果存在not事件，绑定默认事件
+            if ($.isFunction(parsedAction.not)) {
+                events.on("is:" + actionKey, function(e, xnode, actionKey) {
+                    notEvents[actionKey] = {
+                        events: events,
+                        xnode: xnode
+                    };
+                });
+            }
+            events.trigger.call(null, 'is:alert');
+        });
+    }
+
     return r;
 });
