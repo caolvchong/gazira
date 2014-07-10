@@ -73,13 +73,13 @@ define(function(require, exports, module) {
                         actionKeys = xnode.attr(actionKeyVal);
                     }
 
+                    // 遍历notEvents如果新对象不是原先触发的对象则触发not事件
                     $.each(notEvents, function(_actionKey, notEvent) {
-                        var _events = notEvent.events;
                         var _xnode = notEvent.xnode;
 
                         if (xnode[0] !== _xnode[0]) {
                             bindContext(events, target);
-                            if (!!_events.trigger('not:' + _actionKey, e, _xnode, _actionKey)) {
+                            if (!!events.trigger('not:' + _actionKey, e, _xnode, _actionKey)) {
                                 delete notEvents[_actionKey];
                             }
                         }
@@ -118,15 +118,7 @@ define(function(require, exports, module) {
 
     function bindAction(events, notEvents, actions) {
         $.each(actions, function(actionKey, action) {
-            var parsedAction = {
-                /*
-                is: null,
-                not: null,
-                callback: null,
-                before: null,
-                after: null
-                */
-            };
+            var parsedAction = {};
             if ($.isFunction(action)) {
                 parsedAction.is = action;
             } else {
@@ -144,12 +136,10 @@ define(function(require, exports, module) {
             if ($.isFunction(parsedAction.not)) {
                 events.on("is:" + actionKey, function(e, xnode, actionKey) {
                     notEvents[actionKey] = {
-                        events: events,
                         xnode: xnode
                     };
                 });
             }
-            events.trigger.call(null, 'is:alert');
         });
     }
 
