@@ -26,6 +26,7 @@ define(function(require, exports, module) {
                 },
                 not: function() {
                     alert('没点击到aim2');
+                    return false;
                 }
             }
         });
