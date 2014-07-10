@@ -1,0 +1,21 @@
+{
+  "name": "gazira",
+  "version": "0.0.1",
+  "homepage": "https://github.com/caolvchong/gazira",
+  "authors": [
+    "chengbapi <chengbapi@gmail.com>"
+  ],
+  "description": "gazira",
+  "main": "js/lib",
+  "keywords": [
+    "gazira"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
