@@ -10,6 +10,15 @@ define(function(require, exports, module) {
 
     $(function() {
         /**--------------------------------------------
+         * 新增实例： 父元素的position为fixed
+         * --------------------------------------------*/
+        new Sortable({
+            element: '#sortable0',
+            item: 'li',
+            proxyParent:$('#proxyparent')//可以任意指定position不是fixed的元素作为父元素
+        })
+
+        /**--------------------------------------------
          * 实例1： 纵向排序
          * --------------------------------------------*/
         new Sortable({

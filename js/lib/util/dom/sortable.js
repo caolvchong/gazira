@@ -24,6 +24,7 @@ define(function(require, exports, module) {
             connect: null, // 可拖拽到的容器
             placeholder: null,
             proxy: null,
+            proxyParent: null,//proxy的父级元素
             connectSelf: true,
             animate: false
         },
@@ -40,6 +41,7 @@ define(function(require, exports, module) {
                 handler: this.get('handler'),
                 visible: this.get('visible'),
                 proxy: this.get('proxy'),
+                proxyParent:this.get('proxyParent'),
                 drop: (function() {
                     var arr = [];
                     var connect = this.get('connect');

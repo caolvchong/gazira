@@ -138,6 +138,15 @@ define(function(require, exports, module) {
 
 
             // 回调函数
+
+            //该事件函数是处理flash加载失败，由用户自己处理给出相应提示
+            settings.swfupload_load_failed_handler = function (issue) {
+                if (issue === "Flash Player doesn't support SWFUpload") {
+                    that.trigger('flashUnsupport');
+                }
+                that.trigger('flashLoadFailed', issue);
+            };
+
             // 该事件函数是内部事件，因此不能被重写。当SWFupload实例化，加载的FLASH完成所有初始化操作时触发此事件
             settings.swfupload_loaded_handler = function() {
                 that.trigger('flashLoaded');

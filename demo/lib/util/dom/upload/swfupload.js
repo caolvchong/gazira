@@ -11,8 +11,8 @@ define(function(require, exports, module) {
 
     $(function() {
         var u = new Upload({
-            url: 'http://localhost/gazira/demo/lib/util/dom/upload/upload.php',
-            swf: 'http://localhost/gazira/public/swf/swfupload.swf',
+           /* url: 'http://localhost/gazira/demo/lib/util/dom/upload/upload.php',
+            swf: 'http://localhost/gazira/public/swf/swfupload.swf',*/
             node: '#btn',
             type: '*.jpg; *.gif; *.png',
             maxSize: '3MB', // 文件大小限制
@@ -28,7 +28,9 @@ define(function(require, exports, module) {
             height: 48,
             text: '<span class="redText">上传</span>',
             textStyle: '.redText { color: #f00; font-size:36px;}'
-        }).on('flashLoaded',function() { // flash载入
+        }).on('flashUnsupport',function(){
+                console.log('flashUnsupport');
+            }).on('flashLoaded',function() { // flash载入
                 console.log('flashLoaded');
             }).on('dialogStart',function() { // 对话框弹出
                 console.log('dialogStart');
