@@ -11,8 +11,8 @@ define(function(require, exports, module) {
 
     $(function() {
         var u = new Upload({
-           /* url: 'http://localhost/gazira/demo/lib/util/dom/upload/upload.php',
-            swf: 'http://localhost/gazira/public/swf/swfupload.swf',*/
+            url: 'http://localhost/gazira/demo/lib/util/dom/upload/upload.php',
+            swf: 'http://localhost/gazira/public/swf/swfupload.swf',
             node: '#btn',
             type: '*.jpg; *.gif; *.png',
             maxSize: '3MB', // 文件大小限制
