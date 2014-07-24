@@ -63,7 +63,8 @@ define(function(require, exports, module) {
             except: null, // 排除的句柄
             visible: false, // 拖拽时候是否显示拖拽的元素
             animate: true, // 是否显示revert或者到指定位置的动画
-            keepTop: true // 是否保持拖拽的节点始终位于最前
+            keepTop: true, // 是否保持拖拽的节点始终位于最前
+            proxyParent: null//proxy的父级元素
         },
         events: {},
         initialize: function(config) {
@@ -178,7 +179,11 @@ define(function(require, exports, module) {
                                 top: element.offset().top,
                                 visibility: 'hidden'
                             }).data('proxy', true);
-                            proxy.appendTo(element.parent());
+                            if (obj.get('proxyParent')) {
+                                proxy.appendTo(obj.get('proxyParent'));
+                            } else {
+                                proxy.appendTo(element.parent());
+                            }
                             if(obj.get('scroll') !== true) { // 拖动时候不影响滚动条，设置true则可以在拖动到边缘的同时让滚动条滚动
                                 e.preventDefault();
                             }

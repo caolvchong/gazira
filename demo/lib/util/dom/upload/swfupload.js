@@ -28,7 +28,9 @@ define(function(require, exports, module) {
             height: 48,
             text: '<span class="redText">上传</span>',
             textStyle: '.redText { color: #f00; font-size:36px;}'
-        }).on('flashLoaded',function() { // flash载入
+        }).on('flashUnsupport',function(){
+                console.log('flashUnsupport');
+            }).on('flashLoaded',function() { // flash载入
                 console.log('flashLoaded');
             }).on('dialogStart',function() { // 对话框弹出
                 console.log('dialogStart');
