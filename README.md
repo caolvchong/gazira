@@ -1,7 +1,7 @@
-## 迁移到duo.js/component
+## 迁移到spm3/duo.js/component
 gazira将迁移到 https://github.com/gazira
 
-构建工具将使用duo.js
+构建工具将使用duo.js/spm3
 
 ## 介绍
 gazira 源于arale 提供一套成熟稳健快速的前端开发方案
