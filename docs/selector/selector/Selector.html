@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Selector</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: Selector</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+    Selector
+    </h2>
+    
+        <div class="class-description">选择器基类</div>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="Selector"><span class="type-signature"></span>new Selector<span class="signature">(config)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">组件配置</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.number</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">选择个数限制</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;option></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">所有选项</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.seleted</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;option></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">已选的选项</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.optionContainer</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">选项DOM Element的父节点</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.optionTemplate</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">渲染DOM的string或模板</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.className</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">为父节点增加的新类名</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.optionClassName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">为选项DOM节点增加的新类名</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.triggerType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">触发选择的事件类型</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.selectable</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;option></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">可选的选项，默认为所有选项</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.unselectable</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;option></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">不可选的选项，默认为空</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.onSelect</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">选择的自定义事件</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.onUnselect</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">取消选择的自定义事件</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.onSelect</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">选择的自定义事件</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.onOverflow</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">当所选选项个数超出限定时的自定义事件</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.onSelectTwice</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">选择后再次选择的自定义事件</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>config.onUnselectable</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">选择了不可选选项的自定义事件</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="selector.js.html">/Users/mac/ND/js-lib/gazira/js/lib/cmp/selector/selector.js</a>, <a href="selector.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>new Selector({
+  number: [2, 3],
+  options: options,
+  onSelect: function(target, option, selected) {
+    conosle.log(option);
+  }
+});</code></pre>
+
+    
+</dd>
+
+    
+    </div>
+    
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li>Widget</li>
+        </ul>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Requires</h3>
+        
+        <ul>
+            <li>module:jQuery</li>
+        </ul>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Selector.html">Selector</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha3</a> on Fri Jan 03 2014 17:36:03 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
