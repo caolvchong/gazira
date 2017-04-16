@@ -77,7 +77,7 @@ define(function(require, exports, module) {
         },
         next: function() {
             var totalPage = Math.ceil(this.get('total') / this.get('size'));
-            this.set('current', Math.min(totalPage, this.get('current') + 1));
+            this.set('current', Math.min(totalPage, +this.get('current') + 1));
             return this;
         },
         load: function(val) {
